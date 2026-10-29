@@ -232,11 +232,20 @@ if args["--help"] != nil {
                 return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
             }
 
+            func displayTaskLine(_ task: Task, pinStr: String) {
+                let status = task.completed ? "[x]" : "[ ]"
+                let tagStr = formatTags(task.tags)
+                if showDescription {
+                    print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
+                } else {
+                    print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr)")
+                }
+            }
+
             func displayTasks(_ tasksToShow: [Task], showPin: Bool) {
                 let pinStr = showPin ? "\(red)* \(reset)" : ""
 
                 if sortField == "completed" {
-                    // Split into completed and uncompleted, apply limit to each
                     let uncompleted = tasksToShow.filter { !$0.completed }
                     let completed = tasksToShow.filter { $0.completed }
 
@@ -247,51 +256,31 @@ if args["--help"] != nil {
                         displayedCompleted = Array(completed.prefix(displayLimit))
                     }
 
-                    // Display uncompleted tasks
                     for task in displayedUncompleted {
-                        let tagStr = formatTags(task.tags)
-                        if showDescription {
-                            print("  \(pinStr)[ ] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                        } else {
-                            print("  \(pinStr)[ ] #\(task.id) \(task.title)\(tagStr)")
-                        }
+                        displayTaskLine(task, pinStr: pinStr)
                     }
                     if uncompleted.count > displayedUncompleted.count {
                         print("  ...")
                     }
 
-                    // Separator
                     if !displayedUncompleted.isEmpty && !displayedCompleted.isEmpty {
                         print("")
                     }
 
-                    // Display completed tasks
                     for task in displayedCompleted {
-                        let tagStr = formatTags(task.tags)
-                        if showDescription {
-                            print("  \(pinStr)[x] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                        } else {
-                            print("  \(pinStr)[x] #\(task.id) \(task.title)\(tagStr)")
-                        }
+                        displayTaskLine(task, pinStr: pinStr)
                     }
                     if completed.count > displayedCompleted.count {
                         print("  ...")
                     }
                 } else {
-                    // Normal display with limit
                     var displayedTasks = tasksToShow
                     if displayLimit > 0 {
                         displayedTasks = Array(tasksToShow.prefix(displayLimit))
                     }
 
                     for task in displayedTasks {
-                        let status = task.completed ? "[x]" : "[ ]"
-                        let tagStr = formatTags(task.tags)
-                        if showDescription {
-                            print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                        } else {
-                            print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr)")
-                        }
+                        displayTaskLine(task, pinStr: pinStr)
                     }
 
                     if displayLimit > 0 && tasksToShow.count > displayedTasks.count {

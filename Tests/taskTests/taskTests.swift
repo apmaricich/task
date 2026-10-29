@@ -332,4 +332,64 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(uncompletedCount, 2)
         XCTAssertEqual(completedCount, 1)
     }
+
+    // MARK: - Pin Task Tests
+
+    func testGetPinTagsEmpty() {
+        let pinTags = store.getPinTags()
+        XCTAssertTrue(pinTags.isEmpty)
+    }
+
+    func testGetPinTagsConfigured() {
+        store.setConfig(key: "pinTags", value: "#important,#urgent")
+        let pinTags = store.getPinTags()
+        XCTAssertEqual(pinTags.count, 2)
+        XCTAssertTrue(pinTags.contains("#important"))
+        XCTAssertTrue(pinTags.contains("#urgent"))
+    }
+
+    func testPinTaskAddsTag() {
+        let task = store.add(title: "Test", description: "")
+        store.setConfig(key: "pinTags", value: "#important")
+
+        let result = store.pinTask(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertEqual(retrieved?.tags, ["#important"])
+    }
+
+    func testUnpinTaskRemovesTag() {
+        let task = store.add(title: "Test", description: "", tags: ["#important"])
+        store.setConfig(key: "pinTags", value: "#important,#urgent")
+
+        let result = store.pinTask(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertTrue(retrieved?.tags.isEmpty ?? true)
+    }
+
+    func testPinTaskNonExistent() {
+        store.setConfig(key: "pinTags", value: "#important")
+        let result = store.pinTask(id: 999)
+        XCTAssertFalse(result)
+    }
+
+    func testPinTaskNoPinTagsConfigured() {
+        let task = store.add(title: "Test", description: "")
+        let result = store.pinTask(id: task.id)
+        XCTAssertFalse(result)
+    }
+
+    func testPinTaskRemovesAllPinTags() {
+        let task = store.add(title: "Test", description: "", tags: ["#important", "#urgent", "#other"])
+        store.setConfig(key: "pinTags", value: "#important,#urgent")
+
+        let result = store.pinTask(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertEqual(retrieved?.tags, ["#other"])
+    }
 }
