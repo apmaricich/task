@@ -1,0 +1,47 @@
+{
+  "config" : {
+    "sort" : "completed",
+    "displayLimit" : 2
+  },
+  "tasks" : [
+    {
+      "completed" : true,
+      "description" : "",
+      "title" : "sort task by complete feature",
+      "id" : 1
+    },
+    {
+      "completed" : false,
+      "id" : 2,
+      "title" : "visual update to sort",
+      "description" : ""
+    },
+    {
+      "completed" : true,
+      "id" : 3,
+      "title" : "add config command",
+      "description" : ""
+    },
+    {
+      "description" : "",
+      "title" : "add created and completed timestamps",
+      "completed" : true,
+      "id" : 4
+    },
+    {
+      "completedDate" : 1793279136.1286559,
+      "completed" : true,
+      "description" : "",
+      "id" : 5,
+      "title" : "add display limit configuration option.",
+      "createdDate" : 1793278255.319313
+    },
+    {
+      "title" : "refactor codebase for readability",
+      "createdDate" : 1793278956.649796,
+      "completed" : false,
+      "id" : 6,
+      "description" : ""
+    }
+  ]
+}
