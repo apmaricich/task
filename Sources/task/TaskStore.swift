@@ -247,6 +247,18 @@ class TaskStore {
         return false
     }
 
+    func getShowCompleted() -> Bool {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+        if let showCompleted = config["showCompleted"] as? Bool {
+            return showCompleted
+        }
+        if let showCompletedStr = config["showCompleted"] as? String {
+            return showCompletedStr == "true"
+        }
+        return true
+    }
+
     private func parseTags(_ tagsStr: String) -> [String] {
         return tagsStr
             .split(separator: ",")

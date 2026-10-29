@@ -197,11 +197,11 @@ if args["--help"] != nil {
             return task.tags.contains(where: { backlogTags.contains($0) })
         }
 
+        let backlogCount = backlogTasks.count
+        printHeader("Backlog: (\(backlogCount))")
         if backlogTasks.isEmpty {
-            print("No backlog tasks found.")
+            print("  No tasks.")
         } else {
-            let backlogCount = backlogTasks.count
-            printHeader("Backlog: (\(backlogCount))")
 
             let sortField = store.getSortField()
             let displayLimit = store.getDisplayLimit()
@@ -306,9 +306,6 @@ if args["--help"] != nil {
         } else {
             let showDescription = args["--description"] != nil || args["-d"] != nil
             let tasks = store.list()
-            if tasks.isEmpty {
-                print("No tasks found.")
-            } else {
             let yellow = "\u{1b}[33m"
             let green = "\u{1b}[32m"
             let cyan = "\u{1b}[36m"
@@ -321,6 +318,7 @@ if args["--help"] != nil {
             let pinTags = store.getPinTags()
             let backlogTags = store.getBacklogTags()
             let showBacklog = store.getShowBacklog()
+            let showCompleted = store.getShowCompleted()
 
             // Filter out backlog tasks unless showBacklog is true
             let nonBacklogTasks = tasks.filter { task in
@@ -335,11 +333,17 @@ if args["--help"] != nil {
             let nonBacklogCompleted = nonBacklogTasks.filter { $0.completed }.count
             let backlogCount = tasks.count - nonBacklogTasks.count
 
+            // Filter out completed tasks if showCompleted is false
+            var tasksToShow = nonBacklogTasks
+            if !showCompleted {
+                tasksToShow = tasksToShow.filter { !$0.completed }
+            }
+
             // Separate pinned tasks from the rest
-            let pinnedTasks = nonBacklogTasks.filter { task in
+            let pinnedTasks = tasksToShow.filter { task in
                 !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
             }
-            let unpinnedTasks = nonBacklogTasks.filter { task in
+            let unpinnedTasks = tasksToShow.filter { task in
                 pinnedTasks.contains(where: { $0.id == task.id }) == false
             }
 
@@ -351,6 +355,10 @@ if args["--help"] != nil {
                 printHeader(headerTitle + " \(red)*\(pinCount)\(reset)\(backlogSuffix)")
             } else {
                 printHeader(headerTitle + backlogSuffix)
+            }
+
+            if tasksToShow.isEmpty {
+                print("  No tasks.")
             }
 
             func formatTags(_ tags: [String]) -> String {
@@ -429,7 +437,6 @@ if args["--help"] != nil {
         // Display unpinned tasks
         if !unpinnedTasks.isEmpty {
             displayTasks(unpinnedTasks, showPin: false)
-        }
         }
     }
 

@@ -382,6 +382,17 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(tasks.count - nonBacklogTasks.count, 0)
     }
 
+    func testGetShowCompletedDefault() {
+        let showCompleted = store.getShowCompleted()
+        XCTAssertTrue(showCompleted)
+    }
+
+    func testGetShowCompletedDisabled() {
+        store.setConfig(key: "showCompleted", value: "false")
+        let showCompleted = store.getShowCompleted()
+        XCTAssertFalse(showCompleted)
+    }
+
     // MARK: - Track Task Tests
 
     func testTrackTaskCreatesAndCompletes() {

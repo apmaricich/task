@@ -1,96 +1,89 @@
 {
-  "config" : {
-    "displayLimit" : 4,
-    "backlogTags" : "#backlog",
-    "sort" : "completed",
-    "pinTags" : "#pin",
-    "tagDisplayLimit" : 3
-  },
   "tasks" : [
     {
-      "title" : "sort task by complete feature",
       "id" : 1,
+      "title" : "sort task by complete feature",
       "description" : "",
       "completed" : true
     },
     {
-      "description" : "",
       "id" : 2,
       "title" : "visual update to sort",
       "completedDate" : 1793282877.4435391,
+      "description" : "",
       "completed" : true
     },
     {
       "id" : 3,
+      "title" : "add config command",
       "completed" : true,
-      "description" : "",
-      "title" : "add config command"
-    },
-    {
-      "title" : "add created and completed timestamps",
-      "completed" : true,
-      "id" : 4,
       "description" : ""
     },
     {
-      "description" : "",
-      "id" : 5,
-      "completedDate" : 1793279136.1286559,
+      "id" : 4,
+      "title" : "add created and completed timestamps",
       "completed" : true,
+      "description" : ""
+    },
+    {
+      "id" : 5,
       "createdDate" : 1793278255.319313,
+      "completedDate" : 1793279136.1286559,
+      "description" : "",
+      "completed" : true,
       "title" : "add display limit configuration option."
     },
     {
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "updatedDate" : 1793280698.610184,
+      "createdDate" : 1793278956.649796,
+      "id" : 6,
       "completedDate" : 1793280765.953521,
       "title" : "refactor codebase for readability",
-      "id" : 6,
-      "createdDate" : 1793278956.649796,
+      "updatedDate" : 1793280698.610184,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
       "completed" : true
     },
     {
-      "completedDate" : 1793282892.406467,
-      "title" : "prompt for input feature",
       "createdDate" : 1793280739.789355,
+      "title" : "prompt for input feature",
+      "completedDate" : 1793282892.406467,
       "completed" : true,
       "description" : "",
       "id" : 7
     },
     {
+      "createdDate" : 1793280751.5302989,
+      "id" : 8,
+      "title" : "tag support",
+      "completedDate" : 1793291351.0477939,
+      "updatedDate" : 1793288452.6348372,
+      "description" : "",
+      "completed" : true,
       "tags" : [
         "#urgent",
         "#fish"
-      ],
-      "createdDate" : 1793280751.5302989,
-      "updatedDate" : 1793288452.6348372,
-      "title" : "tag support",
-      "description" : "",
-      "id" : 8,
-      "completedDate" : 1793291351.0477939,
-      "completed" : true
+      ]
     },
     {
       "createdDate" : 1793281067.3222299,
+      "id" : 9,
       "title" : "task complete no parameters feature",
       "updatedDate" : 1793294256.8439879,
-      "id" : 9,
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
       "completed" : false,
       "tags" : [
         "#testing",
         "#bug",
         "#backlog"
-      ],
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete."
+      ]
     },
     {
-      "id" : 10,
       "createdDate" : 1793281110.801991,
-      "completed" : true,
-      "description" : "",
+      "id" : 10,
       "title" : "add hr rule",
+      "completedDate" : 1793285143.4755101,
       "updatedDate" : 1793285071.8822351,
-      "completedDate" : 1793285143.4755101
+      "description" : "",
+      "completed" : true
     },
     {
       "id" : 12,
@@ -101,50 +94,58 @@
       "completed" : true
     },
     {
+      "createdDate" : 1793287030.560792,
       "id" : 13,
       "title" : "backlog feature",
-      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
       "completedDate" : 1793303074.8227601,
-      "completed" : true,
       "updatedDate" : 1793303135.5591919,
-      "createdDate" : 1793287030.560792
+      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
+      "completed" : true
     },
     {
+      "createdDate" : 1793287468.2949429,
+      "id" : 14,
       "completedDate" : 1793298376.082309,
+      "title" : "Test with tags",
+      "description" : "",
+      "completed" : true,
       "tags" : [
         "#bug",
         "#urgent"
-      ],
-      "id" : 14,
-      "createdDate" : 1793287468.2949429,
-      "title" : "Test with tags",
-      "completed" : true,
-      "description" : ""
+      ]
     },
     {
-      "completedDate" : 1793298359.5235991,
-      "title" : "Remove 'list' command and replace with no arguments",
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
       "createdDate" : 1793294391.9601312,
+      "title" : "Remove 'list' command and replace with no arguments",
+      "completedDate" : 1793298359.5235991,
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
       "id" : 15,
       "completed" : true
     },
     {
+      "createdDate" : 1793296823.392992,
       "id" : 16,
-      "updatedDate" : 1793298333.3063569,
-      "description" : "",
       "title" : "pin section",
       "completedDate" : 1793298347.843744,
-      "createdDate" : 1793296823.392992,
+      "updatedDate" : 1793298333.3063569,
+      "description" : "",
       "completed" : true
     },
     {
       "createdDate" : 1793303447.776912,
-      "completedDate" : 1793303447.776912,
       "title" : "Test of task track",
+      "completedDate" : 1793303447.776912,
       "id" : 17,
       "description" : "This is just a test.",
       "completed" : true
     }
-  ]
+  ],
+  "config" : {
+    "backlogTags" : "#backlog",
+    "showCompleted" : "false",
+    "pinTags" : "#pin",
+    "tagDisplayLimit" : 3,
+    "sort" : "completed",
+    "displayLimit" : 4
+  }
 }
