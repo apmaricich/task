@@ -10,13 +10,15 @@ struct Task {
     var createdDate: Double
     var completedDate: Double?
     var updatedDate: Double?
+    var tags: [String]
 
-    init(id: Int, title: String, description: String) {
+    init(id: Int, title: String, description: String, tags: [String] = []) {
         self.id = id
         self.title = title
         self.description = description
         self.completed = false
         self.createdDate = Date().timeIntervalSince1970
+        self.tags = tags
     }
 
     func createdDateFormatted() -> String {

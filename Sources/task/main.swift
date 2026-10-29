@@ -21,6 +21,15 @@ func parseArguments() -> [String: String] {
             } else {
                 result["--description"] = args.removeFirst()
             }
+        } else if arg == "--tag" || arg == "-T" {
+            if !args.isEmpty {
+                let tagValue = args.removeFirst()
+                if result["--tag"] == nil {
+                    result["--tag"] = tagValue
+                } else {
+                    result["--tag"] = result["--tag"]! + "," + tagValue
+                }
+            }
         } else if arg == "--help" || arg == "-h" {
             result["--help"] = ""
         } else if result["command"] == nil {
@@ -52,29 +61,35 @@ func prompt(_ message: String) -> String {
 func displayTaskDetail(task: Task) {
     let maxWidth = 80
 
-    // Print top separator
-    print(String(repeating: "-", count: maxWidth))
+    // Print top box
+    print("+\(String(repeating: "-", count: maxWidth))+")
 
     // Determine completion status
     let status = task.completed ? "[x]" : "[ ]"
 
-    // Format title line with ID
-    let titleLine = "\(status) \(task.title)"
-    let idWidth = String(task.id).count
-    let titleWidth = titleLine.count + 2
-    let idOffset = maxWidth - idWidth
-    let separator = String(repeating: " ", count: max(0, idOffset - titleWidth))
-    print("\(titleLine)\(separator)#\(task.id)")
+    // Format title line with ID right-aligned
+    let titleText = "\(status) \(task.title)"
+    let idText = "#\(task.id)"
+    let contentLength = titleText.count + idText.count + 1  // +1 for space
+    let padding = String(repeating: " ", count: max(0, maxWidth - contentLength - 2))
+    print("| \(titleText) \(padding)\(idText) |")
 
-    // Print separator line
-    print(String(repeating: "-", count: maxWidth))
+    // Print bottom box
+    print("+\(String(repeating: "-", count: maxWidth))+")
 
     // Format dates
     let createdFormatted = formatDate(task.createdDate)
     let updatedFormatted = task.updatedDate != nil ? formatDate(task.updatedDate!) : "N/A"
     let completedFormatted = task.completedDate != nil ? formatDate(task.completedDate!) : "N/A"
 
-    print("C: \(createdFormatted)\tU: \(updatedFormatted)\tD: \(completedFormatted)")
+    print("  C: \(createdFormatted)\tU: \(updatedFormatted)\tD: \(completedFormatted)")
+
+    // Print tags
+    if !task.tags.isEmpty {
+        let cyan = "\u{1b}[36m"
+        let reset = "\u{1b}[0m"
+        print("  \(cyan)\(task.tags.joined(separator: " "))\(reset)")
+    }
 
     // Print description with word wrapping
     if task.description.isEmpty {
@@ -167,12 +182,24 @@ if args["--help"] != nil {
             let completedCount = tasks.filter { $0.completed }.count
             let yellow = "\u{1b}[33m"
             let green = "\u{1b}[32m"
+            let cyan = "\u{1b}[36m"
             let reset = "\u{1b}[0m"
             print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))")
             print(String(repeating: "-", count: 13))
 
             let sortField = store.getSortField()
             let displayLimit = store.getDisplayLimit()
+            let tagDisplayLimit = store.getTagDisplayLimit()
+
+            func formatTags(_ tags: [String]) -> String {
+                if tags.isEmpty { return "" }
+                var displayTags = tags
+                if tagDisplayLimit > 0 && tags.count > tagDisplayLimit {
+                    displayTags = Array(tags.prefix(tagDisplayLimit))
+                    return " \(cyan)" + displayTags.joined(separator: " ") + " ...\(reset)"
+                }
+                return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
+            }
 
             if sortField == "completed" {
                 // Split into completed and uncompleted, apply limit to each
@@ -184,10 +211,11 @@ if args["--help"] != nil {
 
                 // Display uncompleted tasks
                 for task in displayedUncompleted {
+                    let tagStr = formatTags(task.tags)
                     if showDescription {
-                        print("  [ ] #\(task.id) \(task.title) - \(task.description)")
+                        print("  [ ] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
                     } else {
-                        print("  [ ] #\(task.id) \(task.title)")
+                        print("  [ ] #\(task.id) \(task.title)\(tagStr)")
                     }
                 }
                 if uncompleted.count > displayedUncompleted.count {
@@ -201,10 +229,11 @@ if args["--help"] != nil {
 
                 // Display completed tasks
                 for task in displayedCompleted {
+                    let tagStr = formatTags(task.tags)
                     if showDescription {
-                        print("  [x] #\(task.id) \(task.title) - \(task.description)")
+                        print("  [x] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
                     } else {
-                        print("  [x] #\(task.id) \(task.title)")
+                        print("  [x] #\(task.id) \(task.title)\(tagStr)")
                     }
                 }
                 if completed.count > displayedCompleted.count {
@@ -219,10 +248,11 @@ if args["--help"] != nil {
 
                 for task in displayedTasks {
                     let status = task.completed ? "[x]" : "[ ]"
+                    let tagStr = formatTags(task.tags)
                     if showDescription {
-                        print("  \(status) #\(task.id) \(task.title) - \(task.description)")
+                        print("  \(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
                     } else {
-                        print("  \(status) #\(task.id) \(task.title)")
+                        print("  \(status) #\(task.id) \(task.title)\(tagStr)")
                     }
                 }
 
@@ -237,15 +267,28 @@ if args["--help"] != nil {
         let titleProvided = args["--title"] != nil
         let title = args["--title"] ?? prompt("Title: ")
 
+        // Parse tags
+        var tags: [String] = []
+        if let tagStr = args["--tag"] {
+            tags = tagStr.split(separator: ",").map {
+                let tag = $0.trimmingCharacters(in: .whitespaces)
+                if !tag.hasPrefix("#") {
+                    print("Error: tag '\(tag)' must be prefixed with '#'")
+                    exit(1)
+                }
+                return tag
+            }
+        }
+
         if titleProvided {
             // Title provided, don't prompt for description
             let description = args["--description"] ?? ""
-            let task = store.add(title: title, description: description)
+            let task = store.add(title: title, description: description, tags: tags)
             print("Added task #\(task.id): \(task.title)")
         } else {
             // No title provided, prompt for both
             let description = prompt("Description: ")
-            let task = store.add(title: title, description: description)
+            let task = store.add(title: title, description: description, tags: tags)
             print("Added task #\(task.id): \(task.title)")
         }
 
@@ -257,12 +300,25 @@ if args["--help"] != nil {
         let title = args["--title"]
         let description = args["--description"]
 
-        if title == nil && description == nil {
-            print("Error: at least one field (title or description) is required")
+        // Parse tags
+        var updateTags: [String]?
+        if let tagStr = args["--tag"] {
+            updateTags = tagStr.split(separator: ",").map {
+                let tag = $0.trimmingCharacters(in: .whitespaces)
+                if !tag.hasPrefix("#") {
+                    print("Error: tag '\(tag)' must be prefixed with '#'")
+                    exit(1)
+                }
+                return tag
+            }
+        }
+
+        if title == nil && description == nil && updateTags == nil {
+            print("Error: at least one field (title, description, or tag) is required")
             exit(1)
         }
 
-        if store.update(id: id, title: title, description: description) {
+        if store.update(id: id, title: title, description: description, tags: updateTags) {
             print("Updated task #\(id)")
         } else {
             print("Error: task #\(id) not found")

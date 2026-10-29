@@ -34,7 +34,7 @@ class TaskStore {
 
     func initStore() {
         var store = loadStore()
-        store["config"] = ["sort": "completed"]
+        store["config"] = ["sort": "completed", "tagDisplayLimit": 0]
         saveStore(store)
         print("Task store initialized at \(filePath)")
     }
@@ -49,7 +49,8 @@ class TaskStore {
             var task = Task(
                 id: $0["id"] as? Int ?? 0,
                 title: $0["title"] as? String ?? "",
-                description: $0["description"] as? String ?? ""
+                description: $0["description"] as? String ?? "",
+                tags: $0["tags"] as? [String] ?? []
             )
             task.completed = $0["completed"] as? Bool ?? false
             // If no createdDate, use current time so it sorts correctly
@@ -62,19 +63,22 @@ class TaskStore {
         return sortTasks(taskInstances, by: sortField)
     }
 
-    func add(title: String, description: String) -> Task {
+    func add(title: String, description: String, tags: [String] = []) -> Task {
         var store = loadStore()
         var tasks = store["tasks"] as? [[String: Any]] ?? []
 
         let nextId = tasks.isEmpty ? 1 : tasks.map { $0["id"] as? Int ?? 0 }.max()! + 1
-        let task = Task(id: nextId, title: title, description: description)
-        let taskDict: [String: Any] = [
+        let task = Task(id: nextId, title: title, description: description, tags: tags)
+        var taskDict: [String: Any] = [
             "id": task.id,
             "title": task.title,
             "description": task.description,
             "completed": task.completed,
             "createdDate": task.createdDate
         ]
+        if !task.tags.isEmpty {
+            taskDict["tags"] = task.tags
+        }
         tasks.append(taskDict)
 
         store["tasks"] = tasks
@@ -83,7 +87,7 @@ class TaskStore {
         return task
     }
 
-    func update(id: Int, title: String?, description: String?) -> Bool {
+    func update(id: Int, title: String?, description: String?, tags: [String]? = nil) -> Bool {
         var store = loadStore()
         var tasks = store["tasks"] as? [[String: Any]] ?? []
         let index = tasks.firstIndex { $0["id"] as? Int == id }
@@ -95,6 +99,21 @@ class TaskStore {
         }
         if let description = description {
             tasks[index]["description"] = description
+        }
+        if let tags = tags {
+            var currentTags = tasks[index]["tags"] as? [String] ?? []
+            for tag in tags {
+                if currentTags.contains(tag) {
+                    currentTags.removeAll { $0 == tag }
+                } else {
+                    currentTags.append(tag)
+                }
+            }
+            if !currentTags.isEmpty {
+                tasks[index]["tags"] = currentTags
+            } else {
+                tasks[index].removeValue(forKey: "tags")
+            }
         }
         tasks[index]["updatedDate"] = Date().timeIntervalSince1970
 
@@ -163,6 +182,12 @@ class TaskStore {
         return config["displayLimit"] as? Int ?? 0
     }
 
+    func getTagDisplayLimit() -> Int {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+        return config["tagDisplayLimit"] as? Int ?? 0
+    }
+
     func getTask(id: Int) -> Task? {
         let store = loadStore()
         let tasks = store["tasks"] as? [[String: Any]] ?? []
@@ -173,7 +198,8 @@ class TaskStore {
         var task = Task(
             id: taskDict["id"] as? Int ?? 0,
             title: taskDict["title"] as? String ?? "",
-            description: taskDict["description"] as? String ?? ""
+            description: taskDict["description"] as? String ?? "",
+            tags: taskDict["tags"] as? [String] ?? []
         )
         task.completed = taskDict["completed"] as? Bool ?? false
         task.createdDate = taskDict["createdDate"] as? Double ?? task.createdDate

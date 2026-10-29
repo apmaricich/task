@@ -2,94 +2,120 @@
   "tasks" : [
     {
       "id" : 1,
-      "title" : "sort task by complete feature",
-      "description" : "",
-      "completed" : true
-    },
-    {
-      "completedDate" : 1793282877.4435391,
-      "title" : "visual update to sort",
-      "id" : 2,
       "completed" : true,
+      "title" : "sort task by complete feature",
       "description" : ""
     },
     {
+      "completed" : true,
       "description" : "",
+      "title" : "visual update to sort",
+      "completedDate" : 1793282877.4435391,
+      "id" : 2
+    },
+    {
       "id" : 3,
+      "description" : "",
       "title" : "add config command",
       "completed" : true
     },
     {
       "title" : "add created and completed timestamps",
-      "id" : 4,
+      "description" : "",
       "completed" : true,
-      "description" : ""
+      "id" : 4
     },
     {
       "id" : 5,
       "completedDate" : 1793279136.1286559,
+      "description" : "",
       "title" : "add display limit configuration option.",
-      "createdDate" : 1793278255.319313,
-      "description" : "",
-      "completed" : true
-    },
-    {
-      "title" : "refactor codebase for readability",
-      "updatedDate" : 1793280698.610184,
       "completed" : true,
-      "createdDate" : 1793278956.649796,
-      "id" : 6,
+      "createdDate" : 1793278255.319313
+    },
+    {
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "title" : "refactor codebase for readability",
+      "completed" : true,
       "completedDate" : 1793280765.953521,
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?"
+      "createdDate" : 1793278956.649796,
+      "updatedDate" : 1793280698.610184,
+      "id" : 6
     },
     {
-      "description" : "",
-      "createdDate" : 1793280739.789355,
-      "id" : 7,
       "title" : "prompt for input feature",
-      "completedDate" : 1793282892.406467,
-      "completed" : true
+      "createdDate" : 1793280739.789355,
+      "completed" : true,
+      "description" : "",
+      "id" : 7,
+      "completedDate" : 1793282892.406467
     },
     {
-      "completed" : false,
+      "id" : 8,
+      "completed" : true,
+      "createdDate" : 1793280751.5302989,
       "title" : "tag support",
       "description" : "",
-      "id" : 8,
-      "createdDate" : 1793280751.5302989
+      "updatedDate" : 1793288452.6348372,
+      "completedDate" : 1793291351.0477939,
+      "tags" : [
+        "#urgent",
+        "#fish"
+      ]
     },
     {
       "createdDate" : 1793281067.3222299,
-      "title" : "task complete no parameters feature",
       "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "completed" : false,
       "id" : 9,
-      "completed" : false
+      "title" : "task complete no parameters feature"
     },
     {
       "description" : "",
-      "id" : 10,
-      "completedDate" : 1793285143.4755101,
+      "updatedDate" : 1793285071.8822351,
       "title" : "add hr rule",
-      "completed" : true,
+      "completedDate" : 1793285143.4755101,
       "createdDate" : 1793281110.801991,
-      "updatedDate" : 1793285071.8822351
+      "id" : 10,
+      "completed" : true
     },
     {
-      "title" : "tag based priority system",
-      "createdDate" : 1793285723.4814019,
-      "completed" : false,
       "id" : 11,
-      "description" : "A list of tags should be able to be configured under a priority configuration option. all tags in the list are ordered by highest to lowest priority. high priority gets colored red, lower priority is colored yellow, no priority tag is displayed as normal."
+      "title" : "tag based priority system",
+      "completed" : false,
+      "description" : "A list of tags should be able to be configured under a priority configuration option. all tags in the list are ordered by highest to lowest priority. high priority gets colored red, lower priority is colored yellow, no priority tag is displayed as normal.",
+      "createdDate" : 1793285723.4814019
     },
     {
+      "createdDate" : 1793286882.7039061,
+      "completed" : false,
       "id" : 12,
       "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "title" : "track command",
+      "title" : "track command"
+    },
+    {
+      "id" : 13,
+      "createdDate" : 1793287030.560792,
+      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
       "completed" : false,
-      "createdDate" : 1793286882.7039061
+      "title" : "backlog feature"
+    },
+    {
+      "createdDate" : 1793287468.2949429,
+      "description" : "",
+      "id" : 14,
+      "completed" : false,
+      "tags" : [
+        "#bug",
+        "#urgent"
+      ],
+      "title" : "Test with tags"
     }
   ],
   "config" : {
-    "displayLimit" : 3,
-    "sort" : "completed"
+    "tagDisplayLimit" : 1,
+    "sort" : "completed",
+    "taskDisplayLimit" : 1,
+    "displayLimit" : 3
   }
 }
