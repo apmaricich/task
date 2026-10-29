@@ -7,6 +7,8 @@ A simple command-line task manager built with Swift and Swift Package Manager.
 - Add, update, delete, and complete tasks
 - Multiple sorting options (by completion status, title, description, ID)
 - Display limits with pagination indicators
+- Tags for organizing tasks
+- Pin tasks to the top of the list
 - Persistent storage using JSON files
 - Comprehensive unit test coverage
 
@@ -28,18 +30,12 @@ Initialize a new task store:
 ./task init
 ```
 
-Add a task:
-
-```bash
-./task add "Task title" --description "Task details"
-# Or simply: ./task add "Task title"
-```
-
-List tasks:
+### Listing Tasks
 
 ```bash
 ./task list
-# Or: ./task ls
+# Or simply run with no arguments:
+./task
 ```
 
 With display limit:
@@ -49,23 +45,45 @@ With display limit:
 ./task ls
 ```
 
-Update a task:
+### Quick Task Detail
+
+View a specific task by providing its ID directly:
 
 ```bash
-./task update <ID> --title "New title" --description "New description"
+./task 8
 ```
 
-Delete a task:
+### Adding Tasks
+
+```bash
+./task add "Task title"
+./task add "Task title" --description "Task details"
+```
+
+Add tags to tasks:
+
+```bash
+./task add "Task title" --tag "#important"
+./task add "Task title" --tag "#important" --tag "#work"
+```
+
+Tags must be prefixed with `#`.
+
+### Updating Tasks
+
+```bash
+./task update <ID> --title "New title"
+./task update <ID> --description "New description"
+./task update <ID> --tag "#newtag"
+```
+
+### Deleting and Completing Tasks
 
 ```bash
 ./task delete <ID>
-```
-
-Mark a task as completed:
-
-```bash
 ./task done <ID>
-# Or: ./task complete <ID>
+# Or:
+./task complete <ID>
 ```
 
 ## Configuration
@@ -93,6 +111,40 @@ Limit the number of tasks shown:
 ```
 
 When sorting by `completed`, the limit applies separately to completed and uncompleted tasks.
+
+### Tag Display Limit
+
+Limit the number of tags shown per task:
+
+```bash
+./task config tagDisplayLimit 2  # Show max 2 tags per task
+./task config tagDisplayLimit 0  # Show all tags (default)
+```
+
+### Pin Tags
+
+Pin specific tasks to the top of the list by configuring tag(s) that indicate pinned tasks:
+
+```bash
+./task config pinTags "#important"
+./task config pinTags "#important,#urgent"  # Multiple tags
+```
+
+Tasks with any of the configured pin tags will appear in a separate pinned section at the top of the list, marked with a red asterisk.
+
+### Pinning Tasks
+
+Pin or unpin a task by ID. If the task has no pin tags, the first pin tag from the configured list is applied. If it already has a pin tag, all pin tags are removed:
+
+```bash
+./task pin <ID>
+```
+
+## Help
+
+```bash
+./task --help
+```
 
 ## Testing
 
