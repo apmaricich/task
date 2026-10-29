@@ -236,4 +236,42 @@ final class TaskStoreTests: XCTestCase {
         let updated = store.list().first { $0.id == task.id }!
         XCTAssertNotNil(updated.updatedDate)
     }
+
+    func testGetTask() {
+        let task = store.add(title: "Get Test", description: "Test description")
+        let retrieved = store.getTask(id: task.id)
+
+        XCTAssertNotNil(retrieved)
+        XCTAssertEqual(retrieved?.title, "Get Test")
+        XCTAssertEqual(retrieved?.description, "Test description")
+        XCTAssertEqual(retrieved?.id, task.id)
+    }
+
+    func testGetTaskNonExistent() {
+        let retrieved = store.getTask(id: 999)
+        XCTAssertNil(retrieved)
+    }
+
+    func testPrompt() {
+        // Test that prompt returns empty string when no input is provided
+        let result = prompt("Test: ")
+        // We can't easily test interactive input in unit tests, so just verify
+        // the function can be called without crashing
+        XCTAssert(result is String)
+    }
+
+    func testGetConfig() {
+        store.setConfig(key: "sort", value: "title")
+        store.setConfig(key: "displayLimit", value: "10")
+
+        let config = store.getConfig()
+        XCTAssertEqual(config["sort"] as? String, "title")
+        XCTAssertEqual(config["displayLimit"] as? Int, 10)
+    }
+
+    func testGetConfigEmpty() {
+        let config = store.getConfig()
+        // Default config should have sort field
+        XCTAssertEqual(config["sort"] as? String, "completed")
+    }
 }

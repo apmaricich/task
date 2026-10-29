@@ -52,7 +52,8 @@ class TaskStore {
                 description: $0["description"] as? String ?? ""
             )
             task.completed = $0["completed"] as? Bool ?? false
-            task.createdDate = $0["createdDate"] as? Double ?? task.createdDate
+            // If no createdDate, use current time so it sorts correctly
+            task.createdDate = $0["createdDate"] as? Double ?? Date().timeIntervalSince1970
             task.completedDate = $0["completedDate"] as? Double
             task.updatedDate = $0["updatedDate"] as? Double
             return task
@@ -145,6 +146,11 @@ class TaskStore {
         print("Updated config: \(key) = \(value)")
     }
 
+    func getConfig() -> [String: Any] {
+        let store = loadStore()
+        return store["config"] as? [String: Any] ?? [:]
+    }
+
     func getSortField() -> String {
         let store = loadStore()
         let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
@@ -157,29 +163,61 @@ class TaskStore {
         return config["displayLimit"] as? Int ?? 0
     }
 
+    func getTask(id: Int) -> Task? {
+        let store = loadStore()
+        let tasks = store["tasks"] as? [[String: Any]] ?? []
+
+        let taskDict = tasks.first { $0["id"] as? Int == id }
+        guard let taskDict = taskDict else { return nil }
+
+        var task = Task(
+            id: taskDict["id"] as? Int ?? 0,
+            title: taskDict["title"] as? String ?? "",
+            description: taskDict["description"] as? String ?? ""
+        )
+        task.completed = taskDict["completed"] as? Bool ?? false
+        task.createdDate = taskDict["createdDate"] as? Double ?? task.createdDate
+        task.completedDate = taskDict["completedDate"] as? Double
+        task.updatedDate = taskDict["updatedDate"] as? Double
+        return task
+    }
+
+    private func sortUncompleted(_ tasks: [Task]) -> [Task] {
+        return tasks.sorted { taskA, taskB in
+            if taskA.createdDate == 0.0 && taskB.createdDate == 0.0 {
+                return taskA.id < taskB.id
+            }
+            if taskA.createdDate == 0.0 {
+                return false
+            }
+            if taskB.createdDate == 0.0 {
+                return true
+            }
+            return taskA.createdDate < taskB.createdDate
+        }
+    }
+
+    private func sortCompleted(_ tasks: [Task]) -> [Task] {
+        return tasks.sorted { taskA, taskB in
+            if taskA.completedDate == nil && taskB.completedDate == nil {
+                return taskA.id < taskB.id
+            }
+            if taskA.completedDate == nil {
+                return false
+            }
+            if taskB.completedDate == nil {
+                return true
+            }
+            return taskA.completedDate! > taskB.completedDate!
+        }
+    }
+
     private func sortTasks(_ tasks: [Task], by field: String) -> [Task] {
         switch field {
         case "completed":
-            // Primary: uncompleted first, then completed
-            // Uncompleted: oldest createdDate first (ascending)
-            // Completed: most recent completedDate first (descending)
-            return tasks.sorted { a, b in
-                if a.completed != b.completed {
-                    return !a.completed && b.completed
-                }
-                if a.completed && b.completed {
-                    // Both completed - sort by completedDate (newest first)
-                    if let aDate = a.completedDate, let bDate = b.completedDate {
-                        return aDate > bDate
-                    }
-                    if a.completedDate != nil && b.completedDate == nil {
-                        return true
-                    }
-                    return false
-                }
-                // Both uncompleted - sort by createdDate (oldest first)
-                return a.createdDate < b.createdDate
-            }
+            let uncompleted = sortUncompleted(tasks.filter { !$0.completed })
+            let completed = sortCompleted(tasks.filter { $0.completed })
+            return uncompleted + completed
         case "title":
             return tasks.sorted { $0.title < $1.title }
         case "description":
