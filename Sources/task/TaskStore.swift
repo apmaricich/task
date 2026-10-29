@@ -188,6 +188,62 @@ class TaskStore {
         return config["tagDisplayLimit"] as? Int ?? 0
     }
 
+    func getPinTags() -> [String] {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+        let pinTagsStr = config["pinTags"] as? String ?? ""
+        if pinTagsStr.isEmpty { return [] }
+
+        return pinTagsStr
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .map { tag in
+                if tag.hasPrefix("#") {
+                    return tag
+                }
+                return "#" + tag
+            }
+            .filter { !$0.isEmpty }
+    }
+
+    func pinTask(id: Int) -> Bool {
+        var store = loadStore()
+        var tasks = store["tasks"] as? [[String: Any]] ?? []
+        let index = tasks.firstIndex { $0["id"] as? Int == id }
+
+        guard let index = index else { return false }
+
+        let pinTags = getPinTags()
+        guard !pinTags.isEmpty else {
+            print("Error: no pinTags configured. Set with 'task config pinTags #tag'")
+            return false
+        }
+
+        var tags = tasks[index]["tags"] as? [String] ?? []
+
+        // Check if task has any pin tags
+        let hasPinTag = tags.contains(where: { pinTags.contains($0) })
+
+        if hasPinTag {
+            // Remove all pin tags
+            tags = tags.filter { !pinTags.contains($0) }
+        } else {
+            // Add first pin tag
+            tags.append(pinTags[0])
+        }
+
+        if tags.isEmpty {
+            tasks[index].removeValue(forKey: "tags")
+        } else {
+            tasks[index]["tags"] = tags
+        }
+        tasks[index]["updatedDate"] = Date().timeIntervalSince1970
+
+        store["tasks"] = tasks
+        saveStore(store)
+        return true
+    }
+
     func getTask(id: Int) -> Task? {
         let store = loadStore()
         let tasks = store["tasks"] as? [[String: Any]] ?? []

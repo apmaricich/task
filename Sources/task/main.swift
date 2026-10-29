@@ -164,6 +164,19 @@ if args["--help"] != nil {
     case "init":
         store.initStore()
 
+    case "pin":
+        guard let idStr = args["id"], let id = Int(idStr) else {
+            print("Error: task ID is required")
+            exit(1)
+        }
+
+        if store.pinTask(id: id) {
+            print("Task #\(id) toggled pin status")
+        } else {
+            print("Error: task #\(id) not found")
+            exit(1)
+        }
+
     case "list", "ls":
         if let idStr = args["id"], let id = Int(idStr) {
             // Show detailed info for a specific task
@@ -184,13 +197,30 @@ if args["--help"] != nil {
             let yellow = "\u{1b}[33m"
             let green = "\u{1b}[32m"
             let cyan = "\u{1b}[36m"
+            let red = "\u{1b}[31m"
             let reset = "\u{1b}[0m"
-            print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))")
-            print(String(repeating: "-", count: 13))
 
             let sortField = store.getSortField()
             let displayLimit = store.getDisplayLimit()
             let tagDisplayLimit = store.getTagDisplayLimit()
+            let pinTags = store.getPinTags()
+
+            // Separate pinned tasks from the rest
+            let pinnedTasks = tasks.filter { task in
+                !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
+            }
+            let unpinnedTasks = tasks.filter { task in
+                pinnedTasks.contains(where: { $0.id == task.id }) == false
+            }
+
+            // Print header with pin count if any
+            let pinCount = pinnedTasks.count
+            if pinCount > 0 {
+                print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset)) \(red)*\(pinCount)\(reset)")
+            } else {
+                print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))")
+            }
+            print(String(repeating: "-", count: 13))
 
             func formatTags(_ tags: [String]) -> String {
                 if tags.isEmpty { return "" }
@@ -202,71 +232,86 @@ if args["--help"] != nil {
                 return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
             }
 
-            if sortField == "completed" {
-                // Split into completed and uncompleted, apply limit to each
-                let uncompleted = tasks.filter { !$0.completed }
-                let completed = tasks.filter { $0.completed }
+            func displayTasks(_ tasksToShow: [Task], showPin: Bool) {
+                let pinStr = showPin ? "\(red)* \(reset)" : ""
 
-                var displayedUncompleted = uncompleted
-                var displayedCompleted = completed
-                if displayLimit > 0 {
-                    displayedUncompleted = Array(uncompleted.prefix(displayLimit))
-                    displayedCompleted = Array(completed.prefix(displayLimit))
-                }
+                if sortField == "completed" {
+                    // Split into completed and uncompleted, apply limit to each
+                    let uncompleted = tasksToShow.filter { !$0.completed }
+                    let completed = tasksToShow.filter { $0.completed }
 
-                // Display uncompleted tasks
-                for task in displayedUncompleted {
-                    let tagStr = formatTags(task.tags)
-                    if showDescription {
-                        print("  [ ] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                    } else {
-                        print("  [ ] #\(task.id) \(task.title)\(tagStr)")
+                    var displayedUncompleted = uncompleted
+                    var displayedCompleted = completed
+                    if displayLimit > 0 {
+                        displayedUncompleted = Array(uncompleted.prefix(displayLimit))
+                        displayedCompleted = Array(completed.prefix(displayLimit))
                     }
-                }
-                if uncompleted.count > displayedUncompleted.count {
-                    print("  ...")
-                }
 
-                // Separator
-                if !displayedUncompleted.isEmpty && !displayedCompleted.isEmpty {
-                    print("")
-                }
-
-                // Display completed tasks
-                for task in displayedCompleted {
-                    let tagStr = formatTags(task.tags)
-                    if showDescription {
-                        print("  [x] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                    } else {
-                        print("  [x] #\(task.id) \(task.title)\(tagStr)")
+                    // Display uncompleted tasks
+                    for task in displayedUncompleted {
+                        let tagStr = formatTags(task.tags)
+                        if showDescription {
+                            print("  \(pinStr)[ ] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
+                        } else {
+                            print("  \(pinStr)[ ] #\(task.id) \(task.title)\(tagStr)")
+                        }
                     }
-                }
-                if completed.count > displayedCompleted.count {
-                    print("  ...")
-                }
-            } else {
-                // Normal display with limit
-                var displayedTasks = tasks
-                if displayLimit > 0 {
-                    displayedTasks = Array(tasks.prefix(displayLimit))
-                }
-
-                for task in displayedTasks {
-                    let status = task.completed ? "[x]" : "[ ]"
-                    let tagStr = formatTags(task.tags)
-                    if showDescription {
-                        print("  \(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
-                    } else {
-                        print("  \(status) #\(task.id) \(task.title)\(tagStr)")
+                    if uncompleted.count > displayedUncompleted.count {
+                        print("  ...")
                     }
-                }
 
-                if displayLimit > 0 && tasks.count > displayedTasks.count {
-                    print("  ...")
+                    // Separator
+                    if !displayedUncompleted.isEmpty && !displayedCompleted.isEmpty {
+                        print("")
+                    }
+
+                    // Display completed tasks
+                    for task in displayedCompleted {
+                        let tagStr = formatTags(task.tags)
+                        if showDescription {
+                            print("  \(pinStr)[x] #\(task.id) \(task.title)\(tagStr) - \(task.description)")
+                        } else {
+                            print("  \(pinStr)[x] #\(task.id) \(task.title)\(tagStr)")
+                        }
+                    }
+                    if completed.count > displayedCompleted.count {
+                        print("  ...")
+                    }
+                } else {
+                    // Normal display with limit
+                    var displayedTasks = tasksToShow
+                    if displayLimit > 0 {
+                        displayedTasks = Array(tasksToShow.prefix(displayLimit))
+                    }
+
+                    for task in displayedTasks {
+                        let status = task.completed ? "[x]" : "[ ]"
+                        let tagStr = formatTags(task.tags)
+                        if showDescription {
+                            print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
+                        } else {
+                            print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr)")
+                        }
+                    }
+
+                    if displayLimit > 0 && tasksToShow.count > displayedTasks.count {
+                        print("  ...")
+                    }
                 }
             }
+
+        // Display pinned section at the top
+        if !pinnedTasks.isEmpty {
+            displayTasks(pinnedTasks, showPin: true)
+            print("")
+        }
+
+        // Display unpinned tasks
+        if !unpinnedTasks.isEmpty {
+            displayTasks(unpinnedTasks, showPin: false)
         }
         }
+    }
 
     case "add":
         let titleProvided = args["--title"] != nil
