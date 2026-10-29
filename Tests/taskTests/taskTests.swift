@@ -274,4 +274,62 @@ final class TaskStoreTests: XCTestCase {
         // Default config should have sort field
         XCTAssertEqual(config["sort"] as? String, "completed")
     }
+
+    // MARK: - Task Counting Tests (for list header)
+
+    func testCountUncompletedTasks() {
+        store.add(title: "Uncompleted 1", description: "")
+        store.add(title: "Completed 1", description: "")
+        let completedTask = store.list().first { $0.title == "Completed 1" }!
+        store.done(id: completedTask.id)
+        store.add(title: "Uncompleted 2", description: "")
+
+        let tasks = store.list()
+        let uncompletedCount = tasks.filter { !$0.completed }.count
+        XCTAssertEqual(uncompletedCount, 2)
+    }
+
+    func testCountCompletedTasks() {
+        store.add(title: "Task 1", description: "")
+        store.add(title: "Task 2", description: "")
+        store.add(title: "Task 3", description: "")
+
+        let tasks = store.list()
+        for task in tasks.prefix(2) {
+            store.done(id: task.id)
+        }
+
+        let completedCount = store.list().filter { $0.completed }.count
+        XCTAssertEqual(completedCount, 2)
+    }
+
+    func testCountsWithNoTasks() {
+        let tasks = store.list()
+        let uncompletedCount = tasks.filter { !$0.completed }.count
+        let completedCount = tasks.filter { $0.completed }.count
+        XCTAssertEqual(uncompletedCount, 0)
+        XCTAssertEqual(completedCount, 0)
+    }
+
+    func testCountsAfterMixedOperations() {
+        // Add 4 tasks, complete 1, delete 1
+        store.add(title: "A", description: "")
+        store.add(title: "B", description: "")
+        store.add(title: "C", description: "")
+        store.add(title: "D", description: "")
+
+        let taskB = store.list().first { $0.title == "B" }!
+        store.done(id: taskB.id)
+
+        let taskC = store.list().first { $0.title == "C" }!
+        store.delete(id: taskC.id)
+
+        let tasks = store.list()
+        let uncompletedCount = tasks.filter { !$0.completed }.count
+        let completedCount = tasks.filter { $0.completed }.count
+
+        XCTAssertEqual(tasks.count, 3)
+        XCTAssertEqual(uncompletedCount, 2)
+        XCTAssertEqual(completedCount, 1)
+    }
 }

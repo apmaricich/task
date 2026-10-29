@@ -1,8 +1,4 @@
 {
-  "config" : {
-    "sort" : "title",
-    "displayLimit" : 10
-  },
   "tasks" : [
     {
       "id" : 1,
@@ -11,69 +7,89 @@
       "completed" : true
     },
     {
-      "id" : 2,
-      "title" : "visual update to sort",
       "completedDate" : 1793282877.4435391,
+      "title" : "visual update to sort",
+      "id" : 2,
       "completed" : true,
       "description" : ""
     },
     {
+      "description" : "",
       "id" : 3,
       "title" : "add config command",
-      "description" : "",
       "completed" : true
     },
     {
-      "id" : 4,
       "title" : "add created and completed timestamps",
+      "id" : 4,
+      "completed" : true,
+      "description" : ""
+    },
+    {
+      "id" : 5,
+      "completedDate" : 1793279136.1286559,
+      "title" : "add display limit configuration option.",
+      "createdDate" : 1793278255.319313,
       "description" : "",
       "completed" : true
     },
     {
-      "createdDate" : 1793278255.319313,
-      "title" : "add display limit configuration option.",
-      "completedDate" : 1793279136.1286559,
+      "title" : "refactor codebase for readability",
+      "updatedDate" : 1793280698.610184,
       "completed" : true,
-      "description" : "",
-      "id" : 5
-    },
-    {
       "createdDate" : 1793278956.649796,
       "id" : 6,
       "completedDate" : 1793280765.953521,
-      "title" : "refactor codebase for readability",
-      "updatedDate" : 1793280698.610184,
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?"
+    },
+    {
+      "description" : "",
+      "createdDate" : 1793280739.789355,
+      "id" : 7,
+      "title" : "prompt for input feature",
+      "completedDate" : 1793282892.406467,
       "completed" : true
     },
     {
-      "createdDate" : 1793280739.789355,
-      "title" : "prompt for input feature",
-      "id" : 7,
-      "completed" : true,
-      "completedDate" : 1793282892.406467,
-      "description" : ""
-    },
-    {
-      "id" : 8,
-      "title" : "tag support",
-      "createdDate" : 1793280751.5302989,
-      "description" : "",
-      "completed" : false
-    },
-    {
-      "id" : 9,
-      "title" : "task complete no parameters feature",
-      "createdDate" : 1793281067.3222299,
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
-      "completed" : false
-    },
-    {
-      "id" : 10,
-      "title" : "add horizontal rule to top of task detail command.\n",
-      "createdDate" : 1793281110.801991,
       "completed" : false,
-      "description" : ""
+      "title" : "tag support",
+      "description" : "",
+      "id" : 8,
+      "createdDate" : 1793280751.5302989
+    },
+    {
+      "createdDate" : 1793281067.3222299,
+      "title" : "task complete no parameters feature",
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "id" : 9,
+      "completed" : false
+    },
+    {
+      "description" : "",
+      "id" : 10,
+      "completedDate" : 1793285143.4755101,
+      "title" : "add hr rule",
+      "completed" : true,
+      "createdDate" : 1793281110.801991,
+      "updatedDate" : 1793285071.8822351
+    },
+    {
+      "title" : "tag based priority system",
+      "createdDate" : 1793285723.4814019,
+      "completed" : false,
+      "id" : 11,
+      "description" : "A list of tags should be able to be configured under a priority configuration option. all tags in the list are ordered by highest to lowest priority. high priority gets colored red, lower priority is colored yellow, no priority tag is displayed as normal."
+    },
+    {
+      "id" : 12,
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
+      "title" : "track command",
+      "completed" : false,
+      "createdDate" : 1793286882.7039061
     }
-  ]
+  ],
+  "config" : {
+    "displayLimit" : 3,
+    "sort" : "completed"
+  }
 }

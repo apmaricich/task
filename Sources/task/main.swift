@@ -163,10 +163,18 @@ if args["--help"] != nil {
             if tasks.isEmpty {
                 print("No tasks found.")
             } else {
+            let uncompletedCount = tasks.filter { !$0.completed }.count
+            let completedCount = tasks.filter { $0.completed }.count
+            let yellow = "\u{1b}[33m"
+            let green = "\u{1b}[32m"
+            let reset = "\u{1b}[0m"
+            print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))")
+            print(String(repeating: "-", count: 13))
+
             let sortField = store.getSortField()
             let displayLimit = store.getDisplayLimit()
 
-            if sortField == "completed" && displayLimit > 0 {
+            if sortField == "completed" {
                 // Split into completed and uncompleted, apply limit to each
                 let uncompleted = tasks.filter { !$0.completed }
                 let completed = tasks.filter { $0.completed }
@@ -177,13 +185,13 @@ if args["--help"] != nil {
                 // Display uncompleted tasks
                 for task in displayedUncompleted {
                     if showDescription {
-                        print("[ ] #\(task.id) \(task.title) - \(task.description)")
+                        print("  [ ] #\(task.id) \(task.title) - \(task.description)")
                     } else {
-                        print("[ ] #\(task.id) \(task.title)")
+                        print("  [ ] #\(task.id) \(task.title)")
                     }
                 }
                 if uncompleted.count > displayedUncompleted.count {
-                    print("...")
+                    print("  ...")
                 }
 
                 // Separator
@@ -194,13 +202,13 @@ if args["--help"] != nil {
                 // Display completed tasks
                 for task in displayedCompleted {
                     if showDescription {
-                        print("[x] #\(task.id) \(task.title) - \(task.description)")
+                        print("  [x] #\(task.id) \(task.title) - \(task.description)")
                     } else {
-                        print("[x] #\(task.id) \(task.title)")
+                        print("  [x] #\(task.id) \(task.title)")
                     }
                 }
                 if completed.count > displayedCompleted.count {
-                    print("...")
+                    print("  ...")
                 }
             } else {
                 // Normal display with limit
@@ -212,14 +220,14 @@ if args["--help"] != nil {
                 for task in displayedTasks {
                     let status = task.completed ? "[x]" : "[ ]"
                     if showDescription {
-                        print("\(status) #\(task.id) \(task.title) - \(task.description)")
+                        print("  \(status) #\(task.id) \(task.title) - \(task.description)")
                     } else {
-                        print("\(status) #\(task.id) \(task.title)")
+                        print("  \(status) #\(task.id) \(task.title)")
                     }
                 }
 
                 if displayLimit > 0 && tasks.count > displayedTasks.count {
-                    print("...")
+                    print("  ...")
                 }
             }
         }
