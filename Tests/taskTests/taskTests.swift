@@ -333,6 +333,52 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(completedCount, 1)
     }
 
+    // MARK: - Track Task Tests
+
+    func testTrackTaskCreatesAndCompletes() {
+        let task = store.track(title: "Tracked Task", description: "Description")
+        XCTAssertTrue(task.completed)
+        XCTAssertNotNil(task.completedDate)
+        XCTAssertEqual(task.id, 1)
+    }
+
+    func testTrackTaskWithTags() {
+        let task = store.track(title: "Tracked", description: "", tags: ["#tag"])
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertTrue(retrieved?.completed ?? false)
+        XCTAssertEqual(retrieved?.tags, ["#tag"])
+    }
+
+    // MARK: - Ready Task Tests
+
+    func testReadyTaskRemovesBacklogTag() {
+        let task = store.add(title: "Test", description: "", tags: ["#backlog"])
+        store.setConfig(key: "backlogTags", value: "#backlog,#someday")
+
+        let result = store.readyTask(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertTrue(retrieved?.tags.isEmpty ?? true)
+    }
+
+    func testReadyTaskKeepsNonBacklogTags() {
+        let task = store.add(title: "Test", description: "", tags: ["#backlog", "#important"])
+        store.setConfig(key: "backlogTags", value: "#backlog")
+
+        let result = store.readyTask(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertEqual(retrieved?.tags, ["#important"])
+    }
+
+    func testReadyTaskNonExistent() {
+        store.setConfig(key: "backlogTags", value: "#backlog")
+        let result = store.readyTask(id: 999)
+        XCTAssertFalse(result)
+    }
+
     // MARK: - Pin Task Tests
 
     func testGetPinTagsEmpty() {
@@ -391,5 +437,31 @@ final class TaskStoreTests: XCTestCase {
 
         let retrieved = store.getTask(id: task.id)
         XCTAssertEqual(retrieved?.tags, ["#other"])
+    }
+
+    // MARK: - Backlog Tag Tests
+
+    func testGetBacklogTagsEmpty() {
+        let backlogTags = store.getBacklogTags()
+        XCTAssertTrue(backlogTags.isEmpty)
+    }
+
+    func testGetBacklogTagsConfigured() {
+        store.setConfig(key: "backlogTags", value: "#backlog,#someday")
+        let backlogTags = store.getBacklogTags()
+        XCTAssertEqual(backlogTags.count, 2)
+        XCTAssertTrue(backlogTags.contains("#backlog"))
+        XCTAssertTrue(backlogTags.contains("#someday"))
+    }
+
+    func testGetShowBacklogDefault() {
+        let showBacklog = store.getShowBacklog()
+        XCTAssertFalse(showBacklog)
+    }
+
+    func testGetShowBacklogEnabled() {
+        store.setConfig(key: "showBacklog", value: "true")
+        let showBacklog = store.getShowBacklog()
+        XCTAssertTrue(showBacklog)
     }
 }

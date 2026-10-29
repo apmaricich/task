@@ -9,6 +9,7 @@ A simple command-line task manager built with Swift and Swift Package Manager.
 - Display limits with pagination indicators
 - Tags for organizing tasks
 - Pin tasks to the top of the list
+- Backlog support with configurable tags
 - Persistent storage using JSON files
 - Comprehensive unit test coverage
 
@@ -138,6 +139,27 @@ Pin or unpin a task by ID. If the task has no pin tags, the first pin tag from t
 
 ```bash
 ./task pin <ID>
+```
+
+### Backlog Tags
+
+Hide tasks in the regular list by configuring backlog tags:
+
+```bash
+./task config backlogTags "#backlog"
+./task config backlogTags "#backlog,#someday"
+```
+
+Tasks with backlog tags are hidden by default. Show them in the regular list with:
+
+```bash
+./task config showBacklog true
+```
+
+View only backlog tasks:
+
+```bash
+./task backlog
 ```
 
 ## Help

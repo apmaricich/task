@@ -63,6 +63,35 @@ class TaskStore {
         return sortTasks(taskInstances, by: sortField)
     }
 
+    func track(title: String, description: String, tags: [String] = []) -> Task {
+        var store = loadStore()
+        var tasks = store["tasks"] as? [[String: Any]] ?? []
+
+        let nextId = tasks.isEmpty ? 1 : tasks.map { $0["id"] as? Int ?? 0 }.max()! + 1
+        var task = Task(id: nextId, title: title, description: description, tags: tags)
+        let now = Date().timeIntervalSince1970
+        task.completed = true
+        task.completedDate = now
+
+        var taskDict: [String: Any] = [
+            "id": task.id,
+            "title": task.title,
+            "description": task.description,
+            "completed": true,
+            "createdDate": now,
+            "completedDate": now
+        ]
+        if !task.tags.isEmpty {
+            taskDict["tags"] = task.tags
+        }
+        tasks.append(taskDict)
+
+        store["tasks"] = tasks
+        saveStore(store)
+
+        return task
+    }
+
     func add(title: String, description: String, tags: [String] = []) -> Task {
         var store = loadStore()
         var tasks = store["tasks"] as? [[String: Any]] ?? []
@@ -194,7 +223,32 @@ class TaskStore {
         let pinTagsStr = config["pinTags"] as? String ?? ""
         if pinTagsStr.isEmpty { return [] }
 
-        return pinTagsStr
+        return parseTags(pinTagsStr)
+    }
+
+    func getBacklogTags() -> [String] {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+        let backlogTagsStr = config["backlogTags"] as? String ?? ""
+        if backlogTagsStr.isEmpty { return [] }
+
+        return parseTags(backlogTagsStr)
+    }
+
+    func getShowBacklog() -> Bool {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+        if let showBacklog = config["showBacklog"] as? Bool {
+            return showBacklog
+        }
+        if let showBacklogStr = config["showBacklog"] as? String {
+            return showBacklogStr == "true"
+        }
+        return false
+    }
+
+    private func parseTags(_ tagsStr: String) -> [String] {
+        return tagsStr
             .split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespaces) }
             .map { tag in
@@ -204,6 +258,32 @@ class TaskStore {
                 return "#" + tag
             }
             .filter { !$0.isEmpty }
+    }
+
+    func readyTask(id: Int) -> Bool {
+        var store = loadStore()
+        var tasks = store["tasks"] as? [[String: Any]] ?? []
+        let index = tasks.firstIndex { $0["id"] as? Int == id }
+
+        guard let index = index else { return false }
+
+        let backlogTags = getBacklogTags()
+        guard !backlogTags.isEmpty else { return false }
+
+        var tags = tasks[index]["tags"] as? [String] ?? []
+        let hadBacklogTag = tags.contains(where: { backlogTags.contains($0) })
+        tags = tags.filter { !backlogTags.contains($0) }
+
+        if tags.isEmpty {
+            tasks[index].removeValue(forKey: "tags")
+        } else {
+            tasks[index]["tags"] = tags
+        }
+        tasks[index]["updatedDate"] = Date().timeIntervalSince1970
+
+        store["tasks"] = tasks
+        saveStore(store)
+        return hadBacklogTag
     }
 
     func pinTask(id: Int) -> Bool {

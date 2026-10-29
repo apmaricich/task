@@ -164,6 +164,19 @@ if args["--help"] != nil {
     case "init":
         store.initStore()
 
+    case "ready":
+        guard let idStr = args["id"], let id = Int(idStr) else {
+            print("Error: task ID is required")
+            exit(1)
+        }
+
+        if store.readyTask(id: id) {
+            print("Task #\(id) has been removed from the backlog")
+        } else {
+            print("Error: task #\(id) not found")
+            exit(1)
+        }
+
     case "pin":
         guard let idStr = args["id"], let id = Int(idStr) else {
             print("Error: task ID is required")
@@ -175,6 +188,110 @@ if args["--help"] != nil {
         } else {
             print("Error: task #\(id) not found")
             exit(1)
+        }
+
+    case "backlog":
+        let backlogTags = store.getBacklogTags()
+        let backlogTasks = store.list().filter { task in
+            if backlogTags.isEmpty { return false }
+            return task.tags.contains(where: { backlogTags.contains($0) })
+        }
+
+        if backlogTasks.isEmpty {
+            print("No backlog tasks found.")
+        } else {
+            let backlogCount = backlogTasks.count
+            printHeader("Backlog: (\(backlogCount))")
+
+            let sortField = store.getSortField()
+            let displayLimit = store.getDisplayLimit()
+            let tagDisplayLimit = store.getTagDisplayLimit()
+            let pinTags = store.getPinTags()
+            let cyan = "\u{1b}[36m"
+            let red = "\u{1b}[31m"
+            let reset = "\u{1b}[0m"
+
+            // Separate pinned tasks from the rest
+            let pinnedTasks = backlogTasks.filter { task in
+                !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
+            }
+            let unpinnedTasks = backlogTasks.filter { task in
+                pinnedTasks.contains(where: { $0.id == task.id }) == false
+            }
+
+            func formatTags(_ tags: [String]) -> String {
+                if tags.isEmpty { return "" }
+                var displayTags = tags
+                if tagDisplayLimit > 0 && tags.count > tagDisplayLimit {
+                    displayTags = Array(tags.prefix(tagDisplayLimit))
+                    return " \(cyan)" + displayTags.joined(separator: " ") + " ...\(reset)"
+                }
+                return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
+            }
+
+            func displayBacklogTaskLine(_ task: Task, pinStr: String) {
+                let status = task.completed ? "[x]" : "[ ]"
+                let tagStr = formatTags(task.tags)
+                print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr)")
+            }
+
+            func displayBacklogTasks(_ tasksToShow: [Task], showPin: Bool) {
+                let pinStr = showPin ? "\(red)* \(reset)" : ""
+
+                if sortField == "completed" {
+                    let uncompleted = tasksToShow.filter { !$0.completed }
+                    let completed = tasksToShow.filter { $0.completed }
+
+                    var displayedUncompleted = uncompleted
+                    var displayedCompleted = completed
+                    if displayLimit > 0 {
+                        displayedUncompleted = Array(uncompleted.prefix(displayLimit))
+                        displayedCompleted = Array(completed.prefix(displayLimit))
+                    }
+
+                    for task in displayedUncompleted {
+                        displayBacklogTaskLine(task, pinStr: pinStr)
+                    }
+                    if uncompleted.count > displayedUncompleted.count {
+                        print("  ...")
+                    }
+
+                    if !displayedUncompleted.isEmpty && !displayedCompleted.isEmpty {
+                        print("")
+                    }
+
+                    for task in displayedCompleted {
+                        displayBacklogTaskLine(task, pinStr: pinStr)
+                    }
+                    if completed.count > displayedCompleted.count {
+                        print("  ...")
+                    }
+                } else {
+                    var displayedTasks = tasksToShow
+                    if displayLimit > 0 {
+                        displayedTasks = Array(tasksToShow.prefix(displayLimit))
+                    }
+
+                    for task in displayedTasks {
+                        displayBacklogTaskLine(task, pinStr: pinStr)
+                    }
+
+                    if displayLimit > 0 && tasksToShow.count > displayedTasks.count {
+                        print("  ...")
+                    }
+                }
+            }
+
+            // Display pinned section at the top
+            if !pinnedTasks.isEmpty {
+                displayBacklogTasks(pinnedTasks, showPin: true)
+                print("")
+            }
+
+            // Display unpinned tasks
+            if !unpinnedTasks.isEmpty {
+                displayBacklogTasks(unpinnedTasks, showPin: false)
+            }
         }
 
     case "list", "ls":
@@ -204,23 +321,34 @@ if args["--help"] != nil {
             let displayLimit = store.getDisplayLimit()
             let tagDisplayLimit = store.getTagDisplayLimit()
             let pinTags = store.getPinTags()
+            let backlogTags = store.getBacklogTags()
+            let showBacklog = store.getShowBacklog()
+
+            // Filter out backlog tasks unless showBacklog is true
+            let nonBacklogTasks = tasks.filter { task in
+                if backlogTags.isEmpty {
+                    return true
+                }
+                let hasBacklogTag = task.tags.contains(where: { backlogTags.contains($0) })
+                return !hasBacklogTag || showBacklog
+            }
 
             // Separate pinned tasks from the rest
-            let pinnedTasks = tasks.filter { task in
+            let pinnedTasks = nonBacklogTasks.filter { task in
                 !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
             }
-            let unpinnedTasks = tasks.filter { task in
+            let unpinnedTasks = nonBacklogTasks.filter { task in
                 pinnedTasks.contains(where: { $0.id == task.id }) == false
             }
 
             // Print header with pin count if any
             let pinCount = pinnedTasks.count
+            let headerTitle = "Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))"
             if pinCount > 0 {
-                print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset)) \(red)*\(pinCount)\(reset)")
+                printHeader(headerTitle + " \(red)*\(pinCount)\(reset)")
             } else {
-                print("Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))")
+                printHeader(headerTitle)
             }
-            print(String(repeating: "-", count: 13))
 
             func formatTags(_ tags: [String]) -> String {
                 if tags.isEmpty { return "" }
@@ -301,6 +429,33 @@ if args["--help"] != nil {
         }
         }
     }
+
+    case "track":
+        let titleProvided = args["--title"] != nil
+        let title = args["--title"] ?? prompt("Title: ")
+
+        // Parse tags
+        var tags: [String] = []
+        if let tagStr = args["--tag"] {
+            tags = tagStr.split(separator: ",").map {
+                let tag = $0.trimmingCharacters(in: .whitespaces)
+                if !tag.hasPrefix("#") {
+                    print("Error: tag '\(tag)' must be prefixed with '#'")
+                    exit(1)
+                }
+                return tag
+            }
+        }
+
+        if titleProvided {
+            let description = args["--description"] ?? ""
+            let task = store.track(title: title, description: description, tags: tags)
+            print("Tracked #\(task.id): \(task.title)")
+        } else {
+            let description = prompt("Description: ")
+            let task = store.track(title: title, description: description, tags: tags)
+            print("Tracked #\(task.id): \(task.title)")
+        }
 
     case "add":
         let titleProvided = args["--title"] != nil

@@ -2,6 +2,11 @@ import Foundation
 
 // MARK: - Display Formatting
 
+func printHeader(_ title: String, separatorSize: Int = 13) {
+    print(title)
+    print(String(repeating: "-", count: separatorSize))
+}
+
 func printAsciiTable(rows: [[String]], headers: [String]) {
     guard !rows.isEmpty && !headers.isEmpty else { return }
 
