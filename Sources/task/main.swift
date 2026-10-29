@@ -158,7 +158,8 @@ let args = parseArguments()
 
 if args["--help"] != nil {
     showHelp()
-} else if let command = args["command"] {
+} else {
+    let command = args["command"] ?? "list"
     switch command {
     case "init":
         store.initStore()
@@ -206,8 +207,12 @@ if args["--help"] != nil {
                 let uncompleted = tasks.filter { !$0.completed }
                 let completed = tasks.filter { $0.completed }
 
-                let displayedUncompleted = Array(uncompleted.prefix(displayLimit))
-                let displayedCompleted = Array(completed.prefix(displayLimit))
+                var displayedUncompleted = uncompleted
+                var displayedCompleted = completed
+                if displayLimit > 0 {
+                    displayedUncompleted = Array(uncompleted.prefix(displayLimit))
+                    displayedCompleted = Array(completed.prefix(displayLimit))
+                }
 
                 // Display uncompleted tasks
                 for task in displayedUncompleted {
@@ -370,9 +375,16 @@ if args["--help"] != nil {
         }
 
     default:
-        print("Error: unknown command '\(command)'")
-        exit(1)
+        if let id = Int(command) {
+            if let task = store.getTask(id: id) {
+                displayTaskDetail(task: task)
+            } else {
+                print("Error: task #\(id) not found")
+                exit(1)
+            }
+        } else {
+            print("Error: unknown command '\(command)'")
+            exit(1)
+        }
     }
-} else {
-    showHelp()
 }
