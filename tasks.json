@@ -1,140 +1,141 @@
 {
+  "config" : {
+    "displayLimit" : 4,
+    "backlogTags" : "#backlog",
+    "sort" : "completed",
+    "pinTags" : "#pin",
+    "tagDisplayLimit" : 3
+  },
   "tasks" : [
     {
-      "completed" : true,
       "title" : "sort task by complete feature",
+      "id" : 1,
       "description" : "",
-      "id" : 1
+      "completed" : true
     },
     {
-      "completed" : true,
       "description" : "",
+      "id" : 2,
       "title" : "visual update to sort",
       "completedDate" : 1793282877.4435391,
-      "id" : 2
+      "completed" : true
     },
     {
-      "completed" : true,
       "id" : 3,
-      "title" : "add config command",
-      "description" : ""
+      "completed" : true,
+      "description" : "",
+      "title" : "add config command"
     },
     {
       "title" : "add created and completed timestamps",
-      "description" : "",
       "completed" : true,
-      "id" : 4
+      "id" : 4,
+      "description" : ""
     },
     {
       "description" : "",
       "id" : 5,
       "completedDate" : 1793279136.1286559,
       "completed" : true,
-      "title" : "add display limit configuration option.",
-      "createdDate" : 1793278255.319313
+      "createdDate" : 1793278255.319313,
+      "title" : "add display limit configuration option."
     },
     {
-      "id" : 6,
-      "createdDate" : 1793278956.649796,
-      "completed" : true,
       "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "updatedDate" : 1793280698.610184,
       "completedDate" : 1793280765.953521,
       "title" : "refactor codebase for readability",
-      "updatedDate" : 1793280698.610184
+      "id" : 6,
+      "createdDate" : 1793278956.649796,
+      "completed" : true
     },
     {
-      "description" : "",
-      "id" : 7,
+      "completedDate" : 1793282892.406467,
+      "title" : "prompt for input feature",
       "createdDate" : 1793280739.789355,
       "completed" : true,
-      "completedDate" : 1793282892.406467,
-      "title" : "prompt for input feature"
+      "description" : "",
+      "id" : 7
     },
     {
-      "updatedDate" : 1793288452.6348372,
-      "id" : 8,
       "tags" : [
         "#urgent",
         "#fish"
       ],
-      "completedDate" : 1793291351.0477939,
       "createdDate" : 1793280751.5302989,
+      "updatedDate" : 1793288452.6348372,
       "title" : "tag support",
-      "completed" : true,
-      "description" : ""
+      "description" : "",
+      "id" : 8,
+      "completedDate" : 1793291351.0477939,
+      "completed" : true
     },
     {
-      "completed" : false,
       "createdDate" : 1793281067.3222299,
+      "title" : "task complete no parameters feature",
+      "updatedDate" : 1793294256.8439879,
+      "id" : 9,
+      "completed" : false,
       "tags" : [
         "#testing",
         "#bug",
         "#backlog"
       ],
-      "updatedDate" : 1793294256.8439879,
-      "title" : "task complete no parameters feature",
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
-      "id" : 9
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete."
     },
     {
-      "completedDate" : 1793285143.4755101,
-      "completed" : true,
-      "updatedDate" : 1793285071.8822351,
       "id" : 10,
-      "description" : "",
       "createdDate" : 1793281110.801991,
-      "title" : "add hr rule"
+      "completed" : true,
+      "description" : "",
+      "title" : "add hr rule",
+      "updatedDate" : 1793285071.8822351,
+      "completedDate" : 1793285143.4755101
     },
     {
-      "id" : 11,
-      "createdDate" : 1793285723.4814019,
-      "description" : "A list of tags should be able to be configured under a priority configuration option. all tags in the list are ordered by highest to lowest priority. high priority gets colored red, lower priority is colored yellow, no priority tag is displayed as normal.",
-      "completed" : false,
-      "title" : "tag based priority system"
-    },
-    {
-      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "completed" : false,
       "id" : 12,
       "title" : "track command",
-      "createdDate" : 1793286882.7039061
+      "createdDate" : 1793286882.7039061,
+      "completedDate" : 1793303628.6489511,
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
+      "completed" : true
     },
     {
-      "title" : "backlog feature",
-      "completed" : true,
       "id" : 13,
+      "title" : "backlog feature",
       "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
       "completedDate" : 1793303074.8227601,
+      "completed" : true,
       "updatedDate" : 1793303135.5591919,
       "createdDate" : 1793287030.560792
     },
     {
-      "completed" : true,
-      "createdDate" : 1793287468.2949429,
+      "completedDate" : 1793298376.082309,
       "tags" : [
         "#bug",
         "#urgent"
       ],
       "id" : 14,
-      "completedDate" : 1793298376.082309,
-      "description" : "",
-      "title" : "Test with tags"
-    },
-    {
-      "title" : "Remove 'list' command and replace with no arguments",
-      "createdDate" : 1793294391.9601312,
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
-      "completedDate" : 1793298359.5235991,
+      "createdDate" : 1793287468.2949429,
+      "title" : "Test with tags",
       "completed" : true,
-      "id" : 15
+      "description" : ""
     },
     {
+      "completedDate" : 1793298359.5235991,
+      "title" : "Remove 'list' command and replace with no arguments",
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
+      "createdDate" : 1793294391.9601312,
+      "id" : 15,
+      "completed" : true
+    },
+    {
+      "id" : 16,
+      "updatedDate" : 1793298333.3063569,
       "description" : "",
       "title" : "pin section",
-      "createdDate" : 1793296823.392992,
-      "updatedDate" : 1793298333.3063569,
       "completedDate" : 1793298347.843744,
-      "id" : 16,
+      "createdDate" : 1793296823.392992,
       "completed" : true
     },
     {
@@ -142,15 +143,8 @@
       "completedDate" : 1793303447.776912,
       "title" : "Test of task track",
       "id" : 17,
-      "completed" : true,
-      "description" : "This is just a test."
+      "description" : "This is just a test.",
+      "completed" : true
     }
-  ],
-  "config" : {
-    "displayLimit" : 4,
-    "backlogTags" : "#backlog",
-    "sort" : "completed",
-    "pinTags" : "#pin",
-    "tagDisplayLimit" : 3
-  }
+  ]
 }

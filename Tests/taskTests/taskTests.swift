@@ -333,6 +333,55 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(completedCount, 1)
     }
 
+    func testBacklogTasksExcludedFromCounts() {
+        store.add(title: "Regular uncompleted", description: "")
+        store.add(title: "Regular completed", description: "")
+        let completed = store.list().first { $0.title == "Regular completed" }!
+        store.done(id: completed.id)
+
+        store.add(title: "Backlog uncompleted", description: "", tags: ["#backlog"])
+        store.add(title: "Backlog completed", description: "", tags: ["#backlog"])
+        let backlogCompleted = store.list().first { $0.title == "Backlog completed" }!
+        store.done(id: backlogCompleted.id)
+
+        store.setConfig(key: "backlogTags", value: "#backlog")
+
+        let tasks = store.list()
+        let nonBacklogTasks = tasks.filter { task in
+            let backlogTags = store.getBacklogTags()
+            if backlogTags.isEmpty { return true }
+            return !task.tags.contains(where: { backlogTags.contains($0) })
+        }
+
+        // Non-backlog tasks should be 2 (1 uncompleted, 1 completed)
+        XCTAssertEqual(nonBacklogTasks.count, 2)
+        XCTAssertEqual(nonBacklogTasks.filter { !$0.completed }.count, 1)
+        XCTAssertEqual(nonBacklogTasks.filter { $0.completed }.count, 1)
+
+        // Total tasks should be 4
+        XCTAssertEqual(tasks.count, 4)
+
+        // Backlog count
+        let backlogCount = tasks.count - nonBacklogTasks.count
+        XCTAssertEqual(backlogCount, 2)
+    }
+
+    func testBacklogCountWithNoBacklogTasks() {
+        store.add(title: "Regular task", description: "")
+        store.setConfig(key: "backlogTags", value: "#backlog")
+
+        let tasks = store.list()
+        let nonBacklogTasks = tasks.filter { task in
+            let backlogTags = store.getBacklogTags()
+            if backlogTags.isEmpty { return true }
+            return !task.tags.contains(where: { backlogTags.contains($0) })
+        }
+
+        XCTAssertEqual(tasks.count, 1)
+        XCTAssertEqual(nonBacklogTasks.count, 1)
+        XCTAssertEqual(tasks.count - nonBacklogTasks.count, 0)
+    }
+
     // MARK: - Track Task Tests
 
     func testTrackTaskCreatesAndCompletes() {

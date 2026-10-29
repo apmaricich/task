@@ -309,8 +309,6 @@ if args["--help"] != nil {
             if tasks.isEmpty {
                 print("No tasks found.")
             } else {
-            let uncompletedCount = tasks.filter { !$0.completed }.count
-            let completedCount = tasks.filter { $0.completed }.count
             let yellow = "\u{1b}[33m"
             let green = "\u{1b}[32m"
             let cyan = "\u{1b}[36m"
@@ -333,6 +331,10 @@ if args["--help"] != nil {
                 return !hasBacklogTag || showBacklog
             }
 
+            let nonBacklogUncompleted = nonBacklogTasks.filter { !$0.completed }.count
+            let nonBacklogCompleted = nonBacklogTasks.filter { $0.completed }.count
+            let backlogCount = tasks.count - nonBacklogTasks.count
+
             // Separate pinned tasks from the rest
             let pinnedTasks = nonBacklogTasks.filter { task in
                 !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
@@ -341,13 +343,14 @@ if args["--help"] != nil {
                 pinnedTasks.contains(where: { $0.id == task.id }) == false
             }
 
-            // Print header with pin count if any
+            // Print header with pin count and backlog count
             let pinCount = pinnedTasks.count
-            let headerTitle = "Tasks: (\(yellow)\(uncompletedCount)\(reset), \(green)\(completedCount)\(reset))"
+            let headerTitle = "Tasks: (\(yellow)\(nonBacklogUncompleted)\(reset), \(green)\(nonBacklogCompleted)\(reset))"
+            let backlogSuffix = backlogCount > 0 ? " \(red)b\(backlogCount)\(reset)" : ""
             if pinCount > 0 {
-                printHeader(headerTitle + " \(red)*\(pinCount)\(reset)")
+                printHeader(headerTitle + " \(red)*\(pinCount)\(reset)\(backlogSuffix)")
             } else {
-                printHeader(headerTitle)
+                printHeader(headerTitle + backlogSuffix)
             }
 
             func formatTags(_ tags: [String]) -> String {
