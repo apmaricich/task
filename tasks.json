@@ -1,79 +1,79 @@
 {
   "config" : {
-    "sort" : "completed",
-    "displayLimit" : 0
+    "sort" : "title",
+    "displayLimit" : 10
   },
   "tasks" : [
     {
-      "description" : "",
-      "completed" : true,
+      "id" : 1,
       "title" : "sort task by complete feature",
-      "id" : 1
-    },
-    {
-      "id" : 2,
-      "completed" : true,
-      "completedDate" : 1793282877.4435391,
       "description" : "",
-      "title" : "visual update to sort"
-    },
-    {
-      "description" : "",
-      "completed" : true,
-      "title" : "add config command",
-      "id" : 3
-    },
-    {
-      "description" : "",
-      "title" : "add created and completed timestamps",
-      "id" : 4,
       "completed" : true
     },
     {
+      "id" : 2,
+      "title" : "visual update to sort",
+      "completedDate" : 1793282877.4435391,
       "completed" : true,
-      "createdDate" : 1793278255.319313,
+      "description" : ""
+    },
+    {
+      "id" : 3,
+      "title" : "add config command",
       "description" : "",
+      "completed" : true
+    },
+    {
+      "id" : 4,
+      "title" : "add created and completed timestamps",
+      "description" : "",
+      "completed" : true
+    },
+    {
+      "createdDate" : 1793278255.319313,
       "title" : "add display limit configuration option.",
       "completedDate" : 1793279136.1286559,
+      "completed" : true,
+      "description" : "",
       "id" : 5
     },
     {
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "completedDate" : 1793280765.953521,
       "createdDate" : 1793278956.649796,
-      "title" : "refactor codebase for readability",
       "id" : 6,
-      "completed" : true,
-      "updatedDate" : 1793280698.610184
+      "completedDate" : 1793280765.953521,
+      "title" : "refactor codebase for readability",
+      "updatedDate" : 1793280698.610184,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "completed" : true
     },
     {
-      "completed" : true,
       "createdDate" : 1793280739.789355,
       "title" : "prompt for input feature",
       "id" : 7,
+      "completed" : true,
       "completedDate" : 1793282892.406467,
       "description" : ""
     },
     {
-      "title" : "tag support",
-      "description" : "",
       "id" : 8,
-      "completed" : false,
-      "createdDate" : 1793280751.5302989
-    },
-    {
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
-      "id" : 9,
-      "title" : "task complete no parameters feature",
-      "createdDate" : 1793281067.3222299,
+      "title" : "tag support",
+      "createdDate" : 1793280751.5302989,
+      "description" : "",
       "completed" : false
     },
     {
-      "completed" : false,
+      "id" : 9,
+      "title" : "task complete no parameters feature",
+      "createdDate" : 1793281067.3222299,
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "completed" : false
+    },
+    {
       "id" : 10,
-      "description" : "",
       "title" : "add horizontal rule to top of task detail command.\n",
-      "createdDate" : 1793281110.801991
+      "createdDate" : 1793281110.801991,
+      "completed" : false,
+      "description" : ""
     }
   ]
 }

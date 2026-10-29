@@ -299,9 +299,9 @@ if args["--help"] != nil {
             if config.isEmpty {
                 print("No configuration set.")
             } else {
-                for (key, value) in config.sorted(by: { $0.key < $1.key }) {
-                    print("\(key)\t\t\(value)")
-                }
+                let headers = ["Key", "Value"]
+                let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { [ $0.key, "\($0.value)" ] }
+                printAsciiTable(rows: rows, headers: headers)
             }
         }
 
