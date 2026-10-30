@@ -130,19 +130,7 @@ class TaskStore {
             tasks[index]["description"] = description
         }
         if let tags = tags {
-            var currentTags = tasks[index]["tags"] as? [String] ?? []
-            for tag in tags {
-                if currentTags.contains(tag) {
-                    currentTags.removeAll { $0 == tag }
-                } else {
-                    currentTags.append(tag)
-                }
-            }
-            if !currentTags.isEmpty {
-                tasks[index]["tags"] = currentTags
-            } else {
-                tasks[index].removeValue(forKey: "tags")
-            }
+            tasks[index]["tags"] = tags
         }
         tasks[index]["updatedDate"] = Date().timeIntervalSince1970
 
@@ -217,22 +205,21 @@ class TaskStore {
         return config["tagDisplayLimit"] as? Int ?? 0
     }
 
-    func getPinTags() -> [String] {
+    func getConfigTags(_ key: String) -> [String] {
         let store = loadStore()
         let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
-        let pinTagsStr = config["pinTags"] as? String ?? ""
-        if pinTagsStr.isEmpty { return [] }
+        let tagsStr = config[key] as? String ?? ""
+        if tagsStr.isEmpty { return [] }
 
-        return parseTags(pinTagsStr)
+        return parseTags(tagsStr)
+    }
+
+    func getPinTags() -> [String] {
+        return getConfigTags("pinTags")
     }
 
     func getBacklogTags() -> [String] {
-        let store = loadStore()
-        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
-        let backlogTagsStr = config["backlogTags"] as? String ?? ""
-        if backlogTagsStr.isEmpty { return [] }
-
-        return parseTags(backlogTagsStr)
+        return getConfigTags("backlogTags")
     }
 
     func getShowBacklog() -> Bool {

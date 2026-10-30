@@ -1,31 +1,23 @@
 {
-  "config" : {
-    "pinTags" : "#pin",
-    "tagDisplayLimit" : 3,
-    "backlogTags" : "#backlog",
-    "sort" : "completed",
-    "showCompleted" : "false",
-    "displayLimit" : 4
-  },
   "tasks" : [
     {
-      "completed" : true,
       "title" : "sort task by complete feature",
-      "id" : 1,
-      "description" : ""
+      "description" : "",
+      "completed" : true,
+      "id" : 1
     },
     {
-      "completedDate" : 1793282877.4435391,
-      "completed" : true,
       "title" : "visual update to sort",
       "id" : 2,
-      "description" : ""
+      "completed" : true,
+      "description" : "",
+      "completedDate" : 1793282877.4435391
     },
     {
-      "description" : "",
       "id" : 3,
+      "completed" : true,
       "title" : "add config command",
-      "completed" : true
+      "description" : ""
     },
     {
       "description" : "",
@@ -34,136 +26,149 @@
       "id" : 4
     },
     {
+      "title" : "add display limit configuration option.",
+      "id" : 5,
       "description" : "",
       "createdDate" : 1793278255.319313,
       "completed" : true,
-      "title" : "add display limit configuration option.",
-      "completedDate" : 1793279136.1286559,
-      "id" : 5
+      "completedDate" : 1793279136.1286559
     },
     {
-      "title" : "refactor codebase for readability",
       "updatedDate" : 1793280698.610184,
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "completed" : true,
-      "completedDate" : 1793280765.953521,
       "createdDate" : 1793278956.649796,
-      "id" : 6
-    },
-    {
-      "completedDate" : 1793282892.406467,
-      "id" : 7,
-      "createdDate" : 1793280739.789355,
-      "title" : "prompt for input feature",
-      "description" : "",
-      "completed" : true
-    },
-    {
-      "id" : 8,
-      "description" : "",
-      "createdDate" : 1793280751.5302989,
       "completed" : true,
-      "updatedDate" : 1793288452.6348372,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "completedDate" : 1793280765.953521,
+      "id" : 6,
+      "title" : "refactor codebase for readability"
+    },
+    {
+      "title" : "prompt for input feature",
+      "createdDate" : 1793280739.789355,
+      "id" : 7,
+      "completed" : true,
+      "description" : "",
+      "completedDate" : 1793282892.406467
+    },
+    {
+      "title" : "tag support",
+      "description" : "",
+      "id" : 8,
       "tags" : [
         "#urgent",
         "#fish"
       ],
-      "title" : "tag support",
-      "completedDate" : 1793291351.0477939
+      "completed" : true,
+      "completedDate" : 1793291351.0477939,
+      "createdDate" : 1793280751.5302989,
+      "updatedDate" : 1793288452.6348372
     },
     {
-      "createdDate" : 1793281067.3222299,
       "completed" : false,
-      "title" : "task complete no parameters feature",
+      "createdDate" : 1793281067.3222299,
+      "updatedDate" : 1793364652.6220279,
       "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
-      "tags" : [
-        "#testing",
-        "#bug",
-        "#backlog"
-      ],
-      "updatedDate" : 1793294256.8439879,
-      "id" : 9
+      "id" : 9,
+      "title" : "task complete no parameters feature"
     },
     {
-      "title" : "add hr rule",
-      "completedDate" : 1793285143.4755101,
+      "id" : 10,
+      "createdDate" : 1793281110.801991,
       "updatedDate" : 1793285071.8822351,
       "description" : "",
+      "completedDate" : 1793285143.4755101,
       "completed" : true,
-      "id" : 10,
-      "createdDate" : 1793281110.801991
+      "title" : "add hr rule"
     },
     {
-      "completedDate" : 1793303628.6489511,
-      "completed" : true,
+      "createdDate" : 1793286882.7039061,
       "title" : "track command",
       "id" : 12,
       "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "createdDate" : 1793286882.7039061
+      "completed" : true,
+      "completedDate" : 1793303628.6489511
     },
     {
-      "completedDate" : 1793303074.8227601,
+      "id" : 13,
+      "title" : "backlog feature",
+      "completed" : true,
       "createdDate" : 1793287030.560792,
       "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
-      "id" : 13,
       "updatedDate" : 1793303135.5591919,
-      "completed" : true,
-      "title" : "backlog feature"
+      "completedDate" : 1793303074.8227601
     },
     {
+      "completedDate" : 1793298376.082309,
+      "id" : 14,
       "createdDate" : 1793287468.2949429,
+      "title" : "Test with tags",
+      "description" : "",
       "tags" : [
         "#bug",
         "#urgent"
       ],
-      "description" : "",
-      "completedDate" : 1793298376.082309,
-      "id" : 14,
-      "completed" : true,
-      "title" : "Test with tags"
+      "completed" : true
     },
     {
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
       "completed" : true,
+      "id" : 15,
+      "completedDate" : 1793298359.5235991,
       "title" : "Remove 'list' command and replace with no arguments",
       "createdDate" : 1793294391.9601312,
-      "id" : 15,
-      "completedDate" : 1793298359.5235991
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags."
     },
     {
       "description" : "",
-      "id" : 16,
+      "completedDate" : 1793298347.843744,
       "title" : "pin section",
       "updatedDate" : 1793298333.3063569,
       "completed" : true,
-      "completedDate" : 1793298347.843744,
+      "id" : 16,
       "createdDate" : 1793296823.392992
     },
     {
       "createdDate" : 1793303447.776912,
-      "description" : "This is just a test.",
-      "title" : "Test of task track",
       "completed" : true,
-      "id" : 17,
-      "completedDate" : 1793303447.776912
+      "title" : "Test of task track",
+      "completedDate" : 1793303447.776912,
+      "description" : "This is just a test.",
+      "id" : 17
     },
     {
-      "id" : 18,
-      "completed" : false,
-      "tags" : [
-        "#pin"
-      ],
-      "updatedDate" : 1793305557.05896,
+      "updatedDate" : 1793364410.861331,
       "createdDate" : 1793305384.1244321,
-      "description" : "List of tags should be able to be provided when adding an item through the prompt.",
-      "title" : "task add should prompt for tags"
+      "completed" : true,
+      "completedDate" : 1793364406.008229,
+      "title" : "task add should prompt for tags",
+      "id" : 18,
+      "description" : "List of tags should be able to be provided when adding an item through the prompt."
     },
     {
-      "completed" : false,
+      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
+      "completedDate" : 1793365063.5266628,
       "title" : "idea",
+      "completed" : true,
       "id" : 19,
-      "createdDate" : 1793305894.0261459,
-      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation."
+      "createdDate" : 1793305894.0261459
+    },
+    {
+      "tags" : [
+        "#backlog"
+      ],
+      "id" : 20,
+      "title" : "statistics viewer",
+      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
+      "completed" : false,
+      "updatedDate" : 1793365147.065887,
+      "createdDate" : 1793365147.063472
     }
-  ]
+  ],
+  "config" : {
+    "sort" : "completed",
+    "displayLimit" : 4,
+    "backlogTags" : "#backlog",
+    "showCompleted" : "false",
+    "pinTags" : "#pin",
+    "tagDisplayLimit" : 3
+  }
 }

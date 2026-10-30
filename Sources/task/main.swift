@@ -128,6 +128,36 @@ func printWrappedText(_ text: String, maxWidth: Int, indent: String) {
     }
 }
 
+// MARK: - Add Task with Prompt
+
+func addTaskWithPrompt(_ store: TaskStore, args: [String: String]) {
+    let titleProvided = args["--title"] != nil
+    let title = args["--title"] ?? prompt("Title: ")
+
+    var tags: [String] = []
+    if let tagStr = args["--tag"] {
+        tags = store.parseTags(tagStr)
+    }
+
+    if titleProvided {
+        let description = args["--description"] ?? ""
+        let task = store.add(title: title, description: description, tags: tags)
+        print("Added task #\(task.id): \(task.title)")
+    } else {
+        let description = prompt("Description: ")
+
+        if tags.isEmpty {
+            let tagInput = prompt("Tags (comma-separated, prefix with #): ")
+            if !tagInput.isEmpty {
+                tags = store.parseTags(tagInput)
+            }
+        }
+
+        let task = store.add(title: title, description: description, tags: tags)
+        print("Added task #\(task.id): \(task.title)")
+    }
+}
+
 // MARK: - Help Display
 
 func showHelp() {
@@ -474,35 +504,22 @@ if args["--help"] != nil {
         }
 
     case "add":
-        let titleProvided = args["--title"] != nil
-        let title = args["--title"] ?? prompt("Title: ")
+        addTaskWithPrompt(store, args: args)
 
-        // Parse tags from flag or prompt
-        var tags: [String] = []
-        if let tagStr = args["--tag"] {
-            tags = store.parseTags(tagStr)
+    case "idea":
+        addTaskWithPrompt(store, args: args)
+        let backlogTags = store.getConfigTags("backlogTags")
+        if backlogTags.isEmpty {
+            print("Error: no backlogTags configured. Set with 'task config backlogTags #tag'")
+            exit(1)
         }
-
-        if titleProvided {
-            // Title provided, don't prompt for description or tags
-            let description = args["--description"] ?? ""
-            let task = store.add(title: title, description: description, tags: tags)
-            print("Added task #\(task.id): \(task.title)")
-        } else {
-            // No title provided, prompt for description and tags
-            let description = prompt("Description: ")
-
-            // Prompt for tags if not provided via flag
-            if tags.isEmpty {
-                let tagInput = prompt("Tags (comma-separated, prefix with #): ")
-                if !tagInput.isEmpty {
-                    tags = store.parseTags(tagInput)
-                }
-            }
-
-            let task = store.add(title: title, description: description, tags: tags)
-            print("Added task #\(task.id): \(task.title)")
+        let allTasks = store.list()
+        guard let newestTask = allTasks.max(by: { $0.id < $1.id }) else {
+            exit(1)
         }
+        // Add backlog tag while preserving any user-provided tags
+        let updatedTags = Array(Set(newestTask.tags + [backlogTags[0]]))
+        store.update(id: newestTask.id, title: newestTask.title, description: newestTask.description, tags: updatedTags)
 
     case "update":
         guard let idStr = args["id"], let id = Int(idStr) else {
