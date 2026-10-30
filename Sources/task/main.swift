@@ -40,6 +40,8 @@ func parseArguments() -> [String: String] {
             result["id"] = arg
         } else if result["command"] == "config" && result["id"] != nil && result["value"] == nil {
             result["value"] = arg
+        } else if result["command"] == "command" && result["id"] == nil {
+            result["id"] = arg
         } else {
             result["id"] = arg
         }
@@ -213,6 +215,9 @@ func showHelp() {
 
 let store = TaskStore()
 let args = parseArguments()
+
+// Get configured commands
+let commands = store.getCommands()
 
 if args["--help"] != nil {
     showHelp()
@@ -590,17 +595,26 @@ if args["--help"] != nil {
 
     case "config":
         if let key = args["id"] {
-            guard let value = args["value"] else {
-                print("Error: config value is required")
-                exit(1)
-            }
-            // Detect tag list config keys
-            let tagListKeys = ["pinTags", "backlogTags"]
-            if tagListKeys.contains(key) {
-                let tags = parseTags(value)
-                store.setConfigTags(key, tags: tags)
+            if let value = args["value"] {
+                let config = store.getConfig()
+                if let currentValue = config[key] as? [String] {
+                    // Current value is a list - toggle
+                    if currentValue.contains(value) {
+                        var newList = currentValue
+                        newList.removeAll(where: { $0 == value })
+                        store.setConfig(key: key, value: newList)
+                    } else {
+                        var newList = currentValue
+                        newList.append(value)
+                        store.setConfig(key: key, value: newList)
+                    }
+                } else {
+                    // Key doesn't exist or current value is not a list - set directly
+                    store.setConfig(key: key, value: value)
+                }
             } else {
-                store.setConfig(key: key, value: value)
+                print("Error: value is required for '\(key)'")
+                exit(1)
             }
         } else {
             let config = store.getConfig()
@@ -608,7 +622,19 @@ if args["--help"] != nil {
                 print("No configuration set.")
             } else {
                 let headers = ["Key", "Value"]
-                let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { [ $0.key, "\($0.value)" ] }
+                let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { key, value in
+                    let valueStr: String
+                    if let arr = value as? [String] {
+                        valueStr = arr.joined(separator: ", ")
+                    } else if let int = value as? Int {
+                        valueStr = "\(int)"
+                    } else if let bool = value as? Bool {
+                        valueStr = "\(bool)"
+                    } else {
+                        valueStr = "\(value)"
+                    }
+                    return [key, valueStr]
+                }
                 printAsciiTable(rows: rows, headers: headers)
             }
         }
@@ -677,6 +703,14 @@ if args["--help"] != nil {
                 print("Error: task #\(id) not found")
                 exit(1)
             }
+        } else if commands.contains(command) {
+            addTaskWithPrompt(store, args: args)
+            let allTasks = store.list()
+            let maxId = allTasks.map { $0.id }.max()!
+            let task = allTasks.first { $0.id == maxId }!
+            let tagToApply = "#" + command
+            let updatedTags = task.tags + [tagToApply]
+            store.update(id: task.id, title: task.title, description: task.description, tags: updatedTags)
         } else {
             print("Error: unknown command '\(command)'")
             exit(1)

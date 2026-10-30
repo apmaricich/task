@@ -34,7 +34,7 @@ class TaskStore {
 
     func initStore() {
         var store = loadStore()
-        store["config"] = ["sort": "completed", "tagDisplayLimit": 0]
+        store["config"] = ["sort": "completed", "tagDisplayLimit": 0, "lists": ["backlogTags", "pinTags", "command"]]
         saveStore(store)
         print("Task store initialized at \(filePath)")
     }
@@ -182,6 +182,22 @@ class TaskStore {
         print("Updated config: \(key) = \(value)")
     }
 
+    func setConfig(key: String, value: [String]) {
+        var store = loadStore()
+        var config = store["config"] as? [String: Any] ?? [:]
+
+        // If the value is empty, store as empty array
+        if value.isEmpty {
+            config[key] = []
+        } else {
+            config[key] = value
+        }
+
+        store["config"] = config
+        saveStore(store)
+        print("Updated config: \(key) = \(value.joined(separator: ","))")
+    }
+
     func getConfig() -> [String: Any] {
         let store = loadStore()
         return store["config"] as? [String: Any] ?? [:]
@@ -233,6 +249,26 @@ class TaskStore {
         store["config"] = config
         saveStore(store)
         print("Updated config: \(key) = \(tags.joined(separator: ","))")
+    }
+
+    func getCommands() -> [String] {
+        let store = loadStore()
+        let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
+
+        if let commands = config["commands"] as? [String] {
+            return commands
+        }
+
+        return []
+    }
+
+    func setCommands(_ commands: [String]) {
+        var store = loadStore()
+        var config = store["config"] as? [String: Any] ?? [:]
+        config["commands"] = commands
+        store["config"] = config
+        saveStore(store)
+        print("Updated config: commands = \(commands.joined(separator: ","))")
     }
 
     func getPinTags() -> [String] {

@@ -51,3 +51,21 @@ swiftlint
 3. Run `swift test` to ensure all tests pass
 4. Run `swiftlint` to check code quality
 5. Commit changes with clear, descriptive messages
+
+## Testing tasks.json Changes
+
+When testing tasks.json changes (adding/removing items, modifying config), create a temporary test directory and work with a copy of the config there. Never modify the root tasks.json during testing.
+
+```bash
+# Create a test directory
+mkdir -p /tmp/task-test
+
+# Copy the config
+cp tasks.json /tmp/task-test/
+
+# Run the test command with the temp config
+cd /tmp/task-test && .build/debug/task <command>
+
+# Clean up when done
+rm -rf /tmp/task-test
+```
