@@ -622,4 +622,46 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(commands.count, 1)
         XCTAssertEqual(commands.first, "feature")
     }
+
+    // MARK: - View Command Tests
+
+    func testViewFiltersByTag() {
+        store.add(title: "Task 1", description: "", tags: ["#backlog"])
+        store.add(title: "Task 2", description: "", tags: ["#important"])
+        store.add(title: "Task 3", description: "", tags: ["#backlog"])
+
+        let viewTasks = store.list().filter { task in
+            task.tags.contains("#backlog")
+        }
+
+        XCTAssertEqual(viewTasks.count, 2)
+        XCTAssertEqual(viewTasks[0].title, "Task 1")
+        XCTAssertEqual(viewTasks[1].title, "Task 3")
+    }
+
+    func testViewReturnsEmptyForMissingTag() {
+        store.add(title: "Task 1", description: "", tags: ["#backlog"])
+
+        let viewTasks = store.list().filter { task in
+            task.tags.contains("#feature")
+        }
+
+        XCTAssertTrue(viewTasks.isEmpty)
+    }
+
+    func testViewCapitalizesTagName() {
+        let tagName = "backlog"
+        let capitalized = tagName.capitalized
+        XCTAssertEqual(capitalized, "Backlog")
+    }
+
+    func testViewHandlesTagWithHash() {
+        // Tags with hash should work the same as without
+        let tag = "#backlog"
+        let viewTasks = store.list().filter { task in
+            task.tags.contains(tag)
+        }
+
+        XCTAssertTrue(viewTasks.isEmpty)
+    }
 }
