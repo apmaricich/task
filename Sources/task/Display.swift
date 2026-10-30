@@ -243,6 +243,7 @@ func showHelp() {
     print("  pin <ID>                Pin or unpin a task")
     print("  ready <ID>              Remove a task from the backlog")
     print("  view <tag>              View tasks by tag")
+    print("  tags                    List all tags and their usage counts")
     print("  config <key> <value>    Update configuration")
     print("")
     print("Options:")

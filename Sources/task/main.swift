@@ -127,6 +127,33 @@ func handleConfig(store: TaskStore, args: [String: String]) {
     }
 }
 
+// MARK: - Tags Command
+
+func handleTags(store: TaskStore) {
+    let tasks = store.list()
+    var tagCounts: [String: Int] = [:]
+
+    for task in tasks {
+        for tag in task.tags {
+            if let count = tagCounts[tag] {
+                tagCounts[tag] = count + 1
+            } else {
+                tagCounts[tag] = 1
+            }
+        }
+    }
+
+    if tagCounts.isEmpty {
+        print("No tags found.")
+    } else {
+        let headers = ["Tag", "Count"]
+        let rows: [[String]] = tagCounts
+            .sorted(by: { $0.key < $1.key })
+            .map { [$0.key, "\($0.value)"] }
+        printAsciiTable(rows: rows, headers: headers)
+    }
+}
+
 // MARK: - View Command
 
 func handleView(store: TaskStore, args: [String: String]) {
@@ -237,6 +264,9 @@ if args["--help"] != nil {
     case "view":
         handleView(store: store, args: args)
 
+    case "tags":
+        handleTags(store: store)
+
     case "list", "ls":
         if let idStr = args["id"], let id = Int(idStr) {
             // Show detailed info for a specific task
@@ -335,21 +365,6 @@ if args["--help"] != nil {
 
     case "add":
         addTaskWithPrompt(store, args: args)
-
-    case "idea":
-        addTaskWithPrompt(store, args: args)
-        let backlogTags = store.getConfigTags("backlogTags")
-        if backlogTags.isEmpty {
-            print("Error: no backlogTags configured. Set with 'task config backlogTags #tag'")
-            exit(1)
-        }
-        let allTasks = store.list()
-        guard let newestTask = allTasks.max(by: { $0.id < $1.id }) else {
-            exit(1)
-        }
-        // Add backlog tag while preserving any user-provided tags
-        let updatedTags = Array(Set(newestTask.tags + [backlogTags[0]]))
-        store.update(id: newestTask.id, title: newestTask.title, description: newestTask.description, tags: updatedTags)
 
     case "update":
         guard let idStr = args["id"], let id = Int(idStr) else {

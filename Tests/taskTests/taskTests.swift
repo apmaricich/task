@@ -623,6 +623,47 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(commands.first, "feature")
     }
 
+    // MARK: - Tags Command Tests
+
+    func testTagsCount() {
+        store.add(title: "Task 1", description: "", tags: ["#backlog"])
+        store.add(title: "Task 2", description: "", tags: ["#important"])
+        store.add(title: "Task 3", description: "", tags: ["#backlog"])
+        store.add(title: "Task 4", description: "", tags: ["#backlog", "#important"])
+
+        let tasks = store.list()
+        var tagCounts: [String: Int] = [:]
+        for task in tasks {
+            for tag in task.tags {
+                if let count = tagCounts[tag] {
+                    tagCounts[tag] = count + 1
+                } else {
+                    tagCounts[tag] = 1
+                }
+            }
+        }
+
+        XCTAssertEqual(tagCounts["#backlog"], 3)
+        XCTAssertEqual(tagCounts["#important"], 2)
+        XCTAssertEqual(tagCounts.count, 2)
+    }
+
+    func testTagsEmpty() {
+        let tasks = store.list()
+        var tagCounts: [String: Int] = [:]
+        for task in tasks {
+            for tag in task.tags {
+                if let count = tagCounts[tag] {
+                    tagCounts[tag] = count + 1
+                } else {
+                    tagCounts[tag] = 1
+                }
+            }
+        }
+
+        XCTAssertTrue(tagCounts.isEmpty)
+    }
+
     // MARK: - View Command Tests
 
     func testViewFiltersByTag() {
