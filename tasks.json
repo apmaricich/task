@@ -1,181 +1,207 @@
 {
   "tasks" : [
     {
-      "id" : 1,
       "title" : "sort task by complete feature",
       "description" : "",
+      "id" : 1,
       "completed" : true
     },
     {
-      "id" : 2,
-      "title" : "visual update to sort",
       "completedDate" : 1793282877.4435391,
       "completed" : true,
-      "description" : ""
+      "description" : "",
+      "title" : "visual update to sort",
+      "id" : 2
     },
     {
-      "id" : 3,
+      "description" : "",
       "title" : "add config command",
       "completed" : true,
-      "description" : ""
+      "id" : 3
     },
     {
       "id" : 4,
-      "title" : "add created and completed timestamps",
       "completed" : true,
+      "title" : "add created and completed timestamps",
       "description" : ""
     },
     {
+      "completedDate" : 1793279136.1286559,
       "createdDate" : 1793278255.319313,
       "title" : "add display limit configuration option.",
-      "completedDate" : 1793279136.1286559,
       "completed" : true,
-      "description" : "",
-      "id" : 5
+      "id" : 5,
+      "description" : ""
     },
     {
-      "createdDate" : 1793278956.649796,
+      "title" : "refactor codebase for readability",
       "id" : 6,
       "completedDate" : 1793280765.953521,
-      "title" : "refactor codebase for readability",
+      "createdDate" : 1793278956.649796,
       "updatedDate" : 1793280698.610184,
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "completed" : true
+      "completed" : true,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?"
     },
     {
-      "id" : 7,
-      "title" : "prompt for input feature",
       "completedDate" : 1793282892.406467,
       "description" : "",
+      "createdDate" : 1793280739.789355,
+      "title" : "prompt for input feature",
       "completed" : true,
-      "createdDate" : 1793280739.789355
+      "id" : 7
     },
     {
-      "createdDate" : 1793280751.5302989,
-      "id" : 8,
-      "completedDate" : 1793291351.0477939,
-      "title" : "tag support",
-      "updatedDate" : 1793288452.6348372,
-      "description" : "",
-      "completed" : true,
       "tags" : [
         "#urgent",
         "#fish"
-      ]
+      ],
+      "description" : "",
+      "title" : "tag support",
+      "completedDate" : 1793291351.0477939,
+      "createdDate" : 1793280751.5302989,
+      "completed" : true,
+      "updatedDate" : 1793288452.6348372,
+      "id" : 8
     },
     {
-      "id" : 9,
-      "title" : "task complete no parameters feature",
-      "createdDate" : 1793281067.3222299,
       "completed" : false,
-      "updatedDate" : 1793372780.4462881,
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete."
+      "createdDate" : 1793281067.3222299,
+      "title" : "task complete no parameters feature",
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "id" : 9,
+      "tags" : [
+        "#backlog"
+      ],
+      "updatedDate" : 1793373809.2933269
     },
     {
-      "createdDate" : 1793281110.801991,
-      "id" : 10,
       "completedDate" : 1793285143.4755101,
+      "id" : 10,
+      "completed" : true,
       "title" : "add hr rule",
       "updatedDate" : 1793285071.8822351,
-      "description" : "",
-      "completed" : true
+      "createdDate" : 1793281110.801991,
+      "description" : ""
     },
     {
-      "id" : 12,
       "title" : "track command",
-      "completedDate" : 1793303628.6489511,
-      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
       "completed" : true,
-      "createdDate" : 1793286882.7039061
+      "id" : 12,
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
+      "createdDate" : 1793286882.7039061,
+      "completedDate" : 1793303628.6489511
     },
     {
+      "updatedDate" : 1793303135.5591919,
       "createdDate" : 1793287030.560792,
       "id" : 13,
-      "completedDate" : 1793303074.8227601,
+      "completed" : true,
       "title" : "backlog feature",
-      "updatedDate" : 1793303135.5591919,
-      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
-      "completed" : true
+      "completedDate" : 1793303074.8227601,
+      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?"
     },
     {
-      "createdDate" : 1793287468.2949429,
-      "id" : 14,
-      "title" : "Test with tags",
-      "completedDate" : 1793298376.082309,
-      "description" : "",
-      "completed" : true,
       "tags" : [
         "#bug",
         "#urgent"
-      ]
-    },
-    {
-      "createdDate" : 1793294391.9601312,
-      "id" : 15,
-      "completedDate" : 1793298359.5235991,
-      "title" : "Remove 'list' command and replace with no arguments",
-      "completed" : true,
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags."
-    },
-    {
-      "createdDate" : 1793296823.392992,
-      "id" : 16,
-      "completedDate" : 1793298347.843744,
-      "title" : "pin section",
-      "updatedDate" : 1793298333.3063569,
+      ],
+      "title" : "Test with tags",
       "description" : "",
-      "completed" : true
+      "id" : 14,
+      "createdDate" : 1793287468.2949429,
+      "completed" : true,
+      "completedDate" : 1793298376.082309
+    },
+    {
+      "completedDate" : 1793298359.5235991,
+      "createdDate" : 1793294391.9601312,
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
+      "completed" : true,
+      "id" : 15,
+      "title" : "Remove 'list' command and replace with no arguments"
+    },
+    {
+      "completed" : true,
+      "createdDate" : 1793296823.392992,
+      "completedDate" : 1793298347.843744,
+      "description" : "",
+      "id" : 16,
+      "title" : "pin section",
+      "updatedDate" : 1793298333.3063569
     },
     {
       "id" : 17,
       "title" : "Test of task track",
-      "completedDate" : 1793303447.776912,
-      "createdDate" : 1793303447.776912,
       "description" : "This is just a test.",
+      "createdDate" : 1793303447.776912,
+      "completedDate" : 1793303447.776912,
       "completed" : true
     },
     {
-      "createdDate" : 1793305384.1244321,
+      "completed" : true,
       "id" : 18,
       "title" : "task add should prompt for tags",
-      "completedDate" : 1793364406.008229,
       "updatedDate" : 1793364410.861331,
+      "createdDate" : 1793305384.1244321,
       "description" : "List of tags should be able to be provided when adding an item through the prompt.",
-      "completed" : true
+      "completedDate" : 1793364406.008229
     },
     {
-      "createdDate" : 1793305894.0261459,
-      "title" : "idea",
-      "completedDate" : 1793365063.5266628,
+      "completed" : true,
       "id" : 19,
+      "title" : "idea",
+      "createdDate" : 1793305894.0261459,
       "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
-      "completed" : true
+      "completedDate" : 1793365063.5266628
     },
     {
-      "createdDate" : 1793365147.063472,
-      "id" : 20,
-      "title" : "statistics viewer",
-      "updatedDate" : 1793365147.065887,
-      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
-      "completed" : false,
       "tags" : [
         "#backlog"
-      ]
+      ],
+      "createdDate" : 1793365147.063472,
+      "updatedDate" : 1793365147.065887,
+      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
+      "id" : 20,
+      "completed" : false,
+      "title" : "statistics viewer"
+    },
+    {
+      "completedDate" : 1793373784.5193291,
+      "id" : 21,
+      "tags" : [
+        "#bug"
+      ],
+      "createdDate" : 1793372929.1742949,
+      "completed" : true,
+      "title" : "fix dynamic command feature",
+      "description" : ""
+    },
+    {
+      "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name.",
+      "createdDate" : 1793373949.4697499,
+      "tags" : [
+        "#feature"
+      ],
+      "completed" : false,
+      "id" : 22,
+      "title" : "view configuration",
+      "updatedDate" : 1793373949.472434
     }
   ],
   "config" : {
-    "pinTags" : [
-      "#pin"
-    ],
-    "sort" : "completed",
-    "tagDisplayLimit" : 3,
     "backlogTags" : [
       "#backlog"
     ],
-    "command" : [
-      "bug"
+    "sort" : "completed",
+    "showCompleted" : "false",
+    "pinTags" : [
+      "#pin"
     ],
+    "tagDisplayLimit" : 3,
     "displayLimit" : 4,
-    "showCompleted" : "false"
+    "command" : [
+      "bug",
+      "feature"
+    ]
   }
 }

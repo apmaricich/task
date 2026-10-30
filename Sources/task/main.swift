@@ -145,6 +145,60 @@ func parseTags(_ tagsStr: String) -> [String] {
         .filter { !$0.isEmpty }
 }
 
+// MARK: - Config Command
+
+func handleConfig(store: TaskStore, args: [String: String]) {
+    if let key = args["id"] {
+        if let value = args["value"] {
+            let config = store.getConfig()
+            let listKeys = config["lists"] as? [String] ?? []
+
+            if let currentValue = config[key] as? [String] {
+                // Current value is a list - toggle
+                if currentValue.contains(value) {
+                    var newList = currentValue
+                    newList.removeAll(where: { $0 == value })
+                    store.setConfig(key: key, value: newList)
+                } else {
+                    var newList = currentValue
+                    newList.append(value)
+                    store.setConfig(key: key, value: newList)
+                }
+            } else if listKeys.contains(key) {
+                // Key is in the lists config but doesn't exist yet - create list
+                store.setConfig(key: key, value: [value])
+            } else {
+                // Key doesn't exist or current value is not a list - set directly
+                store.setConfig(key: key, value: value)
+            }
+        } else {
+            print("Error: value is required for '\(key)'")
+            exit(1)
+        }
+    } else {
+        let config = store.getConfig()
+        if config.isEmpty {
+            print("No configuration set.")
+        } else {
+            let headers = ["Key", "Value"]
+            let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { key, value in
+                let valueStr: String
+                if let arr = value as? [String] {
+                    valueStr = arr.joined(separator: ", ")
+                } else if let int = value as? Int {
+                    valueStr = "\(int)"
+                } else if let bool = value as? Bool {
+                    valueStr = "\(bool)"
+                } else {
+                    valueStr = "\(value)"
+                }
+                return [key, valueStr]
+            }
+            printAsciiTable(rows: rows, headers: headers)
+        }
+    }
+}
+
 // MARK: - Add Task with Prompt
 
 func addTaskWithPrompt(_ store: TaskStore, args: [String: String]) {
@@ -594,50 +648,7 @@ if args["--help"] != nil {
         }
 
     case "config":
-        if let key = args["id"] {
-            if let value = args["value"] {
-                let config = store.getConfig()
-                if let currentValue = config[key] as? [String] {
-                    // Current value is a list - toggle
-                    if currentValue.contains(value) {
-                        var newList = currentValue
-                        newList.removeAll(where: { $0 == value })
-                        store.setConfig(key: key, value: newList)
-                    } else {
-                        var newList = currentValue
-                        newList.append(value)
-                        store.setConfig(key: key, value: newList)
-                    }
-                } else {
-                    // Key doesn't exist or current value is not a list - set directly
-                    store.setConfig(key: key, value: value)
-                }
-            } else {
-                print("Error: value is required for '\(key)'")
-                exit(1)
-            }
-        } else {
-            let config = store.getConfig()
-            if config.isEmpty {
-                print("No configuration set.")
-            } else {
-                let headers = ["Key", "Value"]
-                let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { key, value in
-                    let valueStr: String
-                    if let arr = value as? [String] {
-                        valueStr = arr.joined(separator: ", ")
-                    } else if let int = value as? Int {
-                        valueStr = "\(int)"
-                    } else if let bool = value as? Bool {
-                        valueStr = "\(bool)"
-                    } else {
-                        valueStr = "\(value)"
-                    }
-                    return [key, valueStr]
-                }
-                printAsciiTable(rows: rows, headers: headers)
-            }
-        }
+        handleConfig(store: store, args: args)
 
     case "doctor":
         let filePath = "tasks.json"

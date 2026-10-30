@@ -524,4 +524,102 @@ final class TaskStoreTests: XCTestCase {
         let showBacklog = store.getShowBacklog()
         XCTAssertTrue(showBacklog)
     }
+
+    // MARK: - Config Command Tests
+
+    func testConfigAddNewKey() {
+        handleConfig(store: store, args: ["id": "fun", "value": "is good"])
+        let config = store.getConfig()
+        XCTAssertEqual(config["fun"] as? String, "is good")
+    }
+
+    func testConfigOverwriteNonListValue() {
+        handleConfig(store: store, args: ["id": "fun", "value": "is good"])
+        handleConfig(store: store, args: ["id": "fun", "value": "is bad"])
+        let config = store.getConfig()
+        XCTAssertEqual(config["fun"] as? String, "is bad")
+    }
+
+    func testConfigToggleInListAdd() {
+        // First create the list
+        store.setConfig(key: "fish", value: ["#salmon"])
+
+        // Now add to list via config
+        handleConfig(store: store, args: ["id": "fish", "value": "#carp"])
+        let config = store.getConfig()
+        let fish = config["fish"] as? [String]
+        XCTAssertEqual(fish?.count, 2)
+        XCTAssertTrue(fish?.contains("#salmon") ?? false)
+        XCTAssertTrue(fish?.contains("#carp") ?? false)
+    }
+
+    func testConfigToggleInListRemove() {
+        // Create list with two items
+        store.setConfig(key: "fish", value: ["#salmon", "#carp"])
+
+        // Toggle to remove #carp
+        handleConfig(store: store, args: ["id": "fish", "value": "#carp"])
+        let config = store.getConfig()
+        let fish = config["fish"] as? [String]
+        XCTAssertEqual(fish?.count, 1)
+        XCTAssertTrue(fish?.contains("#salmon") ?? false)
+        XCTAssertFalse(fish?.contains("#carp") ?? false)
+    }
+
+    func testConfigListsConfigCreatesList() {
+        // Initialize store to get the "lists" config
+        store.initStore()
+
+        // Add a command via config - should create a list
+        handleConfig(store: store, args: ["id": "command", "value": "feature"])
+        let config = store.getConfig()
+        let commands = config["command"] as? [String]
+        XCTAssertEqual(commands?.count, 1)
+        XCTAssertEqual(commands?.first, "feature")
+    }
+
+    func testConfigListsConfigToggle() {
+        // Initialize store
+        store.initStore()
+
+        // Add first command
+        handleConfig(store: store, args: ["id": "command", "value": "feature"])
+
+        // Add second command
+        handleConfig(store: store, args: ["id": "command", "value": "bug"])
+        let config = store.getConfig()
+        let commands = config["command"] as? [String]
+        XCTAssertEqual(commands?.count, 2)
+        XCTAssertTrue(commands?.contains("feature") ?? false)
+        XCTAssertTrue(commands?.contains("bug") ?? false)
+
+        // Toggle to remove feature
+        handleConfig(store: store, args: ["id": "command", "value": "feature"])
+        let config2 = store.getConfig()
+        let commands2 = config2["command"] as? [String]
+        XCTAssertEqual(commands2?.count, 1)
+        XCTAssertEqual(commands2?.first, "bug")
+    }
+
+    // MARK: - Dynamic Command Tests
+
+    func testGetCommandsEmpty() {
+        let commands = store.getCommands()
+        XCTAssertTrue(commands.isEmpty)
+    }
+
+    func testGetCommandsFromList() {
+        store.setConfig(key: "command", value: ["feature", "bug"])
+        let commands = store.getCommands()
+        XCTAssertEqual(commands.count, 2)
+        XCTAssertTrue(commands.contains("feature"))
+        XCTAssertTrue(commands.contains("bug"))
+    }
+
+    func testGetCommandsFromStringFallback() {
+        store.setConfig(key: "command", value: "feature")
+        let commands = store.getCommands()
+        XCTAssertEqual(commands.count, 1)
+        XCTAssertEqual(commands.first, "feature")
+    }
 }

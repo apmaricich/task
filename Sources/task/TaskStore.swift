@@ -255,8 +255,12 @@ class TaskStore {
         let store = loadStore()
         let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
 
-        if let commands = config["commands"] as? [String] {
+        if let commands = config["command"] as? [String] {
             return commands
+        }
+
+        if let command = config["command"] as? String {
+            return [command]
         }
 
         return []
