@@ -460,14 +460,7 @@ if args["--help"] != nil {
         // Parse tags
         var tags: [String] = []
         if let tagStr = args["--tag"] {
-            tags = tagStr.split(separator: ",").map {
-                let tag = $0.trimmingCharacters(in: .whitespaces)
-                if !tag.hasPrefix("#") {
-                    print("Error: tag '\(tag)' must be prefixed with '#'")
-                    exit(1)
-                }
-                return tag
-            }
+            tags = store.parseTags(tagStr)
         }
 
         if titleProvided {
@@ -484,27 +477,29 @@ if args["--help"] != nil {
         let titleProvided = args["--title"] != nil
         let title = args["--title"] ?? prompt("Title: ")
 
-        // Parse tags
+        // Parse tags from flag or prompt
         var tags: [String] = []
         if let tagStr = args["--tag"] {
-            tags = tagStr.split(separator: ",").map {
-                let tag = $0.trimmingCharacters(in: .whitespaces)
-                if !tag.hasPrefix("#") {
-                    print("Error: tag '\(tag)' must be prefixed with '#'")
-                    exit(1)
-                }
-                return tag
-            }
+            tags = store.parseTags(tagStr)
         }
 
         if titleProvided {
-            // Title provided, don't prompt for description
+            // Title provided, don't prompt for description or tags
             let description = args["--description"] ?? ""
             let task = store.add(title: title, description: description, tags: tags)
             print("Added task #\(task.id): \(task.title)")
         } else {
-            // No title provided, prompt for both
+            // No title provided, prompt for description and tags
             let description = prompt("Description: ")
+
+            // Prompt for tags if not provided via flag
+            if tags.isEmpty {
+                let tagInput = prompt("Tags (comma-separated, prefix with #): ")
+                if !tagInput.isEmpty {
+                    tags = store.parseTags(tagInput)
+                }
+            }
+
             let task = store.add(title: title, description: description, tags: tags)
             print("Added task #\(task.id): \(task.title)")
         }
@@ -520,14 +515,7 @@ if args["--help"] != nil {
         // Parse tags
         var updateTags: [String]?
         if let tagStr = args["--tag"] {
-            updateTags = tagStr.split(separator: ",").map {
-                let tag = $0.trimmingCharacters(in: .whitespaces)
-                if !tag.hasPrefix("#") {
-                    print("Error: tag '\(tag)' must be prefixed with '#'")
-                    exit(1)
-                }
-                return tag
-            }
+            updateTags = store.parseTags(tagStr)
         }
 
         if title == nil && description == nil && updateTags == nil {

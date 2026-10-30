@@ -259,7 +259,7 @@ class TaskStore {
         return true
     }
 
-    private func parseTags(_ tagsStr: String) -> [String] {
+    func parseTags(_ tagsStr: String) -> [String] {
         return tagsStr
             .split(separator: ",")
             .map { $0.trimmingCharacters(in: .whitespaces) }
