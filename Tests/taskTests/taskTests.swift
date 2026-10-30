@@ -344,7 +344,7 @@ final class TaskStoreTests: XCTestCase {
         let backlogCompleted = store.list().first { $0.title == "Backlog completed" }!
         store.done(id: backlogCompleted.id)
 
-        store.setConfig(key: "backlogTags", value: "#backlog")
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
 
         let tasks = store.list()
         let nonBacklogTasks = tasks.filter { task in
@@ -368,7 +368,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testBacklogCountWithNoBacklogTasks() {
         store.add(title: "Regular task", description: "")
-        store.setConfig(key: "backlogTags", value: "#backlog")
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
 
         let tasks = store.list()
         let nonBacklogTasks = tasks.filter { task in
@@ -413,7 +413,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testReadyTaskRemovesBacklogTag() {
         let task = store.add(title: "Test", description: "", tags: ["#backlog"])
-        store.setConfig(key: "backlogTags", value: "#backlog,#someday")
+        store.setConfigTags("backlogTags", tags: ["#backlog", "#someday"])
 
         let result = store.readyTask(id: task.id)
         XCTAssertTrue(result)
@@ -424,7 +424,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testReadyTaskKeepsNonBacklogTags() {
         let task = store.add(title: "Test", description: "", tags: ["#backlog", "#important"])
-        store.setConfig(key: "backlogTags", value: "#backlog")
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
 
         let result = store.readyTask(id: task.id)
         XCTAssertTrue(result)
@@ -434,7 +434,7 @@ final class TaskStoreTests: XCTestCase {
     }
 
     func testReadyTaskNonExistent() {
-        store.setConfig(key: "backlogTags", value: "#backlog")
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
         let result = store.readyTask(id: 999)
         XCTAssertFalse(result)
     }
@@ -447,7 +447,7 @@ final class TaskStoreTests: XCTestCase {
     }
 
     func testGetPinTagsConfigured() {
-        store.setConfig(key: "pinTags", value: "#important,#urgent")
+        store.setConfigTags("pinTags", tags: ["#important", "#urgent"])
         let pinTags = store.getPinTags()
         XCTAssertEqual(pinTags.count, 2)
         XCTAssertTrue(pinTags.contains("#important"))
@@ -456,7 +456,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testPinTaskAddsTag() {
         let task = store.add(title: "Test", description: "")
-        store.setConfig(key: "pinTags", value: "#important")
+        store.setConfigTags("pinTags", tags: ["#important"])
 
         let result = store.pinTask(id: task.id)
         XCTAssertTrue(result)
@@ -467,7 +467,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testUnpinTaskRemovesTag() {
         let task = store.add(title: "Test", description: "", tags: ["#important"])
-        store.setConfig(key: "pinTags", value: "#important,#urgent")
+        store.setConfigTags("pinTags", tags: ["#important", "#urgent"])
 
         let result = store.pinTask(id: task.id)
         XCTAssertTrue(result)
@@ -477,7 +477,7 @@ final class TaskStoreTests: XCTestCase {
     }
 
     func testPinTaskNonExistent() {
-        store.setConfig(key: "pinTags", value: "#important")
+        store.setConfigTags("pinTags", tags: ["#important"])
         let result = store.pinTask(id: 999)
         XCTAssertFalse(result)
     }
@@ -490,7 +490,7 @@ final class TaskStoreTests: XCTestCase {
 
     func testPinTaskRemovesAllPinTags() {
         let task = store.add(title: "Test", description: "", tags: ["#important", "#urgent", "#other"])
-        store.setConfig(key: "pinTags", value: "#important,#urgent")
+        store.setConfigTags("pinTags", tags: ["#important", "#urgent"])
 
         let result = store.pinTask(id: task.id)
         XCTAssertTrue(result)
@@ -507,7 +507,7 @@ final class TaskStoreTests: XCTestCase {
     }
 
     func testGetBacklogTagsConfigured() {
-        store.setConfig(key: "backlogTags", value: "#backlog,#someday")
+        store.setConfigTags("backlogTags", tags: ["#backlog", "#someday"])
         let backlogTags = store.getBacklogTags()
         XCTAssertEqual(backlogTags.count, 2)
         XCTAssertTrue(backlogTags.contains("#backlog"))

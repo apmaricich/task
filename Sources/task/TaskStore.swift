@@ -208,10 +208,31 @@ class TaskStore {
     func getConfigTags(_ key: String) -> [String] {
         let store = loadStore()
         let config = store["config"] as? [String: Any] ?? ["sort": "completed"]
-        let tagsStr = config[key] as? String ?? ""
-        if tagsStr.isEmpty { return [] }
 
-        return parseTags(tagsStr)
+        // Must be an array of strings
+        if let tags = config[key] as? [String] {
+            return tags.map { $0.hasPrefix("#") ? $0 : "#" + $0 }
+        }
+
+        // If value exists but is not an array, it's an error
+        if config[key] != nil {
+            print("Error: \(key) must be an array of strings")
+            exit(1)
+        }
+
+        return []
+    }
+
+    func setConfigTags(_ key: String, tags: [String]) {
+        var store = loadStore()
+        var config = store["config"] as? [String: Any] ?? [:]
+
+        // Store as array
+        config[key] = tags
+
+        store["config"] = config
+        saveStore(store)
+        print("Updated config: \(key) = \(tags.joined(separator: ","))")
     }
 
     func getPinTags() -> [String] {

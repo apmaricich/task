@@ -128,6 +128,21 @@ func printWrappedText(_ text: String, maxWidth: Int, indent: String) {
     }
 }
 
+// MARK: - Tag Parsing
+
+func parseTags(_ tagsStr: String) -> [String] {
+    return tagsStr
+        .split(separator: ",")
+        .map { $0.trimmingCharacters(in: .whitespaces) }
+        .map { tag in
+            if tag.hasPrefix("#") {
+                return tag
+            }
+            return "#" + tag
+        }
+        .filter { !$0.isEmpty }
+}
+
 // MARK: - Add Task with Prompt
 
 func addTaskWithPrompt(_ store: TaskStore, args: [String: String]) {
@@ -579,7 +594,14 @@ if args["--help"] != nil {
                 print("Error: config value is required")
                 exit(1)
             }
-            store.setConfig(key: key, value: value)
+            // Detect tag list config keys
+            let tagListKeys = ["pinTags", "backlogTags"]
+            if tagListKeys.contains(key) {
+                let tags = parseTags(value)
+                store.setConfigTags(key, tags: tags)
+            } else {
+                store.setConfig(key: key, value: value)
+            }
         } else {
             let config = store.getConfig()
             if config.isEmpty {
@@ -589,6 +611,62 @@ if args["--help"] != nil {
                 let rows: [[String]] = config.sorted(by: { $0.key < $1.key }).map { [ $0.key, "\($0.value)" ] }
                 printAsciiTable(rows: rows, headers: headers)
             }
+        }
+
+    case "doctor":
+        let filePath = "tasks.json"
+        if !FileManager.default.fileExists(atPath: filePath) {
+            print("❌ File not found: \(filePath)")
+            exit(1)
+        }
+
+        do {
+            let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+            let parsed = try JSONSerialization.jsonObject(with: data, options: [])
+
+            if let obj = parsed as? [String: Any] {
+                print("✅ Valid JSON")
+
+                if let tasks = obj["tasks"] as? [[String: Any]] {
+                    print("✅ Tasks array: \(tasks.count) task(s)")
+                } else if let tasks = obj["tasks"] {
+                    print("⚠️ 'tasks' exists but is not an array: \(type(of: tasks))")
+                } else {
+                    print("⚠️ Missing 'tasks' field")
+                }
+
+                if let config = obj["config"] as? [String: Any] {
+                    print("✅ Config object found")
+
+                    if let sort = config["sort"] as? String {
+                        print("✅ sort: \(sort)")
+                    } else if config["sort"] != nil {
+                        print("⚠️ 'sort' is not a string: \(type(of: config["sort"]!))")
+                    } else {
+                        print("⚠️ Missing 'sort' config")
+                    }
+
+                    // Validate pinTags and backlogTags are arrays
+                    for key in ["pinTags", "backlogTags"] {
+                        if let value = config[key] {
+                            if let tags = value as? [String] {
+                                print("✅ \(key): \(tags.count) tag(s)")
+                            } else {
+                                print("⚠️ '\(key)' is not an array: \(type(of: value))")
+                            }
+                        }
+                    }
+                } else if let config = obj["config"] {
+                    print("⚠️ 'config' exists but is not an object: \(type(of: config))")
+                } else {
+                    print("⚠️ Missing 'config' field")
+                }
+            } else {
+                print("⚠️ JSON is not an object")
+            }
+        } catch {
+            print("❌ Invalid JSON: \(error)")
+            exit(1)
         }
 
     default:

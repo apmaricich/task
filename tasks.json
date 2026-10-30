@@ -166,9 +166,9 @@
   "config" : {
     "sort" : "completed",
     "displayLimit" : 4,
-    "backlogTags" : "#backlog",
+    "backlogTags" : [ "#backlog" ],
     "showCompleted" : "false",
-    "pinTags" : "#pin",
+    "pinTags" : [ "#pin" ],
     "tagDisplayLimit" : 3
   }
 }
