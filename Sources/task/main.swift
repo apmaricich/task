@@ -521,6 +521,8 @@ if args["--help"] != nil {
             if doesBranchExist(branchName) {
                 mergeBranch(branchName)
                 print("Merged branch \(branchName)")
+                store.done(id: mergeId!)
+                print("Completed task #\(mergeId!)")
             } else {
                 print("Error: branch \(branchName) does not exist")
                 exit(1)
