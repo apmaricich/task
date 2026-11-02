@@ -8,6 +8,12 @@ A terminal task manager with tagging, sorting, and configuration.
 
 **Never commit without permission:** Always present changes to the user for review before committing. Show the commit message and files, wait for explicit approval, then commit.
 
+**Always run task adds sequentially:** If adding more than one task, run them as a single command separated by `&&` — never split into multiple concurrent runs. The ID generation logic requires serial execution:
+
+```bash
+task add -t "Task 1" -d "Description" && task add -t "Task 2" -d "Description"
+```
+
 ## Quick Commands
 
 **Add a task:**
