@@ -38,3 +38,32 @@ func createAndCheckoutBranch(_ branchName: String) {
     process.launch()
     process.waitUntilExit()
 }
+
+/// Adds tasks.json to .gitattributes with the -diff attribute to prevent it from
+/// showing changes in diff output
+func addTasksGitattributesEntry() {
+    let gitattributesPath = FileManager.default.currentDirectoryPath + "/.gitattributes"
+    let entry = "tasks.json -diff\n"
+
+    // Check if .gitattributes exists
+    if FileManager.default.fileExists(atPath: gitattributesPath) {
+        // Read existing content
+        if let content = try? String(contentsOfFile: gitattributesPath, encoding: .utf8) {
+            // Check if entry already exists
+            if content.contains("tasks.json") {
+                return
+            }
+            // Append entry
+            if let file = try? FileHandle(forWritingTo: URL(fileURLWithPath: gitattributesPath)) {
+                try? file.seekToEnd()
+                if let data = entry.data(using: .utf8) {
+                    file.write(data)
+                }
+                try? file.close()
+            }
+        }
+    } else {
+        // Create .gitattributes with the entry
+        try? entry.write(toFile: gitattributesPath, atomically: true, encoding: .utf8)
+    }
+}

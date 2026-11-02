@@ -234,6 +234,7 @@ if args["--help"] != nil {
     switch command {
     case "init":
         store.initStore()
+        addTasksGitattributesEntry()
 
     case "ready":
         guard let idStr = args["id"], let id = Int(idStr) else {

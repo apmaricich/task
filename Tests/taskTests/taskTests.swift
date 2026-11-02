@@ -754,4 +754,81 @@ final class TaskStoreTests: XCTestCase {
         // Clean up
         try? FileManager.default.removeItem(atPath: tempDir)
     }
+
+    func testAddTasksGitattributesEntryCreatesFile() {
+        // Create a temporary directory for testing
+        let tempDir = NSTemporaryDirectory() + "gitattributes_test_create_\(UUID().uuidString)"
+        try? FileManager.default.createDirectory(atPath: tempDir, withIntermediateDirectories: true)
+
+        // Change to the temp dir
+        let originalDir = FileManager.default.currentDirectoryPath
+        try? FileManager.default.changeCurrentDirectoryPath(tempDir)
+
+        // Verify .gitattributes doesn't exist yet
+        let gitattributesPath = tempDir + "/.gitattributes"
+        XCTAssertFalse(FileManager.default.fileExists(atPath: gitattributesPath))
+
+        // Call the function
+        addTasksGitattributesEntry()
+
+        // Verify .gitattributes was created with the correct entry
+        XCTAssertTrue(FileManager.default.fileExists(atPath: gitattributesPath))
+        let content = try? String(contentsOfFile: gitattributesPath, encoding: .utf8)
+        XCTAssertEqual(content, "tasks.json -diff\n")
+
+        // Restore original directory and clean up
+        try? FileManager.default.changeCurrentDirectoryPath(originalDir)
+        try? FileManager.default.removeItem(atPath: tempDir)
+    }
+
+    func testAddTasksGitattributesEntryAppendsToExisting() {
+        // Create a temporary directory for testing
+        let tempDir = NSTemporaryDirectory() + "gitattributes_test_append_\(UUID().uuidString)"
+        try? FileManager.default.createDirectory(atPath: tempDir, withIntermediateDirectories: true)
+
+        // Change to the temp dir
+        let originalDir = FileManager.default.currentDirectoryPath
+        try? FileManager.default.changeCurrentDirectoryPath(tempDir)
+
+        // Create .gitattributes with an existing entry
+        let gitattributesPath = tempDir + "/.gitattributes"
+        try? "other.txt -diff\n".write(toFile: gitattributesPath, atomically: true, encoding: .utf8)
+
+        // Call the function
+        addTasksGitattributesEntry()
+
+        // Verify the entry was appended
+        let content = try? String(contentsOfFile: gitattributesPath, encoding: .utf8)
+        XCTAssertTrue(content!.contains("other.txt -diff\n"))
+        XCTAssertTrue(content!.contains("tasks.json -diff\n"))
+
+        // Restore original directory and clean up
+        try? FileManager.default.changeCurrentDirectoryPath(originalDir)
+        try? FileManager.default.removeItem(atPath: tempDir)
+    }
+
+    func testAddTasksGitattributesEntryDoesNotDuplicate() {
+        // Create a temporary directory for testing
+        let tempDir = NSTemporaryDirectory() + "gitattributes_test_duplicate_\(UUID().uuidString)"
+        try? FileManager.default.createDirectory(atPath: tempDir, withIntermediateDirectories: true)
+
+        // Change to the temp dir
+        let originalDir = FileManager.default.currentDirectoryPath
+        try? FileManager.default.changeCurrentDirectoryPath(tempDir)
+
+        // Create .gitattributes with the entry already present
+        let gitattributesPath = tempDir + "/.gitattributes"
+        try? "tasks.json -diff\n".write(toFile: gitattributesPath, atomically: true, encoding: .utf8)
+
+        // Call the function
+        addTasksGitattributesEntry()
+
+        // Verify the entry was not duplicated
+        let content = try? String(contentsOfFile: gitattributesPath, encoding: .utf8)
+        XCTAssertEqual(content, "tasks.json -diff\n")
+
+        // Restore original directory and clean up
+        try? FileManager.default.changeCurrentDirectoryPath(originalDir)
+        try? FileManager.default.removeItem(atPath: tempDir)
+    }
 }
