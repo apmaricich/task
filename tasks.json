@@ -1,11 +1,12 @@
 {
   "config" : {
-    "displayLimit" : 5,
+    "tagDisplayLimit" : 3,
     "sort" : "completed",
     "showCompleted" : "false",
     "pinTags" : [
       "#pin"
     ],
+    "displayLimit" : 5,
     "command" : [
       "bug",
       "feature",
@@ -13,264 +14,262 @@
     ],
     "backlogTags" : [
       "#backlog"
-    ],
-    "tagDisplayLimit" : 3
+    ]
   },
   "tasks" : [
     {
+      "completed" : true,
       "id" : 1,
-      "completed" : true,
-      "title" : "sort task by complete feature",
-      "description" : ""
-    },
-    {
-      "completed" : true,
       "description" : "",
-      "completedDate" : 1793282877.4435391,
-      "title" : "visual update to sort",
-      "id" : 2
+      "title" : "sort task by complete feature"
     },
     {
+      "completedDate" : 1793282877.4435391,
       "completed" : true,
-      "id" : 3,
+      "id" : 2,
+      "description" : "",
+      "title" : "visual update to sort"
+    },
+    {
       "title" : "add config command",
+      "id" : 3,
+      "completed" : true,
       "description" : ""
     },
     {
-      "id" : 4,
+      "completed" : true,
       "title" : "add created and completed timestamps",
       "description" : "",
+      "id" : 4
+    },
+    {
+      "createdDate" : 1793278255.319313,
+      "id" : 5,
+      "completedDate" : 1793279136.1286559,
+      "description" : "",
+      "title" : "add display limit configuration option.",
       "completed" : true
     },
     {
-      "completedDate" : 1793279136.1286559,
-      "description" : "",
-      "completed" : true,
-      "createdDate" : 1793278255.319313,
-      "id" : 5,
-      "title" : "add display limit configuration option."
-    },
-    {
-      "createdDate" : 1793278956.649796,
-      "completed" : true,
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "id" : 6,
-      "title" : "refactor codebase for readability",
       "updatedDate" : 1793280698.610184,
-      "completedDate" : 1793280765.953521
+      "id" : 6,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "completed" : true,
+      "title" : "refactor codebase for readability",
+      "completedDate" : 1793280765.953521,
+      "createdDate" : 1793278956.649796
     },
     {
-      "completed" : true,
+      "title" : "prompt for input feature",
       "id" : 7,
       "description" : "",
-      "completedDate" : 1793282892.406467,
-      "title" : "prompt for input feature",
-      "createdDate" : 1793280739.789355
+      "createdDate" : 1793280739.789355,
+      "completed" : true,
+      "completedDate" : 1793282892.406467
     },
     {
-      "completedDate" : 1793291351.0477939,
+      "description" : "",
       "id" : 8,
+      "completed" : true,
       "title" : "tag support",
+      "completedDate" : 1793291351.0477939,
       "createdDate" : 1793280751.5302989,
       "tags" : [
         "#urgent",
         "#fish"
       ],
-      "completed" : true,
-      "description" : "",
       "updatedDate" : 1793288452.6348372
     },
     {
       "title" : "task complete no parameters feature",
+      "id" : 9,
+      "createdDate" : 1793281067.3222299,
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
       "tags" : [
         "#backlog"
       ],
-      "createdDate" : 1793281067.3222299,
       "updatedDate" : 1793373809.2933269,
-      "id" : 9,
-      "completed" : false,
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete."
+      "completed" : false
     },
     {
       "title" : "add hr rule",
-      "completed" : true,
       "description" : "",
-      "completedDate" : 1793285143.4755101,
-      "createdDate" : 1793281110.801991,
       "updatedDate" : 1793285071.8822351,
+      "completedDate" : 1793285143.4755101,
+      "completed" : true,
+      "createdDate" : 1793281110.801991,
       "id" : 10
     },
     {
-      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "id" : 12,
-      "completed" : true,
-      "completedDate" : 1793303628.6489511,
+      "createdDate" : 1793286882.7039061,
       "title" : "track command",
-      "createdDate" : 1793286882.7039061
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
+      "completedDate" : 1793303628.6489511,
+      "id" : 12,
+      "completed" : true
     },
     {
-      "completedDate" : 1793303074.8227601,
       "id" : 13,
-      "title" : "backlog feature",
+      "updatedDate" : 1793303135.5591919,
       "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
       "completed" : true,
       "createdDate" : 1793287030.560792,
-      "updatedDate" : 1793303135.5591919
+      "title" : "backlog feature",
+      "completedDate" : 1793303074.8227601
     },
     {
+      "title" : "Test with tags",
+      "completedDate" : 1793298376.082309,
+      "completed" : true,
+      "id" : 14,
+      "description" : "",
       "tags" : [
         "#bug",
         "#urgent"
       ],
-      "description" : "",
-      "title" : "Test with tags",
-      "completed" : true,
-      "id" : 14,
-      "completedDate" : 1793298376.082309,
       "createdDate" : 1793287468.2949429
     },
     {
-      "title" : "Remove 'list' command and replace with no arguments",
+      "createdDate" : 1793294391.9601312,
+      "completedDate" : 1793298359.5235991,
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
       "completed" : true,
       "id" : 15,
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
-      "completedDate" : 1793298359.5235991,
-      "createdDate" : 1793294391.9601312
+      "title" : "Remove 'list' command and replace with no arguments"
     },
     {
-      "id" : 16,
-      "completed" : true,
-      "updatedDate" : 1793298333.3063569,
       "title" : "pin section",
-      "completedDate" : 1793298347.843744,
+      "completed" : true,
       "description" : "",
-      "createdDate" : 1793296823.392992
+      "id" : 16,
+      "completedDate" : 1793298347.843744,
+      "createdDate" : 1793296823.392992,
+      "updatedDate" : 1793298333.3063569
     },
     {
-      "title" : "Test of task track",
-      "id" : 17,
       "description" : "This is just a test.",
-      "createdDate" : 1793303447.776912,
+      "completed" : true,
+      "id" : 17,
       "completedDate" : 1793303447.776912,
-      "completed" : true
+      "title" : "Test of task track",
+      "createdDate" : 1793303447.776912
     },
     {
-      "updatedDate" : 1793364410.861331,
       "completedDate" : 1793364406.008229,
+      "completed" : true,
+      "id" : 18,
+      "description" : "List of tags should be able to be provided when adding an item through the prompt.",
       "title" : "task add should prompt for tags",
       "createdDate" : 1793305384.1244321,
-      "description" : "List of tags should be able to be provided when adding an item through the prompt.",
-      "id" : 18,
-      "completed" : true
+      "updatedDate" : 1793364410.861331
     },
     {
       "id" : 19,
-      "completedDate" : 1793365063.5266628,
       "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
+      "completedDate" : 1793365063.5266628,
       "completed" : true,
       "createdDate" : 1793305894.0261459,
       "title" : "idea"
     },
     {
-      "id" : 20,
       "createdDate" : 1793365147.063472,
+      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
+      "completed" : false,
+      "updatedDate" : 1793365147.065887,
       "tags" : [
         "#backlog"
       ],
-      "updatedDate" : 1793365147.065887,
-      "completed" : false,
-      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
-      "title" : "statistics viewer"
+      "title" : "statistics viewer",
+      "id" : 20
     },
     {
-      "description" : "",
-      "createdDate" : 1793372929.1742949,
-      "completedDate" : 1793373784.5193291,
       "id" : 21,
-      "completed" : true,
-      "title" : "fix dynamic command feature",
+      "createdDate" : 1793372929.1742949,
       "tags" : [
         "#bug"
+      ],
+      "completed" : true,
+      "description" : "",
+      "title" : "fix dynamic command feature",
+      "completedDate" : 1793373784.5193291
+    },
+    {
+      "title" : "view configuration",
+      "completedDate" : 1793375477.6240292,
+      "id" : 22,
+      "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name.",
+      "completed" : true,
+      "updatedDate" : 1793375467.695183,
+      "createdDate" : 1793373949.4697499,
+      "tags" : [
+        "#feature"
       ]
     },
     {
-      "updatedDate" : 1793375467.695183,
-      "tags" : [
-        "#feature"
-      ],
-      "completed" : true,
-      "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name.",
-      "createdDate" : 1793373949.4697499,
-      "id" : 22,
-      "completedDate" : 1793375477.6240292,
-      "title" : "view configuration"
-    },
-    {
-      "createdDate" : 1793375093.850481,
-      "title" : "tag command",
-      "completedDate" : 1793376057.0426869,
-      "updatedDate" : 1793375093.8526831,
       "tags" : [
         "#feature"
       ],
       "id" : 23,
+      "updatedDate" : 1793375093.8526831,
       "completed" : true,
-      "description" : "task tag should display a list of tags that are currently attached to tickets. It should list all tags and the count of how many tasks are associated with that tag."
+      "completedDate" : 1793376057.0426869,
+      "createdDate" : 1793375093.850481,
+      "description" : "task tag should display a list of tags that are currently attached to tickets. It should list all tags and the count of how many tasks are associated with that tag.",
+      "title" : "tag command"
     },
     {
+      "updatedDate" : 1793389486.5741429,
+      "completed" : false,
       "description" : "agentTags config defines tags that agents use to mark what they are working on. Update the skill to tell the agent to add or remove the agent tag. Agent tag items are pointed to with a green > before the task. ",
       "tags" : [
         "#feature"
       ],
-      "completed" : false,
-      "createdDate" : 1793389486.5689201,
-      "updatedDate" : 1793389486.5741429,
       "title" : "agentTags configuration",
-      "id" : 24
+      "id" : 24,
+      "createdDate" : 1793389486.5689201
     },
     {
-      "description" : "Build a sidebar plugin that shows task list status. Requires understanding OpenCode plugin architecture.",
-      "updatedDate" : 1793410235.17752,
       "title" : "Opencode plugin",
+      "updatedDate" : 1793634583.7913752,
       "tags" : [
-        "#pin",
         "#feature"
       ],
+      "createdDate" : 1793390044.215178,
       "id" : 25,
-      "completed" : false,
-      "createdDate" : 1793390044.215178
+      "description" : "Build a sidebar plugin that shows task list status. Requires understanding OpenCode plugin architecture.",
+      "completed" : false
     },
     {
-      "description" : "task work should checkout a new branch from the current commit with the name of the first tag preceeding a slash and the task id after the slash. for example task work 12 when 12 has a tag of #feature would run a git checkout -b feature\/12",
-      "tags" : [
-        "#feature"
-      ],
       "id" : 26,
       "completed" : false,
-      "updatedDate" : 1793391281.986232,
+      "description" : "task work should checkout a new branch from the current commit with the name of the first tag preceeding a slash and the task id after the slash. for example task work 12 when 12 has a tag of #feature would run a git checkout -b feature\/12",
       "title" : "task work command",
+      "tags" : [
+        "#feature"
+      ],
+      "updatedDate" : 1793391281.986232,
       "createdDate" : 1793391281.9833231
     },
     {
-      "completed" : false,
-      "id" : 27,
-      "createdDate" : 1793614848.0997682,
-      "description" : "Task init command should automatically add an ignore entry to the gitattributes file so changes dont show up in the diff output. ",
-      "title" : "Init to add git attributes",
-      "tags" : [
-        "#feature"
-      ]
-    },
-    {
-      "completed" : false,
-      "description" : "right now the terminal output stays at 80 characters width by default. this doesnt look great when viewing on phones. the app should be able to detect what size the terminal is, and shrink its display width if smaller than 80. ",
       "tags" : [
         "#feature"
       ],
-      "title" : "terminal resize",
-      "updatedDate" : 1793615041.2082729,
+      "id" : 27,
+      "description" : "Task init command should automatically add an ignore entry to the gitattributes file so changes dont show up in the diff output. ",
+      "title" : "Init to add git attributes",
+      "completed" : false,
+      "createdDate" : 1793614848.0997682
+    },
+    {
       "createdDate" : 1793615041.205198,
-      "id" : 28
+      "id" : 28,
+      "completed" : false,
+      "tags" : [
+        "#feature"
+      ],
+      "description" : "right now the terminal output stays at 80 characters width by default. this doesnt look great when viewing on phones. the app should be able to detect what size the terminal is, and shrink its display width if smaller than 80. ",
+      "updatedDate" : 1793615041.2082729,
+      "title" : "terminal resize"
     }
   ]
 }
