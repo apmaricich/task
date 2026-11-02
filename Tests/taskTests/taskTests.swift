@@ -705,4 +705,53 @@ final class TaskStoreTests: XCTestCase {
 
         XCTAssertTrue(viewTasks.isEmpty)
     }
+
+    // MARK: - Work Command Tests
+
+    func testGetBranchNameWithTag() {
+        let task = store.add(title: "Test", description: "", tags: ["#feature"])
+        let branchName = getBranchName(task: task, id: task.id)
+        XCTAssertEqual(branchName, "feature/1")
+    }
+
+    func testGetBranchNameWithNoTags() {
+        let task = store.add(title: "Test", description: "")
+        let branchName = getBranchName(task: task, id: task.id)
+        XCTAssertEqual(branchName, "task/1")
+    }
+
+    func testParseWorkIdValid() {
+        let id = parseWorkId(args: ["id": "42"])
+        XCTAssertEqual(id, 42)
+    }
+
+    func testParseWorkIdMissing() {
+        let id = parseWorkId(args: [:])
+        XCTAssertNil(id)
+    }
+
+    func testParseWorkIdInvalid() {
+        let id = parseWorkId(args: ["id": "abc"])
+        XCTAssertNil(id)
+    }
+
+    func testIsGitRepository() {
+        // Create a temporary directory, initialize a git repo there, and test
+        let tempDir = NSTemporaryDirectory() + "git_test_repo_\(UUID().uuidString)"
+        try? FileManager.default.createDirectory(atPath: tempDir, withIntermediateDirectories: true)
+
+        // Initialize a git repo
+        let process = Process()
+        process.launchPath = "/bin/bash"
+        process.arguments = ["-c", "cd \(tempDir) && git init"]
+        process.launch()
+        process.waitUntilExit()
+
+        // Change to the temp dir and test
+        try? FileManager.default.changeCurrentDirectoryPath(tempDir)
+        XCTAssertTrue(isGitRepository())
+
+        // Clean up
+        try? FileManager.default.removeItem(atPath: tempDir)
+    }
 }

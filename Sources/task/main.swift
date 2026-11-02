@@ -477,6 +477,32 @@ if args["--help"] != nil {
             exit(1)
         }
 
+    case "work":
+        let workId = parseWorkId(args: args)
+        if workId == nil {
+            exit(1)
+        }
+
+        if let task = store.getTask(id: workId!) {
+            let branchName = getBranchName(task: task, id: workId!)
+
+            if !isGitRepository() {
+                print("git has not yet been initialized in the project. Please run `git init`.")
+                exit(1)
+            }
+
+            if doesBranchExist(branchName) {
+                checkoutBranch(branchName)
+                print("Checked out existing branch \(branchName)")
+            } else {
+                createAndCheckoutBranch(branchName)
+                print("Created and checked out branch \(branchName)")
+            }
+        } else {
+            print("Error: task #\(workId!) not found")
+            exit(1)
+        }
+
     default:
         if let id = Int(command) {
             if let task = store.getTask(id: id) {
@@ -498,4 +524,25 @@ if args["--help"] != nil {
             exit(1)
         }
     }
+}
+
+// MARK: - Work Command Helpers
+
+func parseWorkId(args: [String: String]) -> Int? {
+    guard let idStr = args["id"] else {
+        print("Error: task ID is required")
+        return nil
+    }
+    guard let id = Int(idStr) else {
+        print("Error: invalid task ID '\(idStr)'")
+        return nil
+    }
+    return id
+}
+
+func getBranchName(task: Task, id: Int) -> String {
+    let firstTag = task.tags.isEmpty ? "task" : task.tags[0]
+    // Strip the # prefix from the tag for branch name
+    let cleanTag = firstTag.hasPrefix("#") ? String(firstTag.dropFirst()) : firstTag
+    return "\(cleanTag)/\(id)"
 }
