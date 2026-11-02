@@ -504,6 +504,32 @@ if args["--help"] != nil {
             exit(1)
         }
 
+    case "merge":
+        let mergeId = parseWorkId(args: args)
+        if mergeId == nil {
+            exit(1)
+        }
+
+        if let task = store.getTask(id: mergeId!) {
+            let branchName = getBranchName(task: task, id: mergeId!)
+
+            if !isGitRepository() {
+                print("git has not yet been initialized in the project. Please run `git init`.")
+                exit(1)
+            }
+
+            if doesBranchExist(branchName) {
+                mergeBranch(branchName)
+                print("Merged branch \(branchName)")
+            } else {
+                print("Error: branch \(branchName) does not exist")
+                exit(1)
+            }
+        } else {
+            print("Error: task #\(mergeId!) not found")
+            exit(1)
+        }
+
     default:
         if let id = Int(command) {
             if let task = store.getTask(id: id) {

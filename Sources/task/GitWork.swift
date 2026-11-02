@@ -39,6 +39,16 @@ func createAndCheckoutBranch(_ branchName: String) {
     process.waitUntilExit()
 }
 
+/// Merges a branch into the current branch
+func mergeBranch(_ branchName: String) {
+    let process = Process()
+    process.launchPath = "/bin/bash"
+    process.arguments = ["-c", "git merge \(branchName)"]
+    process.currentDirectoryPath = FileManager.default.currentDirectoryPath
+    process.launch()
+    process.waitUntilExit()
+}
+
 /// Adds tasks.json to .gitattributes with the -diff attribute to prevent it from
 /// showing changes in diff output
 func addTasksGitattributesEntry() {
