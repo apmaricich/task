@@ -65,7 +65,7 @@ func addTasksGitattributesEntry() {
             }
             // Append entry
             if let file = try? FileHandle(forWritingTo: URL(fileURLWithPath: gitattributesPath)) {
-                try? file.seekToEnd()
+                _ = try? file.seekToEnd()
                 if let data = entry.data(using: .utf8) {
                     file.write(data)
                 }

@@ -316,7 +316,7 @@ if args["--help"] != nil {
             let pinnedTasks = tasksToShow.filter { task in
                 !pinTags.isEmpty && task.tags.contains(where: { pinTags.contains($0) })
             }
-            let unpinnedTasks = tasksToShow.filter { task in
+            _ = tasksToShow.filter { task in
                 pinnedTasks.contains(where: { $0.id == task.id }) == false
             }
 
@@ -521,7 +521,7 @@ if args["--help"] != nil {
             if doesBranchExist(branchName) {
                 mergeBranch(branchName)
                 print("Merged branch \(branchName)")
-                store.done(id: mergeId!)
+                _ = store.done(id: mergeId!)
                 print("Completed task #\(mergeId!)")
             } else {
                 print("Error: branch \(branchName) does not exist")
@@ -547,7 +547,7 @@ if args["--help"] != nil {
             let task = allTasks.first { $0.id == maxId }!
             let tagToApply = "#" + command
             let updatedTags = task.tags + [tagToApply]
-            store.update(id: task.id, title: task.title, description: task.description, tags: updatedTags)
+            _ = store.update(id: task.id, title: task.title, description: task.description, tags: updatedTags)
         } else {
             print("Error: unknown command '\(command)'")
             exit(1)
