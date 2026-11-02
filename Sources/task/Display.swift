@@ -1,4 +1,21 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#endif
+
+// MARK: - Terminal Width Detection
+
+func getTerminalWidth() -> Int {
+    #if canImport(Darwin) || canImport(Glibc)
+    var size = winsize()
+    if ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0 && size.ws_col > 0 {
+        return Int(size.ws_col)
+    }
+    #endif
+    return 80
+}
 
 // MARK: - Display Formatting
 
@@ -55,11 +72,12 @@ private func printTableRow(_ row: [String], columnWidths: [Int], isHeader: Bool)
 
 // MARK: - Task Detail Display
 
-func displayTaskDetail(task: Task) {
-    let maxWidth = 80
+func displayTaskDetail(task: Task, maxWidth: Int? = nil) {
+    let effectiveWidth = maxWidth ?? getTerminalWidth()
+    let borderWidth = effectiveWidth - 2
 
     // Print top box
-    print("+\(String(repeating: "-", count: maxWidth))+")
+    print("+\(String(repeating: "-", count: borderWidth))+")
 
     // Determine completion status
     let status = task.completed ? "[x]" : "[ ]"
@@ -68,18 +86,11 @@ func displayTaskDetail(task: Task) {
     let titleText = "\(status) \(task.title)"
     let idText = "#\(task.id)"
     let contentLength = titleText.count + idText.count + 1  // +1 for space
-    let padding = String(repeating: " ", count: max(0, maxWidth - contentLength - 2))
+    let padding = String(repeating: " ", count: max(0, borderWidth - 2 - contentLength))
     print("| \(titleText) \(padding)\(idText) |")
 
     // Print bottom box
-    print("+\(String(repeating: "-", count: maxWidth))+")
-
-    // Format dates
-    let createdFormatted = formatDate(task.createdDate)
-    let updatedFormatted = task.updatedDate != nil ? formatDate(task.updatedDate!) : "N/A"
-    let completedFormatted = task.completedDate != nil ? formatDate(task.completedDate!) : "N/A"
-
-    print("  C: \(createdFormatted)\tU: \(updatedFormatted)\tD: \(completedFormatted)")
+    print("+\(String(repeating: "-", count: borderWidth))+")
 
     // Print tags
     if !task.tags.isEmpty {
@@ -94,8 +105,18 @@ func displayTaskDetail(task: Task) {
         print("  No description provided.")
     } else {
         print("")
-        printWrappedText(task.description, maxWidth: maxWidth, indent: "  ")
+        printWrappedText(task.description, maxWidth: borderWidth + 2, indent: "  ")
     }
+
+    // Format and print dates
+    let createdFormatted = formatDate(task.createdDate)
+    let updatedFormatted = task.updatedDate != nil ? formatDate(task.updatedDate!) : "N/A"
+    let completedFormatted = task.completedDate != nil ? formatDate(task.completedDate!) : "N/A"
+
+    print("")
+    print("  C: \(createdFormatted)")
+    print("  U: \(updatedFormatted)")
+    print("  D: \(completedFormatted)")
 }
 
 func formatDate(_ timestamp: Double) -> String {

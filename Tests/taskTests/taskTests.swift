@@ -905,3 +905,97 @@ final class TaskStoreTests: XCTestCase {
         try? FileManager.default.removeItem(atPath: tempDir)
     }
 }
+
+final class DisplayTests: XCTestCase {
+    var testFilePath: String!
+
+    override func setUp() {
+        super.setUp()
+        testFilePath = NSTemporaryDirectory() + "test_display_\(UUID().uuidString).json"
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        if FileManager.default.fileExists(atPath: testFilePath) {
+            try? FileManager.default.removeItem(atPath: testFilePath)
+        }
+    }
+
+    func testGetTerminalWidthReturnsPositiveValue() {
+        let width = getTerminalWidth()
+        XCTAssertGreaterThan(width, 0, "Terminal width should be greater than 0")
+    }
+
+    func testDisplayTaskDetailUsesSpecifiedWidth() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Test", description: "")
+
+        let captured = captureOutput {
+            displayTaskDetail(task: task, maxWidth: 40)
+        }
+
+        // Verify the border is narrower than terminal width
+        let lines = captured.components(separatedBy: "\n")
+        let borderLine = lines.first { $0.starts(with: "+") && $0.contains("-") }
+        XCTAssertNotNil(borderLine)
+        let borderLength = borderLine!.count
+        let terminalWidth = getTerminalWidth()
+        XCTAssertTrue(borderLength < terminalWidth, "Border should be narrower than terminal (got \(borderLength) vs \(terminalWidth))")
+        XCTAssertEqual(borderLength, 40, "Border should be 40 chars (38 dashes + 2 + signs)")
+    }
+
+    func testDisplayTaskDetailDefaultUsesTerminalWidth() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Test", description: "")
+
+        let captured = captureOutput {
+            displayTaskDetail(task: task)
+        }
+
+        let terminalWidth = getTerminalWidth()
+        let expectedBorder = "+\(String(repeating: "-", count: terminalWidth - 2))+"
+        XCTAssertTrue(captured.contains(expectedBorder), "Box should use terminal width")
+    }
+
+    func testPrintWrappedTextAtSmallWidth() {
+        let text = "This is a long sentence that should wrap when the width is small"
+        let captured = captureOutput {
+            printWrappedText(text, maxWidth: 20, indent: "")
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertTrue(lines.count > 1, "Text should wrap into multiple lines")
+        for line in lines {
+            XCTAssertLessThanOrEqual(line.count, 20, "Each line should be at most 20 chars")
+        }
+    }
+
+    func testPrintWrappedTextAtLargeWidth() {
+        let text = "This is a short sentence"
+        let captured = captureOutput {
+            printWrappedText(text, maxWidth: 80, indent: "")
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertEqual(lines.count, 1, "Short text should fit on one line")
+        XCTAssertEqual(lines[0], text)
+    }
+}
+
+// Helper to capture stdout
+func captureOutput(_ closure: () -> Void) -> String {
+    let pipe = Pipe()
+    let original = dup(STDOUT_FILENO)
+    dup2(pipe.fileHandleForWriting.fileDescriptor, STDOUT_FILENO)
+    try? pipe.fileHandleForWriting.close()
+
+    closure()
+
+    fflush(nil)
+    dup2(original, STDOUT_FILENO)
+    try? close(original)
+
+    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+    try? pipe.fileHandleForReading.close()
+    return String(data: data, encoding: .utf8) ?? ""
+}
