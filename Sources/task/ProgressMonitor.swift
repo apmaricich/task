@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(Darwin)
+import Darwin
+#endif
 
 // Monitor task completion progress and display a visual progress bar
 class ProgressMonitor {
@@ -34,24 +37,36 @@ class ProgressMonitor {
     init() {}
     
     // Main entry point: monitor progress and return final state
-    func monitorProgress(store: TaskStore, uncompletedCount: Int) -> State {
+    func monitorProgress(store: TaskStore, tag: String?) -> State {
+        let tasks = store.list()
+        
+        // If tag is provided, filter tasks by that tag
+        // Ensure tag has # prefix
+        let normalizedTag = tag != nil ? (tag!.hasPrefix("#") ? tag! : "#" + tag!) : nil
+        let filteredTasks = normalizedTag != nil ? tasks.filter { $0.tags.contains(normalizedTag!) } : tasks
+        
+        let uncompletedCount = filteredTasks.filter { !$0.completed }.count
+        
         guard uncompletedCount > 0 else {
             return .completed
         }
         
-        return monitorProgressInternal(store: store, initialUncompletedCount: uncompletedCount)
+        return monitorProgressInternal(store: store, initialUncompletedCount: uncompletedCount, tag: normalizedTag)
     }
     
     // Internal loop that monitors tasks until all are complete
-    func monitorProgressInternal(store: TaskStore, initialUncompletedCount: Int) -> State {
+    func monitorProgressInternal(store: TaskStore, initialUncompletedCount: Int, tag: String?) -> State {
         var completedCount: Int = 0
         
         loop: while completedCount < initialUncompletedCount {
             // Re-read tasks from store to get latest state
             let tasks = store.list()
             
+            // Filter by tag if provided
+            let filteredTasks = tag != nil ? tasks.filter { $0.tags.contains(tag!) } : tasks
+            
             // Count uncompleted tasks
-            let uncompletedTasks = tasks.filter { !$0.completed }
+            let uncompletedTasks = filteredTasks.filter { !$0.completed }
             let currentUncompletedCount = uncompletedTasks.count
             
             // Calculate completed tasks: initial - current uncompleted
@@ -68,7 +83,24 @@ class ProgressMonitor {
             )
             
             // Update in place - overwrite previous line
-            print("\rProgress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)", terminator: "")
+            if tag != nil {
+                // Use cyan color for the tag name (ANSI escape code)
+                let line = "\r\u{1b}[36m\(tag!)\u{1b}[0m \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)"
+                let data = line.data(using: .utf8)!
+                data.withUnsafeBytes { bytes in
+                    #if canImport(Darwin)
+                    write(1, bytes.baseAddress, data.count)
+                    #endif
+                }
+            } else {
+                let line = "\rProgress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)"
+                let data = line.data(using: .utf8)!
+                data.withUnsafeBytes { bytes in
+                    #if canImport(Darwin)
+                    write(1, bytes.baseAddress, data.count)
+                    #endif
+                }
+            }
             fflush(stdout)
             
             // Exit when all initial uncompleted tasks are complete
