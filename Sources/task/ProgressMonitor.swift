@@ -34,35 +34,46 @@ class ProgressMonitor {
     init() {}
     
     // Main entry point: monitor progress and return final state
-    func monitorProgress(tasks: [Task]) -> State {
-        let uncompletedCount = tasks.filter { !$0.completed }.count
-        
+    func monitorProgress(store: TaskStore, uncompletedCount: Int) -> State {
         guard uncompletedCount > 0 else {
             return .completed
         }
         
-        return monitorProgressInternal(tasks: tasks, initialUncompletedCount: uncompletedCount)
+        return monitorProgressInternal(store: store, initialUncompletedCount: uncompletedCount)
     }
     
     // Internal loop that monitors tasks until all are complete
-    func monitorProgressInternal(tasks: [Task], initialUncompletedCount: Int) -> State {
+    func monitorProgressInternal(store: TaskStore, initialUncompletedCount: Int) -> State {
         var completedCount: Int = 0
         
         loop: while completedCount < initialUncompletedCount {
-            // Recalculate remaining uncompleted tasks
-            let uncompleted = tasks.filter { !$0.completed }
-            let remaining = uncompleted.count
-            completedCount = initialUncompletedCount - remaining
+            // Re-read tasks from store to get latest state
+            let tasks = store.list()
+            
+            // Count uncompleted tasks
+            let uncompletedTasks = tasks.filter { !$0.completed }
+            let currentUncompletedCount = uncompletedTasks.count
+            
+            // Calculate completed tasks: initial - current uncompleted
+            completedCount = initialUncompletedCount - currentUncompletedCount
+            
+            // Clamp to avoid negative values
+            if completedCount < 0 {
+                completedCount = 0
+            }
             
             let progressInfo = generateProgressInfo(
                 total: initialUncompletedCount,
                 completed: completedCount
             )
             
-            print("Progress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)")
+            // Update in place - overwrite previous line
+            print("\rProgress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)", terminator: "")
+            fflush(stdout)
             
-            // Exit when all tasks are complete
-            if remaining == 0 {
+            // Exit when all initial uncompleted tasks are complete
+            if completedCount >= initialUncompletedCount {
+                print()
                 break
             }
             
@@ -88,7 +99,9 @@ class ProgressMonitor {
         }
         
         let percentage = completed * 100 / total
-        let filledBlocks = Int(percentage / 5)  // 20 blocks, 5% each
+        // Clamp percentage to 0-100 range to handle over-completion
+        let clampedPercentage = max(0, min(100, percentage))
+        let filledBlocks = Int(clampedPercentage / 5)
         let emptyBlocks = 20 - filledBlocks
         let progressBar = String(repeating: "█", count: filledBlocks) +
                          String(repeating: "░", count: emptyBlocks)
@@ -96,7 +109,7 @@ class ProgressMonitor {
         return ProgressInfo(
             current: completed,
             total: total,
-            percentage: percentage,
+            percentage: clampedPercentage,
             filledBlocks: filledBlocks,
             emptyBlocks: emptyBlocks,
             progressBar: "[\(progressBar)]"

@@ -265,8 +265,9 @@ if args["--help"] != nil {
     case "progress":
         // Monitor task progress - block execution until all tasks complete
         let tasks = store.list()
+        let uncompletedCount = tasks.filter { !$0.completed }.count
         let monitor = ProgressMonitor()
-        _ = monitor.monitorProgress(tasks: tasks)
+        _ = monitor.monitorProgress(store: store, uncompletedCount: uncompletedCount)
         exit(0)
 
     case "view":
