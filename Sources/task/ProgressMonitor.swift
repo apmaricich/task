@@ -41,23 +41,30 @@ class ProgressMonitor {
             return .completed
         }
         
-        return monitorProgressInternal(tasks: tasks, uncompletedCount: uncompletedCount)
+        return monitorProgressInternal(tasks: tasks, initialUncompletedCount: uncompletedCount)
     }
     
     // Internal loop that monitors tasks until all are complete
-    func monitorProgressInternal(tasks: [Task], uncompletedCount: Int) -> State {
-        var currentCompleted: Int = 0
+    func monitorProgressInternal(tasks: [Task], initialUncompletedCount: Int) -> State {
+        var completedCount: Int = 0
         
-        loop: while currentCompleted < uncompletedCount {
+        loop: while completedCount < initialUncompletedCount {
+            // Recalculate remaining uncompleted tasks
             let uncompleted = tasks.filter { !$0.completed }
-            currentCompleted = uncompleted.count
+            let remaining = uncompleted.count
+            completedCount = initialUncompletedCount - remaining
             
             let progressInfo = generateProgressInfo(
-                uncompletedCount: uncompletedCount,
-                currentCompleted: currentCompleted
+                total: initialUncompletedCount,
+                completed: completedCount
             )
             
-            print("Progress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(currentCompleted)/\(uncompletedCount)")
+            print("Progress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)")
+            
+            // Exit when all tasks are complete
+            if remaining == 0 {
+                break
+            }
             
             // Sleep 5 seconds before next poll
             sleep(5)
@@ -68,16 +75,27 @@ class ProgressMonitor {
     }
     
     // Generate progress info snapshot from current completion status
-    func generateProgressInfo(uncompletedCount: Int, currentCompleted: Int) -> ProgressInfo {
-        let percentage = currentCompleted * 100 / uncompletedCount
+    func generateProgressInfo(total: Int, completed: Int) -> ProgressInfo {
+        guard total > 0 else {
+            return ProgressInfo(
+                current: completed,
+                total: total,
+                percentage: 0,
+                filledBlocks: 0,
+                emptyBlocks: 20,
+                progressBar: "[░░░░░░░░░░░░░░░░░░░░]"
+            )
+        }
+        
+        let percentage = completed * 100 / total
         let filledBlocks = Int(percentage / 5)  // 20 blocks, 5% each
         let emptyBlocks = 20 - filledBlocks
         let progressBar = String(repeating: "█", count: filledBlocks) +
                          String(repeating: "░", count: emptyBlocks)
         
         return ProgressInfo(
-            current: currentCompleted,
-            total: uncompletedCount,
+            current: completed,
+            total: total,
             percentage: percentage,
             filledBlocks: filledBlocks,
             emptyBlocks: emptyBlocks,

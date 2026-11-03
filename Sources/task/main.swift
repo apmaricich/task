@@ -262,6 +262,13 @@ if args["--help"] != nil {
             exit(1)
         }
 
+    case "progress":
+        // Monitor task progress - block execution until all tasks complete
+        let tasks = store.list()
+        let monitor = ProgressMonitor()
+        _ = monitor.monitorProgress(tasks: tasks)
+        exit(0)
+
     case "view":
         handleView(store: store, args: args)
 
