@@ -11,7 +11,8 @@ func getTerminalWidth() -> Int {
     #if canImport(Darwin) || canImport(Glibc)
     var size = winsize()
     if ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0 && size.ws_col > 0 {
-        return Int(size.ws_col)
+        let width = Int(size.ws_col)
+        return width > 80 ? 80 : width
     }
     #endif
     return 80
@@ -171,11 +172,79 @@ func formatTaskTags(tags: [String], tagDisplayLimit: Int) -> String {
 func displayTaskLine(task: Task, pinStr: String, options: TaskDisplayOptions) {
     let status = task.completed ? "[x]" : "[ ]"
     let tagStr = formatTaskTags(tags: task.tags, tagDisplayLimit: options.tagDisplayLimit)
+    let terminalWidth = getTerminalWidth()
+
+    let prefix = "  \(pinStr)\(status) #\(task.id) "
+    var content = task.title
     if options.showDescription {
-        print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr) - \(task.description)")
+        content += "\(tagStr) - " + task.description
     } else {
-        print("  \(pinStr)\(status) #\(task.id) \(task.title)\(tagStr)")
+        content += tagStr
     }
+
+    // Calculate available width for content
+    let contentWidth = terminalWidth - prefix.count
+    let wrapIndent = "      "
+
+    if content.count <= contentWidth {
+        print(prefix + content)
+    } else {
+        // Wrap the content onto multiple lines
+        printWrappedTaskContent(content, availableWidth: contentWidth, prefix: prefix, wrapIndent: wrapIndent)
+    }
+}
+
+func printWrappedTaskContent(_ content: String, availableWidth: Int, prefix: String, wrapIndent: String) {
+    let words = content.split(separator: " ", omittingEmptySubsequences: false)
+    var line = ""
+    let continuationWidth = getTerminalWidth() - wrapIndent.count
+    var isFirstLine = true
+
+    for word in words {
+        if line.isEmpty {
+            line = word.description
+        } else if line.count + 1 + word.count <= availableWidth {
+            line = line + " " + word.description
+        } else {
+            if isFirstLine {
+                print(prefix + line)
+                isFirstLine = false
+            } else {
+                print(wrapIndent + line)
+            }
+            line = word.description
+            // Word itself is too long - wrap it
+            while line.count > continuationWidth {
+                let breakPoint = findWordBreak(line, at: continuationWidth)
+                let chunk = String(line.prefix(breakPoint))
+                line = String(line.suffix(line.count - breakPoint)).trimmingCharacters(in: .whitespaces)
+                print(wrapIndent + chunk)
+            }
+        }
+    }
+
+    if !line.isEmpty {
+        if isFirstLine {
+            print(prefix + line)
+        } else {
+            print(wrapIndent + line)
+        }
+    }
+}
+
+func findWordBreak(_ text: String, at maxWidth: Int) -> Int {
+    if text.count <= maxWidth {
+        return text.count
+    }
+
+    let prefix = text.prefix(maxWidth)
+    // Find the last space before maxWidth
+    if let lastSpace = prefix.lastIndex(of: " ") {
+        return prefix.distance(from: prefix.startIndex, to: lastSpace)
+    }
+
+    // No space found, break at max width
+    return maxWidth
 }
 
 func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisplayOptions) {

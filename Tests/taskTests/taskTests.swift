@@ -980,6 +980,130 @@ final class DisplayTests: XCTestCase {
         XCTAssertEqual(lines.count, 1, "Short text should fit on one line")
         XCTAssertEqual(lines[0], text)
     }
+
+    func testFindWordBreakAtBoundary() {
+        // Word fits exactly
+        let result = findWordBreak("hello world", at: 5)
+        XCTAssertEqual(result, 5, "Should break at exact boundary")
+    }
+
+    func testFindWordBreakBeforeBoundary() {
+        // Break at last space before boundary (boundary falls mid-word)
+        let result = findWordBreak("hello world foo", at: 10)
+        XCTAssertEqual(result, 5, "Should break at last space before boundary")
+    }
+
+    func testFindWordBreakAfterSpace() {
+        // Boundary falls right after a space
+        let result = findWordBreak("hello world", at: 12)
+        XCTAssertEqual(result, 11, "Should break at the space when boundary is past it")
+    }
+
+    func testFindWordBreakNoSpace() {
+        // No space found, break at max
+        let result = findWordBreak("longword", at: 4)
+        XCTAssertEqual(result, 4, "Should break at max when no space found")
+    }
+
+    func testFindWordBreakExactFit() {
+        // Text fits entirely
+        let result = findWordBreak("short", at: 10)
+        XCTAssertEqual(result, 5, "Should return full length when text fits")
+    }
+
+    func testDisplayTaskLineWrapsLongTitle() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "This is a very long task title that should wrap when displayed in the terminal", description: "")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            showDescription: false
+        )
+
+        let captured = captureOutput {
+            displayTaskLine(task: task, pinStr: "", options: options)
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertTrue(lines.count > 1, "Long title should wrap to multiple lines")
+
+        // First line should have the prefix
+        XCTAssertTrue(lines[0].starts(with: "  [ ] #"), "First line should start with prefix")
+
+        // Continuation lines should be indented with 6 spaces
+        for idx in 1..<lines.count {
+            XCTAssertTrue(lines[idx].hasPrefix("      "), "Continuation line \(idx) should be indented with 6 spaces")
+        }
+    }
+
+    func testDisplayTaskLineWrapsLongDescription() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Short", description: "This is a very long description that should wrap when displayed in the terminal list view because it exceeds the available width")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            showDescription: true
+        )
+
+        let captured = captureOutput {
+            displayTaskLine(task: task, pinStr: "", options: options)
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertTrue(lines.count > 1, "Long description should wrap to multiple lines")
+    }
+
+    func testDisplayTaskLineNoWrapForShortContent() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Short title", description: "Short desc")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            showDescription: true
+        )
+
+        let captured = captureOutput {
+            displayTaskLine(task: task, pinStr: "", options: options)
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertEqual(lines.count, 1, "Short content should fit on one line")
+    }
+
+    func testDisplayTaskLineWrapWithPinStr() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "This is a very long task title that should wrap when displayed in the terminal with a pin string", description: "")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            showDescription: false
+        )
+
+        let red = "\u{1b}[31m"
+        let reset = "\u{1b}[0m"
+        let pinStr = "\(red)* \(reset)"
+
+        let captured = captureOutput {
+            displayTaskLine(task: task, pinStr: pinStr, options: options)
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertTrue(lines.count > 1, "Long title with pin should wrap")
+        // First line should have the pin
+        XCTAssertTrue(lines[0].contains("*"), "First line should contain pin marker")
+    }
 }
 
 // Helper to capture stdout
