@@ -4,6 +4,11 @@ import { exec } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 
+// Strip ANSI escape codes from the output
+function stripAnsi(input: string): string {
+  return input.replace(/\u001b\[[0-9;]*[mGK]/g, "");
+}
+
 async function getTaskList(dir: string): Promise<string | null> {
   try {
     return new Promise<string>((resolve) => {
@@ -11,7 +16,7 @@ async function getTaskList(dir: string): Promise<string | null> {
         if (error || stderr) {
           resolve(null);
         } else {
-          resolve(stdout.trim());
+          resolve(stripAnsi(stdout.trim()));
         }
       });
     });

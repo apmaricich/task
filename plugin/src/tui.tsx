@@ -4,6 +4,11 @@ import { exec } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
 
+// Strip ANSI escape codes from the output
+function stripAnsi(input: string): string {
+  return input.replace(/\u001b\[[0-9;]*[mGK]/g, "");
+}
+
 async function getTaskList(dir: string): Promise<string | null> {
   try {
     return new Promise<string>((resolve) => {
@@ -11,7 +16,7 @@ async function getTaskList(dir: string): Promise<string | null> {
         if (error || stderr) {
           resolve(null);
         } else {
-          resolve(stdout.trim());
+          resolve(stripAnsi(stdout.trim()));
         }
       });
     });
@@ -23,9 +28,6 @@ async function getTaskList(dir: string): Promise<string | null> {
 export default Plugin.define({
   id: "task-manager.tui",
   setup(ctx) {
-    // Explicitly log to stderr to ensure it appears in the OpenCode log
-    process.stderr.write("[task-manager] Plugin setup starting\n");
-    
     // Find the task-manager project location by traversing up the filesystem
     // looking for tasks.json. This ensures the correct task list is shown.
     async function findTaskDir(currentPath: string): Promise<string | null> {
@@ -57,18 +59,9 @@ export default Plugin.define({
           foundDir = await findTaskDir(currentDir);
         }
         if (foundDir) {
-          console.log("[task-manager] Found task dir:", foundDir);
-          // Test the shell first
-          const testResult = await getTaskList(foundDir);
-          if (!testResult) {
-            // Try using the full path to the task binary
-            console.log("[task-manager] Shell test failed, trying full path");
-          }
-          taskListOutput = testResult;
-          console.log("[task-manager] Task list output:", taskListOutput);
+          taskListOutput = await getTaskList(foundDir);
         }
       } catch (err) {
-        console.log("[task-manager] Refresh error:", err);
         taskListOutput = null;
       } finally {
         refreshing = false;
@@ -78,9 +71,8 @@ export default Plugin.define({
     // Initial refresh
     refresh();
 
-    // Refresh on session changes
-    ctx.data.on("session.list.updated", refresh);
-    ctx.data.on("session.created", refresh);
+    // Periodic refresh (every 30 seconds)
+    const interval = setInterval(refresh, 30000);
 
     return ctx.ui.slot({
       append: "sidebar.content",
@@ -91,7 +83,7 @@ export default Plugin.define({
               Tasks
             </text>
             <text fg="gray" wrap={true}>
-              {taskListOutput ?? "Loading..."}
+              {taskListOutput}
             </text>
           </box>
         </Show>
