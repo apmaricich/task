@@ -146,8 +146,18 @@ class TaskStore {
 
         guard let index = index else { return false }
 
-        tasks[index]["completed"] = true
-        tasks[index]["completedDate"] = Date().timeIntervalSince1970
+        let isCompleted = tasks[index]["completed"] as? Bool ?? false
+
+        if isCompleted {
+            // Toggle back to uncompleted
+            tasks[index].removeValue(forKey: "completed")
+            tasks[index].removeValue(forKey: "completedDate")
+        } else {
+            // Mark as completed
+            tasks[index]["completed"] = true
+            tasks[index]["completedDate"] = Date().timeIntervalSince1970
+        }
+
         store["tasks"] = tasks
         saveStore(store)
         return true

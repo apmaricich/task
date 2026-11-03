@@ -413,7 +413,13 @@ if args["--help"] != nil {
         }
 
         if store.done(id: id) {
-            print("Completed task #\(id)")
+            // Check if task is now completed or uncompleted
+            let task = store.getTask(id: id)
+            if task?.completed ?? false {
+                print("Completed task #\(id)")
+            } else {
+                print("Uncompleted task #\(id)")
+            }
         } else {
             print("Error: task #\(id) not found")
             exit(1)

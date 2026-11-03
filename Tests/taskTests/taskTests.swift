@@ -98,6 +98,22 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertNotNil(completed?.completedDate)
     }
 
+    func testDoneTogglesCompletionStatus() {
+        let task = store.add(title: "To complete", description: "Description")
+        store.done(id: task.id)
+
+        // First done marks as complete
+        let completed = store.list().first { $0.id == task.id }
+        XCTAssertTrue(completed?.completed ?? false)
+        XCTAssertNotNil(completed?.completedDate)
+
+        // Second done toggles back to uncompleted
+        store.done(id: task.id)
+        let uncompleted = store.list().first { $0.id == task.id }
+        XCTAssertFalse(uncompleted?.completed ?? false)
+        XCTAssertNil(uncompleted?.completedDate)
+    }
+
     func testDoneNonExistentTask() {
         let done = store.done(id: 999)
         XCTAssertFalse(done)

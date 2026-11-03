@@ -48,6 +48,7 @@ export default Plugin.define({
 
     let taskListOutput: string | null = null;
     let refreshing = false;
+    let lastDir: string | null = null;
     let foundDir: string | null = null;
 
     const refresh = async () => {
@@ -55,7 +56,9 @@ export default Plugin.define({
       refreshing = true;
       try {
         const currentDir = ctx.location?.directory ?? process.cwd();
-        if (!foundDir) {
+        // Re-detect if we've navigated to a different project
+        if (currentDir !== lastDir) {
+          lastDir = currentDir;
           foundDir = await findTaskDir(currentDir);
         }
         if (foundDir) {
