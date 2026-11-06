@@ -849,23 +849,55 @@ final class TaskStoreTests: XCTestCase {
     }
 
     func testMergeMarksTaskCompleted() {
-        // Create a temp directory and git repo
         let tempDir = NSTemporaryDirectory() + "test_merge_\(UUID().uuidString)"
-        try? FileManager.default.createDirectory(atPath: tempDir, withIntermediateDirectories: true)
+        setupGitRepo(at: tempDir)
 
-        // Initialize git repo and make initial commit
-        let process = Process()
-        process.launchPath = "/bin/bash"
-        process.arguments = ["-c", "cd \(tempDir) && git init && git config user.email 'test@test.com' && git config user.name 'Test' && echo 'init' > README.md && git add README.md && git commit -m 'Initial commit'"]
-        process.launch()
-        process.waitUntilExit()
-
-        // Change to the temp directory
         let originalDir = FileManager.default.currentDirectoryPath
         try? FileManager.default.changeCurrentDirectoryPath(tempDir)
 
-        // Create a tasks.json with a task
         let tasksPath = tempDir + "/tasks.json"
+        createTestTasksFile(at: tasksPath)
+
+        let branchProcess = Process()
+        branchProcess.launchPath = "/bin/bash"
+        branchProcess.arguments = ["-c", "cd \(tempDir) && git checkout -b feature/1 && echo 'feature work' > feature.md && git add feature.md && git commit -m 'Feature work'"]
+        branchProcess.launch()
+        branchProcess.waitUntilExit()
+
+        let checkoutProcess = Process()
+        checkoutProcess.launchPath = "/bin/bash"
+        checkoutProcess.arguments = ["-c", "cd \(tempDir) && git checkout main"]
+        checkoutProcess.launch()
+        checkoutProcess.waitUntilExit()
+
+        let taskBinaryPath = "/Users/apmaricich/Code/task/.build/debug/task"
+        let mergeProcess = Process()
+        mergeProcess.launchPath = "/bin/bash"
+        mergeProcess.arguments = ["-c", "cd \(tempDir) && \(taskBinaryPath) merge 1"]
+        mergeProcess.launch()
+        mergeProcess.waitUntilExit()
+
+        let store = TaskStore(filePath: tasksPath)
+        let tasks = store.list()
+        let task = tasks.first { $0.id == 1 }
+        XCTAssertNotNil(task)
+        XCTAssertTrue(task!.completed)
+        XCTAssertNotNil(task!.completedDate)
+
+        try? FileManager.default.changeCurrentDirectoryPath(originalDir)
+        try? FileManager.default.removeItem(atPath: tempDir)
+    }
+
+    func setupGitRepo(at path: String) {
+        try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true)
+        let process = Process()
+        process.launchPath = "/bin/bash"
+        process.arguments = ["-c", "cd \(path) && git init && git config user.email 'test@test.com' && git config user.name 'Test' && echo 'init' > README.md && git add README.md && git commit -m 'Initial commit'"]
+        process.launch()
+        process.waitUntilExit()
+    }
+
+    func createTestTasksFile(at path: String) {
         let tasksJson = """
 {
     "tasks": [
@@ -882,43 +914,7 @@ final class TaskStoreTests: XCTestCase {
     }
 }
 """
-        try? tasksJson.write(toFile: tasksPath, atomically: true, encoding: .utf8)
-
-        // Create the branch that would be expected for this task (feature/1)
-        // Make a commit on the feature branch so the merge has something to merge
-        let branchProcess = Process()
-        branchProcess.launchPath = "/bin/bash"
-        branchProcess.arguments = ["-c", "cd \(tempDir) && git checkout -b feature/1 && echo 'feature work' > feature.md && git add feature.md && git commit -m 'Feature work'"]
-        branchProcess.launch()
-        branchProcess.waitUntilExit()
-
-        // Go back to master branch before merging
-        let masterProcess = Process()
-        masterProcess.launchPath = "/bin/bash"
-        masterProcess.arguments = ["-c", "cd \(tempDir) && git checkout master"]
-        masterProcess.launch()
-        masterProcess.waitUntilExit()
-
-        // Run the merge command via the built binary
-        // Use absolute path to the task binary
-        let taskBinaryPath = "/Users/apmaricich/Code/task/.build/debug/task"
-        let mergeProcess = Process()
-        mergeProcess.launchPath = "/bin/bash"
-        mergeProcess.arguments = ["-c", "cd \(tempDir) && \(taskBinaryPath) merge 1"]
-        mergeProcess.launch()
-        mergeProcess.waitUntilExit()
-
-        // Verify the task is marked as completed
-        let store = TaskStore(filePath: tasksPath)
-        let tasks = store.list()
-        let task = tasks.first { $0.id == 1 }
-        XCTAssertNotNil(task)
-        XCTAssertTrue(task!.completed)
-        XCTAssertNotNil(task!.completedDate)
-
-        // Restore original directory and clean up
-        try? FileManager.default.changeCurrentDirectoryPath(originalDir)
-        try? FileManager.default.removeItem(atPath: tempDir)
+        try? tasksJson.write(toFile: path, atomically: true, encoding: .utf8)
     }
 }
 

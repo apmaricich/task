@@ -1,399 +1,397 @@
 {
+  "tasks" : [
+    {
+      "completed" : true,
+      "description" : "",
+      "id" : 1,
+      "title" : "sort task by complete feature"
+    },
+    {
+      "completed" : true,
+      "completedDate" : 1793282877.4435391,
+      "title" : "visual update to sort",
+      "id" : 2,
+      "description" : ""
+    },
+    {
+      "completed" : true,
+      "title" : "add config command",
+      "id" : 3,
+      "description" : ""
+    },
+    {
+      "completed" : true,
+      "description" : "",
+      "title" : "add created and completed timestamps",
+      "id" : 4
+    },
+    {
+      "description" : "",
+      "title" : "add display limit configuration option.",
+      "id" : 5,
+      "createdDate" : 1793278255.319313,
+      "completed" : true,
+      "completedDate" : 1793279136.1286559
+    },
+    {
+      "completedDate" : 1793280765.953521,
+      "id" : 6,
+      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
+      "createdDate" : 1793278956.649796,
+      "title" : "refactor codebase for readability",
+      "completed" : true,
+      "updatedDate" : 1793280698.610184
+    },
+    {
+      "description" : "",
+      "completedDate" : 1793282892.406467,
+      "title" : "prompt for input feature",
+      "id" : 7,
+      "createdDate" : 1793280739.789355,
+      "completed" : true
+    },
+    {
+      "completed" : true,
+      "title" : "tag support",
+      "id" : 8,
+      "description" : "",
+      "tags" : [
+        "#urgent",
+        "#fish"
+      ],
+      "updatedDate" : 1793288452.6348372,
+      "completedDate" : 1793291351.0477939,
+      "createdDate" : 1793280751.5302989
+    },
+    {
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "title" : "task complete no parameters feature",
+      "tags" : [
+        "#backlog"
+      ],
+      "updatedDate" : 1793373809.2933269,
+      "id" : 9,
+      "completed" : false,
+      "createdDate" : 1793281067.3222299
+    },
+    {
+      "description" : "",
+      "id" : 10,
+      "title" : "add hr rule",
+      "createdDate" : 1793281110.801991,
+      "completed" : true,
+      "updatedDate" : 1793285071.8822351,
+      "completedDate" : 1793285143.4755101
+    },
+    {
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
+      "id" : 12,
+      "completed" : true,
+      "createdDate" : 1793286882.7039061,
+      "completedDate" : 1793303628.6489511,
+      "title" : "track command"
+    },
+    {
+      "completedDate" : 1793303074.8227601,
+      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
+      "id" : 13,
+      "completed" : true,
+      "createdDate" : 1793287030.560792,
+      "title" : "backlog feature",
+      "updatedDate" : 1793303135.5591919
+    },
+    {
+      "tags" : [
+        "#bug",
+        "#urgent"
+      ],
+      "createdDate" : 1793287468.2949429,
+      "completed" : true,
+      "description" : "",
+      "completedDate" : 1793298376.082309,
+      "title" : "Test with tags",
+      "id" : 14
+    },
+    {
+      "id" : 15,
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
+      "completed" : true,
+      "title" : "Remove 'list' command and replace with no arguments",
+      "completedDate" : 1793298359.5235991,
+      "createdDate" : 1793294391.9601312
+    },
+    {
+      "description" : "",
+      "createdDate" : 1793296823.392992,
+      "completedDate" : 1793298347.843744,
+      "updatedDate" : 1793298333.3063569,
+      "id" : 16,
+      "completed" : true,
+      "title" : "pin section"
+    },
+    {
+      "createdDate" : 1793303447.776912,
+      "completedDate" : 1793303447.776912,
+      "completed" : true,
+      "id" : 17,
+      "title" : "Test of task track",
+      "description" : "This is just a test."
+    },
+    {
+      "completed" : true,
+      "id" : 18,
+      "description" : "List of tags should be able to be provided when adding an item through the prompt.",
+      "createdDate" : 1793305384.1244321,
+      "updatedDate" : 1793364410.861331,
+      "completedDate" : 1793364406.008229,
+      "title" : "task add should prompt for tags"
+    },
+    {
+      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
+      "id" : 19,
+      "completedDate" : 1793365063.5266628,
+      "title" : "idea",
+      "completed" : true,
+      "createdDate" : 1793305894.0261459
+    },
+    {
+      "completedDate" : 1793934765.6368141,
+      "completed" : true,
+      "createdDate" : 1793365147.063472,
+      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
+      "id" : 20,
+      "updatedDate" : 1793934219.255044,
+      "title" : "statistics viewer"
+    },
+    {
+      "title" : "fix dynamic command feature",
+      "completed" : true,
+      "completedDate" : 1793373784.5193291,
+      "createdDate" : 1793372929.1742949,
+      "tags" : [
+        "#bug"
+      ],
+      "description" : "",
+      "id" : 21
+    },
+    {
+      "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name.",
+      "completedDate" : 1793375477.6240292,
+      "id" : 22,
+      "createdDate" : 1793373949.4697499,
+      "tags" : [
+        "#feature"
+      ],
+      "updatedDate" : 1793375467.695183,
+      "completed" : true,
+      "title" : "view configuration"
+    },
+    {
+      "description" : "task tag should display a list of tags that are currently attached to tickets. It should list all tags and the count of how many tasks are associated with that tag.",
+      "updatedDate" : 1793375093.8526831,
+      "createdDate" : 1793375093.850481,
+      "title" : "tag command",
+      "completedDate" : 1793376057.0426869,
+      "tags" : [
+        "#feature"
+      ],
+      "id" : 23,
+      "completed" : true
+    },
+    {
+      "description" : "agentTags config defines tags that agents use to mark what they are working on. Update the skill to tell the agent to add or remove the agent tag. Agent tag items are pointed to with a green > before the task. ",
+      "createdDate" : 1793389486.5689201,
+      "tags" : [
+        "#feature"
+      ],
+      "updatedDate" : 1793389486.5741429,
+      "completed" : false,
+      "title" : "agentTags configuration",
+      "id" : 24
+    },
+    {
+      "createdDate" : 1793390044.215178,
+      "completedDate" : 1793713328.455369,
+      "completed" : true,
+      "updatedDate" : 1793713333.1360769,
+      "tags" : [
+        "#feature"
+      ],
+      "description" : "Build a sidebar plugin that shows task list status. Requires understanding OpenCode plugin architecture.",
+      "id" : 25,
+      "title" : "Opencode plugin"
+    },
+    {
+      "tags" : [
+        "#feature"
+      ],
+      "createdDate" : 1793391281.9833231,
+      "updatedDate" : 1793391281.986232,
+      "completedDate" : 1793645320.678071,
+      "id" : 26,
+      "completed" : true,
+      "title" : "task work command",
+      "description" : "task work should checkout a new branch from the current commit with the name of the first tag preceeding a slash and the task id after the slash. for example task work 12 when 12 has a tag of #feature would run a git checkout -b feature\/12"
+    },
+    {
+      "title" : "Init to add git attributes",
+      "completed" : true,
+      "description" : "Task init command should automatically add an ignore entry to the gitattributes file so changes dont show up in the diff output. ",
+      "createdDate" : 1793614848.0997682,
+      "tags" : [
+        "#feature"
+      ],
+      "completedDate" : 1793647058.875103,
+      "id" : 27
+    },
+    {
+      "tags" : [
+        "#feature"
+      ],
+      "completed" : true,
+      "title" : "terminal resize",
+      "description" : "right now the terminal output stays at 80 characters width by default. this doesnt look great when viewing on phones. the app should be able to detect what size the terminal is, and shrink its display width if smaller than 80. ",
+      "updatedDate" : 1793615041.2082729,
+      "completedDate" : 1793655064.4568372,
+      "id" : 28,
+      "createdDate" : 1793615041.205198
+    },
+    {
+      "title" : "merge command",
+      "tags" : [
+        "#feature"
+      ],
+      "completedDate" : 1793650187.1084452,
+      "completed" : true,
+      "updatedDate" : 1793646810.5042119,
+      "createdDate" : 1793646810.501652,
+      "id" : 29,
+      "description" : "add a 'task merge {id}' command that does the same branch assembly logic as task work {id}, but runs a 'git merge {branch}' command, to merge that brancch we worked on into the current branch."
+    },
+    {
+      "title" : "move asterisk",
+      "tags" : [
+        "#feature"
+      ],
+      "id" : 30,
+      "description" : "pinned asterisks should move to after the checkbox but before the title   [ ] * Title",
+      "updatedDate" : 1793662683.345922,
+      "createdDate" : 1793662683.343091,
+      "completed" : false
+    },
+    {
+      "completedDate" : 1793666384.0939469,
+      "updatedDate" : 1793713341.0080881,
+      "completed" : true,
+      "id" : 31,
+      "tags" : [
+        "#feature"
+      ],
+      "title" : "word wrap on list view",
+      "description" : "on main task command or any view command, if a tasks display output is longer than the edge of the size of the terminal, it should cleanly wrap on words. since a typical task is indented by 2 spaces, a word wrap line should be indented 6 soapaces.",
+      "createdDate" : 1793662892.4472229
+    },
+    {
+      "createdDate" : 1793666522.6162171,
+      "updatedDate" : 1793666522.618535,
+      "description" : "For some reason the plugin only displays when i am in the tasks project directory. is it because of the plugin location? I want the plugin to load no matter what directory i open opencode in. if it detects a tasks.json in that directory, it should load the tasks list in the sidebar.",
+      "tags" : [
+        "#bug"
+      ],
+      "id" : 32,
+      "title" : "tasks plugin not working outside tasks project"
+    },
+    {
+      "completed" : false,
+      "description" : "update the task manager skill to describe that the llm should default to using subagts for its work. the process would be: have the main agent read the task and its description, have the main agent write up a new prompt based on its context and details to implement whatever is written in the task, then once the subagent completes the main agent should review the subagents work. This will cut down on the main agents context usage.",
+      "title" : "subagents in skills",
+      "updatedDate" : 1793720477.6541109,
+      "id" : 33,
+      "tags" : [
+        "#feature"
+      ],
+      "createdDate" : 1793720477.6522889
+    },
+    {
+      "tags" : [
+        "#feature"
+      ],
+      "title" : "task progress command",
+      "completed" : true,
+      "updatedDate" : 1793933580.4040389,
+      "createdDate" : 1793731462.1723771,
+      "completedDate" : 1793933569.2690659,
+      "id" : 34,
+      "description" : "a new `task progress` command should be created that displays a live updating progress bar. on launch, it should calculate the number of uncompleted tasks. then it should display a progress bar with the text '(0\/n)' where n is the total number of uncompleted tasks. aevery 5 seconds, the number of uncompleted tasks should be re-checked, and if a task was completed, the progress bar should increase in value. the command should exit once all tasks are complete."
+    },
+    {
+      "title" : "Phase 1: Create ProgressMonitor.swift",
+      "completedDate" : 1793734606.4476728,
+      "createdDate" : 1793734074.7533751,
+      "tags" : [
+        "#feature"
+      ],
+      "description" : "Implement the core progress monitoring logic and data structures. Create the ProgressMonitor class with State, ProgressInfo, and TerminalAction enums. Implement monitorProgress, monitorProgressInternal, and generateProgressInfo methods.",
+      "id" : 35,
+      "completed" : true
+    },
+    {
+      "title" : "Phase 2: Create ProgressMonitorTests.swift",
+      "id" : 36,
+      "completed" : true,
+      "tags" : [
+        "#feature"
+      ],
+      "completedDate" : 1793735009.1210871,
+      "description" : "Implement comprehensive unit tests for ProgressMonitorTests. Test all edge cases including empty task list, all tasks completed, partial completion. Test progress info generation for various percentages.",
+      "createdDate" : 1793734079.4733229
+    },
+    {
+      "description" : "Add handleProgress() function to the main switch. Call monitorProgressWithStore(store) in the progress case. Add appropriate error handling and exit codes. Ensure proper integration with existing code structure.",
+      "createdDate" : 1793734084.091043,
+      "id" : 37,
+      "tags" : [
+        "#feature"
+      ],
+      "completed" : true,
+      "completedDate" : 1793735614.5218239,
+      "title" : "Phase 3: Integrate into main.swift"
+    },
+    {
+      "completed" : true,
+      "description" : "Create a temporary test directory with tasks.json. Add 10-15 tasks to test directory. Run task progress in test directory. Verify progress bar updates every 5 seconds. Verify exit when all tasks complete. Verify graceful Ctrl+C handling.",
+      "id" : 38,
+      "tags" : [
+        "#feature"
+      ],
+      "title" : "Phase 4: Test the Progress Command",
+      "completedDate" : 1793736101.2389741,
+      "createdDate" : 1793734088.417486
+    },
+    {
+      "createdDate" : 1793737485.7874532,
+      "id" : 39,
+      "title" : "test",
+      "description" : "",
+      "completed" : true,
+      "completedDate" : 1793737507.8367891
+    }
+  ],
   "config" : {
-    "backlogTags" : [
-      "#backlog"
+    "command" : [
+      "bug",
+      "feature",
+      "backlog"
     ],
     "sort" : "completed",
     "showCompleted" : "true",
     "pinTags" : [
       "#pin"
     ],
-    "command" : [
-      "bug",
-      "feature",
-      "backlog"
-    ],
     "displayLimit" : 4,
+    "backlogTags" : [
+      "#backlog"
+    ],
     "tagDisplayLimit" : 3
-  },
-  "tasks" : [
-    {
-      "description" : "",
-      "title" : "sort task by complete feature",
-      "completed" : true,
-      "id" : 1
-    },
-    {
-      "title" : "visual update to sort",
-      "id" : 2,
-      "completedDate" : 1793282877.4435391,
-      "completed" : true,
-      "description" : ""
-    },
-    {
-      "description" : "",
-      "title" : "add config command",
-      "id" : 3,
-      "completed" : true
-    },
-    {
-      "description" : "",
-      "title" : "add created and completed timestamps",
-      "completed" : true,
-      "id" : 4
-    },
-    {
-      "completedDate" : 1793279136.1286559,
-      "id" : 5,
-      "title" : "add display limit configuration option.",
-      "description" : "",
-      "createdDate" : 1793278255.319313,
-      "completed" : true
-    },
-    {
-      "updatedDate" : 1793280698.610184,
-      "title" : "refactor codebase for readability",
-      "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "completedDate" : 1793280765.953521,
-      "createdDate" : 1793278956.649796,
-      "id" : 6,
-      "completed" : true
-    },
-    {
-      "title" : "prompt for input feature",
-      "description" : "",
-      "createdDate" : 1793280739.789355,
-      "completedDate" : 1793282892.406467,
-      "id" : 7,
-      "completed" : true
-    },
-    {
-      "completed" : true,
-      "updatedDate" : 1793288452.6348372,
-      "title" : "tag support",
-      "createdDate" : 1793280751.5302989,
-      "description" : "",
-      "completedDate" : 1793291351.0477939,
-      "tags" : [
-        "#urgent",
-        "#fish"
-      ],
-      "id" : 8
-    },
-    {
-      "updatedDate" : 1793373809.2933269,
-      "createdDate" : 1793281067.3222299,
-      "tags" : [
-        "#backlog"
-      ],
-      "completed" : false,
-      "title" : "task complete no parameters feature",
-      "id" : 9,
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete."
-    },
-    {
-      "description" : "",
-      "title" : "add hr rule",
-      "createdDate" : 1793281110.801991,
-      "completed" : true,
-      "updatedDate" : 1793285071.8822351,
-      "id" : 10,
-      "completedDate" : 1793285143.4755101
-    },
-    {
-      "completedDate" : 1793303628.6489511,
-      "createdDate" : 1793286882.7039061,
-      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "title" : "track command",
-      "completed" : true,
-      "id" : 12
-    },
-    {
-      "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
-      "completed" : true,
-      "completedDate" : 1793303074.8227601,
-      "id" : 13,
-      "updatedDate" : 1793303135.5591919,
-      "createdDate" : 1793287030.560792,
-      "title" : "backlog feature"
-    },
-    {
-      "description" : "",
-      "title" : "Test with tags",
-      "id" : 14,
-      "tags" : [
-        "#bug",
-        "#urgent"
-      ],
-      "completed" : true,
-      "completedDate" : 1793298376.082309,
-      "createdDate" : 1793287468.2949429
-    },
-    {
-      "completed" : true,
-      "completedDate" : 1793298359.5235991,
-      "id" : 15,
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
-      "title" : "Remove 'list' command and replace with no arguments",
-      "createdDate" : 1793294391.9601312
-    },
-    {
-      "updatedDate" : 1793298333.3063569,
-      "createdDate" : 1793296823.392992,
-      "completed" : true,
-      "completedDate" : 1793298347.843744,
-      "title" : "pin section",
-      "description" : "",
-      "id" : 16
-    },
-    {
-      "id" : 17,
-      "completedDate" : 1793303447.776912,
-      "title" : "Test of task track",
-      "createdDate" : 1793303447.776912,
-      "description" : "This is just a test.",
-      "completed" : true
-    },
-    {
-      "title" : "task add should prompt for tags",
-      "description" : "List of tags should be able to be provided when adding an item through the prompt.",
-      "id" : 18,
-      "updatedDate" : 1793364410.861331,
-      "completedDate" : 1793364406.008229,
-      "createdDate" : 1793305384.1244321,
-      "completed" : true
-    },
-    {
-      "completed" : true,
-      "title" : "idea",
-      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
-      "id" : 19,
-      "createdDate" : 1793305894.0261459,
-      "completedDate" : 1793365063.5266628
-    },
-    {
-      "updatedDate" : 1793365147.065887,
-      "completed" : false,
-      "title" : "statistics viewer",
-      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
-      "id" : 20,
-      "tags" : [
-        "#backlog"
-      ],
-      "createdDate" : 1793365147.063472
-    },
-    {
-      "description" : "",
-      "tags" : [
-        "#bug"
-      ],
-      "title" : "fix dynamic command feature",
-      "createdDate" : 1793372929.1742949,
-      "completedDate" : 1793373784.5193291,
-      "id" : 21,
-      "completed" : true
-    },
-    {
-      "tags" : [
-        "#feature"
-      ],
-      "completed" : true,
-      "title" : "view configuration",
-      "updatedDate" : 1793375467.695183,
-      "id" : 22,
-      "completedDate" : 1793375477.6240292,
-      "createdDate" : 1793373949.4697499,
-      "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name."
-    },
-    {
-      "createdDate" : 1793375093.850481,
-      "title" : "tag command",
-      "tags" : [
-        "#feature"
-      ],
-      "description" : "task tag should display a list of tags that are currently attached to tickets. It should list all tags and the count of how many tasks are associated with that tag.",
-      "completedDate" : 1793376057.0426869,
-      "completed" : true,
-      "updatedDate" : 1793375093.8526831,
-      "id" : 23
-    },
-    {
-      "updatedDate" : 1793389486.5741429,
-      "createdDate" : 1793389486.5689201,
-      "description" : "agentTags config defines tags that agents use to mark what they are working on. Update the skill to tell the agent to add or remove the agent tag. Agent tag items are pointed to with a green > before the task. ",
-      "title" : "agentTags configuration",
-      "tags" : [
-        "#feature"
-      ],
-      "id" : 24,
-      "completed" : false
-    },
-    {
-      "completedDate" : 1793713328.455369,
-      "id" : 25,
-      "tags" : [
-        "#feature"
-      ],
-      "description" : "Build a sidebar plugin that shows task list status. Requires understanding OpenCode plugin architecture.",
-      "createdDate" : 1793390044.215178,
-      "completed" : true,
-      "updatedDate" : 1793713333.1360769,
-      "title" : "Opencode plugin"
-    },
-    {
-      "updatedDate" : 1793391281.986232,
-      "title" : "task work command",
-      "completed" : true,
-      "createdDate" : 1793391281.9833231,
-      "completedDate" : 1793645320.678071,
-      "id" : 26,
-      "tags" : [
-        "#feature"
-      ],
-      "description" : "task work should checkout a new branch from the current commit with the name of the first tag preceeding a slash and the task id after the slash. for example task work 12 when 12 has a tag of #feature would run a git checkout -b feature\/12"
-    },
-    {
-      "createdDate" : 1793614848.0997682,
-      "description" : "Task init command should automatically add an ignore entry to the gitattributes file so changes dont show up in the diff output. ",
-      "completed" : true,
-      "title" : "Init to add git attributes",
-      "completedDate" : 1793647058.875103,
-      "id" : 27,
-      "tags" : [
-        "#feature"
-      ]
-    },
-    {
-      "updatedDate" : 1793615041.2082729,
-      "createdDate" : 1793615041.205198,
-      "tags" : [
-        "#feature"
-      ],
-      "description" : "right now the terminal output stays at 80 characters width by default. this doesnt look great when viewing on phones. the app should be able to detect what size the terminal is, and shrink its display width if smaller than 80. ",
-      "completedDate" : 1793655064.4568372,
-      "completed" : true,
-      "title" : "terminal resize",
-      "id" : 28
-    },
-    {
-      "title" : "merge command",
-      "createdDate" : 1793646810.501652,
-      "tags" : [
-        "#feature"
-      ],
-      "completedDate" : 1793650187.1084452,
-      "completed" : true,
-      "id" : 29,
-      "description" : "add a 'task merge {id}' command that does the same branch assembly logic as task work {id}, but runs a 'git merge {branch}' command, to merge that brancch we worked on into the current branch.",
-      "updatedDate" : 1793646810.5042119
-    },
-    {
-      "createdDate" : 1793662683.343091,
-      "tags" : [
-        "#feature"
-      ],
-      "id" : 30,
-      "updatedDate" : 1793662683.345922,
-      "description" : "pinned asterisks should move to after the checkbox but before the title   [ ] * Title",
-      "completed" : false,
-      "title" : "move asterisk"
-    },
-    {
-      "createdDate" : 1793662892.4472229,
-      "title" : "word wrap on list view",
-      "id" : 31,
-      "updatedDate" : 1793713341.0080881,
-      "tags" : [
-        "#feature"
-      ],
-      "completedDate" : 1793666384.0939469,
-      "completed" : true,
-      "description" : "on main task command or any view command, if a tasks display output is longer than the edge of the size of the terminal, it should cleanly wrap on words. since a typical task is indented by 2 spaces, a word wrap line should be indented 6 soapaces."
-    },
-    {
-      "description" : "For some reason the plugin only displays when i am in the tasks project directory. is it because of the plugin location? I want the plugin to load no matter what directory i open opencode in. if it detects a tasks.json in that directory, it should load the tasks list in the sidebar.",
-      "createdDate" : 1793666522.6162171,
-      "title" : "tasks plugin not working outside tasks project",
-      "id" : 32,
-      "tags" : [
-        "#bug"
-      ],
-      "updatedDate" : 1793666522.618535
-    },
-    {
-      "completed" : false,
-      "id" : 33,
-      "updatedDate" : 1793720477.6541109,
-      "description" : "update the task manager skill to describe that the llm should default to using subagts for its work. the process would be: have the main agent read the task and its description, have the main agent write up a new prompt based on its context and details to implement whatever is written in the task, then once the subagent completes the main agent should review the subagents work. This will cut down on the main agents context usage.",
-      "createdDate" : 1793720477.6522889,
-      "tags" : [
-        "#feature"
-      ],
-      "title" : "subagents in skills"
-    },
-    {
-      "id" : 34,
-      "updatedDate" : 1793731462.174382,
-      "tags" : [
-        "#pin",
-        "#feature"
-      ],
-      "description" : "a new `task progress` command should be created that displays a live updating progress bar. on launch, it should calculate the number of uncompleted tasks. then it should display a progress bar with the text '(0\/n)' where n is the total number of uncompleted tasks. aevery 5 seconds, the number of uncompleted tasks should be re-checked, and if a task was completed, the progress bar should increase in value. the command should exit once all tasks are complete.",
-      "createdDate" : 1793731462.1723771,
-      "completed" : false,
-      "title" : "task progress command"
-    },
-    {
-      "completedDate" : 1793734606.4476728,
-      "description" : "Implement the core progress monitoring logic and data structures. Create the ProgressMonitor class with State, ProgressInfo, and TerminalAction enums. Implement monitorProgress, monitorProgressInternal, and generateProgressInfo methods.",
-      "tags" : [
-        "#feature"
-      ],
-      "id" : 35,
-      "completed" : true,
-      "title" : "Phase 1: Create ProgressMonitor.swift",
-      "createdDate" : 1793734074.7533751
-    },
-    {
-      "completedDate" : 1793735009.1210871,
-      "title" : "Phase 2: Create ProgressMonitorTests.swift",
-      "completed" : true,
-      "tags" : [
-        "#feature"
-      ],
-      "createdDate" : 1793734079.4733229,
-      "id" : 36,
-      "description" : "Implement comprehensive unit tests for ProgressMonitorTests. Test all edge cases including empty task list, all tasks completed, partial completion. Test progress info generation for various percentages."
-    },
-    {
-      "createdDate" : 1793734084.091043,
-      "completed" : true,
-      "description" : "Add handleProgress() function to the main switch. Call monitorProgressWithStore(store) in the progress case. Add appropriate error handling and exit codes. Ensure proper integration with existing code structure.",
-      "tags" : [
-        "#feature"
-      ],
-      "id" : 37,
-      "completedDate" : 1793735614.5218239,
-      "title" : "Phase 3: Integrate into main.swift"
-    },
-    {
-      "createdDate" : 1793734088.417486,
-      "id" : 38,
-      "description" : "Create a temporary test directory with tasks.json. Add 10-15 tasks to test directory. Run task progress in test directory. Verify progress bar updates every 5 seconds. Verify exit when all tasks complete. Verify graceful Ctrl+C handling.",
-      "completed" : true,
-      "tags" : [
-        "#feature"
-      ],
-      "title" : "Phase 4: Test the Progress Command",
-      "completedDate" : 1793736101.2389741
-    },
-    {
-      "createdDate" : 1793737485.7874532,
-      "completedDate" : 1793737507.8367891,
-      "completed" : true,
-      "title" : "test",
-      "id" : 39,
-      "description" : ""
-    }
-  ]
+  }
 }
