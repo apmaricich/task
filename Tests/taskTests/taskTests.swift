@@ -1122,6 +1122,90 @@ final class DisplayTests: XCTestCase {
     }
 }
 
+final class StatsTests: XCTestCase {
+    var store: TaskStore!
+    var testFilePath: String!
+
+    override func setUp() {
+        super.setUp()
+        testFilePath = NSTemporaryDirectory() + "test_stats_\(UUID().uuidString).json"
+        store = TaskStore(filePath: testFilePath)
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        if FileManager.default.fileExists(atPath: testFilePath) {
+            try? FileManager.default.removeItem(atPath: testFilePath)
+        }
+    }
+
+    func testStatsEmptyTasks() {
+        let captured = captureOutput {
+            handleStats(store: store)
+        }
+
+        XCTAssertTrue(captured.contains("Total tasks:     0"))
+        XCTAssertTrue(captured.contains("Completed:       0"))
+        XCTAssertTrue(captured.contains("Pending:         0"))
+    }
+
+    func testStatsWithMixedTasks() {
+        // Add some tasks
+        store.add(title: "Task 1", description: "")
+        let task2 = store.add(title: "Task 2", description: "")
+        store.add(title: "Task 3", description: "")
+
+        // Complete one
+        store.done(id: task2.id)
+
+        let captured = captureOutput {
+            handleStats(store: store)
+        }
+
+        XCTAssertTrue(captured.contains("Total tasks:     3"))
+        XCTAssertTrue(captured.contains("Completed:       1 (33%)"))
+        XCTAssertTrue(captured.contains("Pending:         2 (66%)"))
+    }
+
+    func testStatsTagDistribution() {
+        store.add(title: "Task 1", description: "", tags: ["#bug"])
+        store.add(title: "Task 2", description: "", tags: ["#feature"])
+        store.add(title: "Task 3", description: "", tags: ["#bug"])
+        store.add(title: "Task 4", description: "", tags: ["#feature"])
+
+        let captured = captureOutput {
+            handleStats(store: store)
+        }
+
+        XCTAssertTrue(captured.contains("#bug: 2"))
+        XCTAssertTrue(captured.contains("#feature: 2"))
+    }
+
+    func testStatsAverageCompletionTime() {
+        // Create task with known dates
+        let task = store.add(title: "Test", description: "")
+        store.done(id: task.id)
+
+        let captured = captureOutput {
+            handleStats(store: store)
+        }
+
+        // Should show average completion time
+        XCTAssertTrue(captured.contains("Avg completion time:"))
+    }
+
+    func testStatsVelocity() {
+        store.add(title: "Task", description: "")
+        let captured = captureOutput {
+            handleStats(store: store)
+        }
+
+        XCTAssertTrue(captured.contains("Velocity"))
+        XCTAssertTrue(captured.contains("Completed today:"))
+        XCTAssertTrue(captured.contains("Completed this week:"))
+    }
+}
+
 // Helper to capture stdout
 func captureOutput(_ closure: () -> Void) -> String {
     let pipe = Pipe()

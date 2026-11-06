@@ -432,6 +432,9 @@ if args["--help"] != nil {
             exit(1)
         }
 
+    case "stats":
+        handleStats(store: store)
+
     case "config":
         handleConfig(store: store, args: args)
 

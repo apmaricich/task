@@ -17,17 +17,24 @@ class ProgressMonitorTests: XCTestCase {
     // MARK: - State Transitions
 
     func testMonitorProgress_NoUncompletedTasks() {
-        let tasks: [Task] = []
-        let state = monitor.monitorProgress(tasks: tasks)
+        let tmpFile = NSTemporaryDirectory() + "test_monitor_\(UUID().uuidString).json"
+        defer { try? FileManager.default.removeItem(atPath: tmpFile) }
+        let store = TaskStore(filePath: tmpFile)
+        let state = monitor.monitorProgress(store: store, tag: nil)
         XCTAssertEqual(state, ProgressMonitor.State.completed)
     }
 
     func testMonitorProgress_CompleteTasks() {
-        var t1 = Task(id: 1, title: "T1", description: "D")
-        t1.completed = true
-        var t2 = Task(id: 2, title: "T2", description: "D")
-        t2.completed = true
-        let state = monitor.monitorProgress(tasks: [t1, t2])
+        let tmpFile = NSTemporaryDirectory() + "test_monitor_\(UUID().uuidString).json"
+        defer { try? FileManager.default.removeItem(atPath: tmpFile) }
+        let store = TaskStore(filePath: tmpFile)
+        store.add(title: "T1", description: "D")
+        store.add(title: "T2", description: "D")
+        let tasks = store.list()
+        for task in tasks {
+            store.done(id: task.id)
+        }
+        let state = monitor.monitorProgress(store: store, tag: nil)
         XCTAssertEqual(state, ProgressMonitor.State.completed)
     }
 
