@@ -51,16 +51,17 @@ func mergeBranch(_ branchName: String) {
 
 /// Adds tasks.json to .gitattributes with the -diff attribute to prevent it from
 /// showing changes in diff output
-func addTasksGitattributesEntry() {
+func addTasksGitattributesEntry(filePath: String? = nil) {
+    let actualPath = filePath ?? "tasks.json"
     let gitattributesPath = FileManager.default.currentDirectoryPath + "/.gitattributes"
-    let entry = "tasks.json -diff\n"
+    let entry = "\(actualPath) -diff\n"
 
     // Check if .gitattributes exists
     if FileManager.default.fileExists(atPath: gitattributesPath) {
         // Read existing content
         if let content = try? String(contentsOfFile: gitattributesPath, encoding: .utf8) {
             // Check if entry already exists
-            if content.contains("tasks.json") {
+            if content.contains(actualPath) {
                 return
             }
             // Append entry

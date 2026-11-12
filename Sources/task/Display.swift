@@ -337,6 +337,7 @@ func showHelp() {
     print("  config <key> <value>    Update configuration")
     print("")
     print("Options:")
+    print("  --file, -f <path>       Path to tasks.json (default: ./tasks.json)")
     print("  --title, -t <title>     Task title")
     print("  --description, -d <desc> Task description")
     print("  --tag, -T <tag>         Tag (must be prefixed with #)")

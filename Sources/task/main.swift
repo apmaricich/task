@@ -30,6 +30,10 @@ func parseArguments() -> [String: String] {
                     result["--tag"] = result["--tag"]! + "," + tagValue
                 }
             }
+        } else if arg == "--file" || arg == "-f" {
+            if !args.isEmpty {
+                result["--file"] = args.removeFirst()
+            }
         } else if arg == "--help" || arg == "-h" {
             result["--help"] = ""
         } else if result["command"] == nil {
@@ -221,8 +225,8 @@ func addTaskWithPrompt(_ store: TaskStore, args: [String: String]) {
 
 // MARK: - Main
 
-let store = TaskStore()
 let args = parseArguments()
+let store = TaskStore(filePath: args["--file"] ?? "tasks.json")
 
 // Get configured commands
 let commands = store.getCommands()
@@ -234,7 +238,7 @@ if args["--help"] != nil {
     switch command {
     case "init":
         store.initStore()
-        addTasksGitattributesEntry()
+        addTasksGitattributesEntry(filePath: args["--file"])
 
     case "ready":
         guard let idStr = args["id"], let id = Int(idStr) else {
@@ -439,14 +443,14 @@ if args["--help"] != nil {
         handleConfig(store: store, args: args)
 
     case "doctor":
-        let filePath = "tasks.json"
-        if !FileManager.default.fileExists(atPath: filePath) {
-            print("❌ File not found: \(filePath)")
+        let doctorFilePath = args["--file"] ?? "tasks.json"
+        if !FileManager.default.fileExists(atPath: doctorFilePath) {
+            print("❌ File not found: \(doctorFilePath)")
             exit(1)
         }
 
         do {
-            let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+            let data = try Data(contentsOf: URL(fileURLWithPath: doctorFilePath))
             let parsed = try JSONSerialization.jsonObject(with: data, options: [])
 
             if let obj = parsed as? [String: Any] {
