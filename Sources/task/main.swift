@@ -182,11 +182,13 @@ func handleView(store: TaskStore, args: [String: String]) {
         let displayLimit = store.getDisplayLimit()
         let tagDisplayLimit = store.getTagDisplayLimit()
         let pinTags = store.getPinTags()
+        let agentTags = store.getAgentTags()
         let viewOptions = TaskDisplayOptions(
             sortField: sortField,
             displayLimit: displayLimit,
             tagDisplayLimit: tagDisplayLimit,
             pinTags: pinTags,
+            agentTags: agentTags,
             showDescription: false
         )
         displayTaskList(tasks: viewTasks, options: viewOptions)
@@ -344,11 +346,13 @@ if args["--help"] != nil {
             if tasksToShow.isEmpty {
                 print("  No tasks.")
             } else {
+                let agentTags = store.getAgentTags()
                 let listOptions = TaskDisplayOptions(
                     sortField: sortField,
                     displayLimit: displayLimit,
                     tagDisplayLimit: tagDisplayLimit,
                     pinTags: pinTags,
+                    agentTags: agentTags,
                     showDescription: showDescription
                 )
                 displayTaskList(tasks: tasksToShow, options: listOptions)

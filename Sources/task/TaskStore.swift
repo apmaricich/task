@@ -293,6 +293,14 @@ class TaskStore {
         return getConfigTags("backlogTags")
     }
 
+    func getAgentTags() -> [String] {
+        let tags = getConfigTags("agentTags")
+        if tags.isEmpty {
+            return ["#working"]
+        }
+        return tags
+    }
+
     func getShowBacklog() -> Bool {
         let store = loadStore()
         let config = store["config"] as? [String: Any] ?? ["sort": "completed"]

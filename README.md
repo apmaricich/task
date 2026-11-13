@@ -133,6 +133,17 @@ Pin specific tasks to the top of the list by configuring tag(s) that indicate pi
 
 Tasks with any of the configured pin tags will appear in a separate pinned section at the top of the list, marked with a red asterisk.
 
+### Agent Tags
+
+Mark which tasks are being actively worked on by agents. The default agent tag is `#working`.
+
+```bash
+./task config agentTags "#working"
+./task config agentTags "#working,#in-progress"  # Multiple tags
+```
+
+Tasks with any configured agent tag are highlighted with a green `>` prefix and orange task title in the list.
+
 ### Pinning Tasks
 
 Pin or unpin a task by ID. If the task has no pin tags, the first pin tag from the configured list is applied. If it already has a pin tag, all pin tags are removed:

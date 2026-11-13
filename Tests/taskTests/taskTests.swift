@@ -515,6 +515,75 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertEqual(retrieved?.tags, ["#other"])
     }
 
+    // MARK: - Agent Tag Tests
+
+    func testGetAgentTagsEmpty() {
+        let agentTags = store.getAgentTags()
+        XCTAssertEqual(agentTags, ["#working"])
+    }
+
+    func testGetAgentTagsConfigured() {
+        store.setConfigTags("agentTags", tags: ["#agent", "#automation"])
+        let agentTags = store.getAgentTags()
+        XCTAssertEqual(agentTags.count, 2)
+        XCTAssertTrue(agentTags.contains("#agent"))
+        XCTAssertTrue(agentTags.contains("#automation"))
+    }
+
+    func testGetAgentTagsLowercase() {
+        store.setConfigTags("agentTags", tags: ["#agent", "#auto"])
+        let agentTags = store.getAgentTags()
+        XCTAssertEqual(agentTags, ["#agent", "#auto"])
+    }
+
+    func testDisplayTaskWithAgentTagShowsOrangeAndGreen() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Agent task", description: "", tags: ["#agent"])
+        store.setConfigTags("agentTags", tags: ["#agent"])
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            agentTags: ["#agent"],
+            showDescription: false
+        )
+
+        let captured = captureOutput {
+            displayTaskList(tasks: [task], options: options)
+        }
+
+        // Orange 208 color code for agent task content
+        XCTAssertTrue(captured.contains("\u{1b}[38;5;208m"), "Agent task should use orange color code")
+        // Green for the ">" indicator
+        XCTAssertTrue(captured.contains("\u{1b}[32m>"), "Agent task should have green '>' indicator")
+        XCTAssertTrue(captured.contains("Agent task"), "Agent task title should be displayed")
+    }
+
+    func testDisplayTaskWithoutAgentTagNoOrangeOrArrow() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Regular task", description: "", tags: ["#normal"])
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            agentTags: ["#agent"],
+            showDescription: false
+        )
+
+        let captured = captureOutput {
+            displayTaskList(tasks: [task], options: options)
+        }
+
+        // Regular task should not have the orange agent color code
+        XCTAssertFalse(captured.contains("\u{1b}[38;5;208m"), "Regular task should not use agent orange")
+        XCTAssertFalse(captured.contains("\u{1b}[32m>"), "Regular task should not have '>' indicator")
+        XCTAssertTrue(captured.contains("Regular task"), "Regular task title should be displayed")
+    }
+
     // MARK: - Backlog Tag Tests
 
     func testGetBacklogTagsEmpty() {
@@ -1032,11 +1101,12 @@ final class DisplayTests: XCTestCase {
             displayLimit: 0,
             tagDisplayLimit: 0,
             pinTags: [],
+            agentTags: [],
             showDescription: false
         )
 
         let captured = captureOutput {
-            displayTaskLine(task: task, pinStr: "", options: options)
+            displayTaskLine(task: task, pinStr: "", agentStr: "", options: options)
         }
 
         let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -1060,11 +1130,12 @@ final class DisplayTests: XCTestCase {
             displayLimit: 0,
             tagDisplayLimit: 0,
             pinTags: [],
+            agentTags: [],
             showDescription: true
         )
 
         let captured = captureOutput {
-            displayTaskLine(task: task, pinStr: "", options: options)
+            displayTaskLine(task: task, pinStr: "", agentStr: "", options: options)
         }
 
         let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -1080,11 +1151,12 @@ final class DisplayTests: XCTestCase {
             displayLimit: 0,
             tagDisplayLimit: 0,
             pinTags: [],
+            agentTags: [],
             showDescription: true
         )
 
         let captured = captureOutput {
-            displayTaskLine(task: task, pinStr: "", options: options)
+            displayTaskLine(task: task, pinStr: "", agentStr: "", options: options)
         }
 
         let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -1100,6 +1172,7 @@ final class DisplayTests: XCTestCase {
             displayLimit: 0,
             tagDisplayLimit: 0,
             pinTags: [],
+            agentTags: [],
             showDescription: false
         )
 
@@ -1108,7 +1181,7 @@ final class DisplayTests: XCTestCase {
         let pinStr = "\(red)* \(reset)"
 
         let captured = captureOutput {
-            displayTaskLine(task: task, pinStr: pinStr, options: options)
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: "", options: options)
         }
 
         let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }

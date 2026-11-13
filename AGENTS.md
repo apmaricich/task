@@ -52,6 +52,15 @@ swiftlint
 4. Run `swiftlint` to check code quality
 5. Commit changes with clear, descriptive messages
 
+## Agent Tags
+
+Use `#working` to mark tasks you are currently working on. This will highlight them in orange in the task list.
+
+```bash
+task tag <id> #working  # Mark as working
+task untag <id> #working  # Clear when done
+```
+
 ## Testing tasks.json Changes
 
 When testing tasks.json changes (adding/removing items, modifying config), create a temporary test directory and work with a copy of the config there. Never modify the root tasks.json during testing.

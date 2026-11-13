@@ -46,6 +46,32 @@ Tags must be prefixed with `#`. Common tags:
 
 View tasks by tag: `task view #bug`
 
+## Agent Tags
+
+Agent tags mark which tasks agents are currently working on. By default, `#working` is used as the agent tag.
+
+**Configure the agent tag (optional):**
+```bash
+task config agentTags "#working,#in-progress"
+```
+
+**Mark a task as being worked on:**
+```bash
+task tag <id> #working
+```
+
+**Mark a task as being worked on:**
+```bash
+task tag <id> #working
+```
+
+**Clear the working tag when done:**
+```bash
+task untag <id> #working
+```
+
+Tasks with agent tags display a green `>` prefix and orange task title in the task list.
+
 ## Common Operations
 
 | Operation | Command |

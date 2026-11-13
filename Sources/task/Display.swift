@@ -154,6 +154,7 @@ struct TaskDisplayOptions {
     let displayLimit: Int
     let tagDisplayLimit: Int
     let pinTags: [String]
+    let agentTags: [String]
     let showDescription: Bool
 }
 
@@ -169,13 +170,23 @@ func formatTaskTags(tags: [String], tagDisplayLimit: Int) -> String {
     return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
 }
 
-func displayTaskLine(task: Task, pinStr: String, options: TaskDisplayOptions) {
+func displayTaskLine(task: Task, pinStr: String, agentStr: String, options: TaskDisplayOptions) {
     let status = task.completed ? "[x]" : "[ ]"
     let tagStr = formatTaskTags(tags: task.tags, tagDisplayLimit: options.tagDisplayLimit)
     let terminalWidth = getTerminalWidth()
 
     let prefix = "  \(status) \(pinStr)#\(task.id) "
     var content = task.title
+
+    // Apply orange highlight for agent tasks
+    if !agentStr.isEmpty {
+        let orange = "\u{1b}[38;5;208m"
+        let green = "\u{1b}[32m"
+        let reset = "\u{1b}[0m"
+        let agentIndicator = "\(green)\(agentStr) "
+        content = agentIndicator + orange + content + reset
+    }
+
     if options.showDescription {
         content += "\(tagStr) - " + task.description
     } else {
@@ -264,7 +275,8 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
         }
 
         for task in displayedUncompleted {
-            displayTaskLine(task: task, pinStr: pinStr, options: options)
+            let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
         }
         if uncompleted.count > displayedUncompleted.count {
             print("  ...")
@@ -275,7 +287,8 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
         }
 
         for task in displayedCompleted {
-            displayTaskLine(task: task, pinStr: pinStr, options: options)
+            let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
         }
         if completed.count > displayedCompleted.count {
             print("  ...")
@@ -287,7 +300,8 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
         }
 
         for task in displayedTasks {
-            displayTaskLine(task: task, pinStr: pinStr, options: options)
+            let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
         }
 
         if options.displayLimit > 0 && tasksToShow.count > displayedTasks.count {
