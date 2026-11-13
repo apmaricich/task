@@ -1,55 +1,110 @@
-// Simple test to verify the plugin can execute task list
+import { parseAnsi } from "./ansi";
 
-import { exec } from "child_process";
-import { promises as fs } from "fs";
-import path from "path";
-
-// Strip ANSI escape codes from the output
-function stripAnsi(input: string): string {
-  return input.replace(/\u001b\[[0-9;]*[mGK]/g, "");
-}
-
-async function getTaskList(dir: string): Promise<string | null> {
+function test(name: string, fn: () => void) {
   try {
-    return new Promise<string>((resolve) => {
-      exec("task list", { cwd: dir }, (error, stdout, stderr) => {
-        if (error || stderr) {
-          resolve(null);
-        } else {
-          resolve(stripAnsi(stdout.trim()));
-        }
-      });
-    });
-  } catch {
-    return null;
+    fn();
+    console.log(`✓ ${name}`);
+  } catch (err) {
+    console.log(`✗ ${name}: ${err}`);
   }
 }
 
-async function findTaskDir(currentPath: string): Promise<string | null> {
-  let searchPath = currentPath;
-  while (searchPath !== "/") {
-    try {
-      const entries = await fs.readdir(searchPath);
-      if (entries.includes("tasks.json")) {
-        return searchPath;
-      }
-    } catch {
-      // Not a directory, or permission error - keep searching up
-    }
-    searchPath = path.dirname(searchPath);
+function assertEqual(actual: any, expected: any, msg?: string) {
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(`Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}${msg ? ": " + msg : ""}`);
   }
-  return null;
 }
 
-async function main() {
-  const taskDir = await findTaskDir(".");
-  console.log("Task dir:", taskDir);
+// Test basic ANSI parsing
+test("parses basic red text", () => {
+  const segments = parseAnsi("\x1b[31mHello\x1b[0m");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].text, "Hello");
+  assertEqual(segments[0].style?.fg, "red");
+});
+
+test("parses bold text", () => {
+  const segments = parseAnsi("\x1b[1mBold\x1b[0m");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].style?.bold, true);
+});
+
+test("parses background color", () => {
+  const segments = parseAnsi("\x1b[41mRedBG\x1b[0m");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].style?.bg, "red");
+});
+
+test("parses multiple styles", () => {
+  const segments = parseAnsi("\x1b[1;31;42mStyled\x1b[0m");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].style?.bold, true);
+  assertEqual(segments[0].style?.fg, "red");
+  assertEqual(segments[0].style?.bg, "green");
+});
+
+test("parses text with mixed styles", () => {
+  const segments = parseAnsi("\x1b[31mRed\x1b[0m normal \x1b[32mGreen\x1b[0m");
+  assertEqual(segments.length, 3);
+  assertEqual(segments[0].text, "Red");
+  assertEqual(segments[0].style?.fg, "red");
+  assertEqual(segments[1].text, " normal ");
+  assertEqual(segments[2].text, "Green");
+  assertEqual(segments[2].style?.fg, "green");
+});
+
+test("handles empty input", () => {
+  const segments = parseAnsi("");
+  assertEqual(segments.length, 0);
+});
+
+test("handles plain text with no ANSI", () => {
+  const segments = parseAnsi("Plain text");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].text, "Plain text");
+});
+
+test("handles newlines", () => {
+  const segments = parseAnsi("Line1\nLine2");
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].text, "Line1\nLine2");
+});
+
+test("handles multiple reset codes", () => {
+  const segments = parseAnsi("\x1b[31mRed\x1b[0m\x1b[32mGreen\x1b[0m");
+  assertEqual(segments.length, 2);
+  assertEqual(segments[0].text, "Red");
+  assertEqual(segments[1].text, "Green");
+});
+
+// Test task list-like output
+test("handles task list output", () => {
+  const output = `\x1b[1;36mTasks\x1b[0m
+  \x1b[90m⬜\x1b[0m [1] Task one
+  \x1b[90m✅\x1b[0m [2] Completed task
+  \x1b[31m[3]\x1b[0m Task three`;
   
-  if (taskDir) {
-    const list = await getTaskList(taskDir);
-    console.log("Task list:");
-    console.log(list);
-  }
-}
+  const segments = parseAnsi(output);
+  // Tasks header
+  assertEqual(segments[0].text, "Tasks");
+  assertEqual(segments[0].style?.bold, true);
+  assertEqual(segments[0].style?.fg, "cyan");
+  // Newline
+  assertEqual(segments[1].text, "\n  ");
+  // Unchecked task icon
+  assertEqual(segments[2].text, "⬜");
+  assertEqual(segments[2].style?.fg, "black");
+  // Task text
+  assertEqual(segments[3].text, " [1] Task one\n  ");
+  // Checked task icon
+  assertEqual(segments[4].text, "✅");
+  // Task text
+  assertEqual(segments[5].text, " [2] Completed task\n  ");
+  // Error task number
+  assertEqual(segments[6].text, "[3]");
+  assertEqual(segments[6].style?.fg, "red");
+  // Task text
+  assertEqual(segments[7].text, " Task three");
+});
 
-main();
+console.log("\nAll tests completed.");

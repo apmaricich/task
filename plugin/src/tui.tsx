@@ -1,28 +1,52 @@
 import { Plugin } from "@opencode/plugin/tui";
-import { Show, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
+import { parseAnsi } from "./ansi";
 
-// Strip ANSI escape codes from the output
-function stripAnsi(input: string): string {
-  return input.replace(/\u001b\[[0-9;]*[mGK]/g, "");
-}
-
-async function getTaskList(dir: string): Promise<string | null> {
+async function getTaskList(dir: string): Promise<string> {
   try {
     return new Promise<string>((resolve) => {
       exec("task list", { cwd: dir }, (error, stdout, stderr) => {
         if (error || stderr) {
-          resolve(null);
+          resolve("");
         } else {
-          resolve(stripAnsi(stdout.trim()));
+          resolve(stdout.trim());
         }
       });
     });
   } catch {
-    return null;
+    return "";
   }
+}
+
+// Convert a color name to an ANSI color code
+function colorToCode(name: string): string {
+  const map: Record<string, string> = {
+    black: "black",
+    red: "red",
+    green: "green",
+    yellow: "yellow",
+    blue: "blue",
+    magenta: "magenta",
+    cyan: "cyan",
+    white: "white",
+  };
+  return map[name] ?? "white";
+}
+
+// Build an OpenTUI style object from a parsed ANSI style
+function toOpenTuiStyle(style?: { fg?: string; bg?: string; bold?: boolean; underline?: boolean; italic?: boolean; dim?: boolean }) {
+  if (!style) return undefined;
+  const result: any = {};
+  if (style.fg) result.fg = colorToCode(style.fg);
+  if (style.bg) result.bg = colorToCode(style.bg);
+  if (style.bold) result.bold = true;
+  if (style.underline) result.underline = true;
+  if (style.italic) result.italic = true;
+  if (style.dim) result.dim = true;
+  return Object.keys(result).length > 0 ? result : undefined;
 }
 
 export default Plugin.define({
@@ -62,7 +86,12 @@ export default Plugin.define({
           foundDir = await findTaskDir(currentDir);
         }
         if (foundDir) {
-          setTaskListOutput(await getTaskList(foundDir));
+          const raw = await getTaskList(foundDir);
+          if (raw) {
+            setTaskListOutput(raw);
+          } else {
+            setTaskListOutput(null);
+          }
         }
       } catch (err) {
         setTaskListOutput(null);
@@ -79,18 +108,53 @@ export default Plugin.define({
 
     return ctx.ui.slot({
       append: "sidebar.content",
-      render: () => (
-        <Show when={taskListOutput() !== null}>
-          <box padding={2}>
-            <text bold={true} fg="blue">
-              Tasks
-            </text>
-            <text fg="gray" wrap={true}>
-              {taskListOutput()}
-            </text>
+      render: () => {
+        const output = taskListOutput();
+        if (output === null) {
+          return null;
+        }
+
+        // Parse ANSI to segments, group by line
+        const segments = parseAnsi(output);
+        const lines: any[][] = [];
+        let currentLine: any[] = [];
+        
+        for (const seg of segments) {
+          if (seg.text.includes('\n')) {
+            const parts = seg.text.split('\n');
+            for (let i = 0; i < parts.length; i++) {
+              if (i > 0 && currentLine.length > 0) {
+                lines.push(currentLine);
+                currentLine = [];
+              }
+              if (parts[i].length > 0) {
+                currentLine.push({ text: parts[i], style: seg.style });
+              }
+            }
+          } else {
+            currentLine.push(seg);
+          }
+        }
+        if (currentLine.length > 0) {
+          lines.push(currentLine);
+        }
+        
+        return (
+          <box>
+            {lines.map((lineSegments) => (
+              <text>
+                {lineSegments.map((seg) => {
+                  const style = toOpenTuiStyle(seg.style);
+                  if (style) {
+                    return <span style={style}>{seg.text}</span>;
+                  }
+                  return seg.text;
+                })}
+              </text>
+            ))}
           </box>
-        </Show>
-      ),
+        );
+      },
     });
   },
 });
