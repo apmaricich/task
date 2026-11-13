@@ -1,5 +1,5 @@
 import { Plugin } from "@opencode/plugin/tui";
-import { Show } from "solid-js";
+import { Show, createSignal } from "solid-js";
 import { exec } from "child_process";
 import { promises as fs } from "fs";
 import path from "path";
@@ -46,7 +46,7 @@ export default Plugin.define({
       return null;
     }
 
-    let taskListOutput: string | null = null;
+    let [taskListOutput, setTaskListOutput] = createSignal<string | null>(null);
     let refreshing = false;
     let lastDir: string | null = null;
     let foundDir: string | null = null;
@@ -62,10 +62,10 @@ export default Plugin.define({
           foundDir = await findTaskDir(currentDir);
         }
         if (foundDir) {
-          taskListOutput = await getTaskList(foundDir);
+          setTaskListOutput(await getTaskList(foundDir));
         }
       } catch (err) {
-        taskListOutput = null;
+        setTaskListOutput(null);
       } finally {
         refreshing = false;
       }
@@ -80,13 +80,13 @@ export default Plugin.define({
     return ctx.ui.slot({
       append: "sidebar.content",
       render: () => (
-        <Show when={taskListOutput !== null}>
+        <Show when={taskListOutput() !== null}>
           <box padding={2}>
             <text bold={true} fg="blue">
               Tasks
             </text>
             <text fg="gray" wrap={true}>
-              {taskListOutput}
+              {taskListOutput()}
             </text>
           </box>
         </Show>

@@ -69,3 +69,11 @@ cd /tmp/task-test && .build/debug/task <command>
 # Clean up when done
 rm -rf /tmp/task-test
 ```
+
+<!-- cockpit-conventions: start · written by /cockpit-setup, which updates it in place -->
+## Cockpit conventions
+
+**Trail**
+- Name branches with a prefix separated by a slash, followed by a task number: `task/4`, `feature/8`, `bug/44`, `tagname/10`.
+- Pull requests go to github.com/apmaricich/task.
+<!-- cockpit-conventions: end -->

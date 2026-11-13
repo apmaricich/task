@@ -176,6 +176,52 @@ Run the test suite:
 swift test
 ```
 
+## OpenCode Plugin
+
+This project includes an OpenCode plugin that displays your task list in the sidebar. The plugin works with any directory you launch OpenCode from by walking up the filesystem to find `tasks.json`.
+
+### Global Installation
+
+To make the plugin available globally (not just when launching OpenCode from this directory):
+
+```bash
+# Create symlink to OpenCode's global plugins directory
+ln -sf "$(pwd)/plugin" ~/.config/opencode/plugins/task-manager
+```
+
+Then add the plugin to your global OpenCode config (`~/.config/opencode/opencode.jsonc`):
+
+```json
+{
+  "plugins": [
+    "opencode-cockpit@0.11.0",
+    "@upstash/context7-opencode",
+    "./plugins/task-manager"
+  ]
+}
+```
+
+After this, launch OpenCode from any directory — the plugin will find and display the tasks for whichever project you're in.
+
+> **Note:** If you previously had the plugin in your local `opencode.json`, remove it to avoid duplicate plugin loading:
+> ```bash
+> # Remove "plugins": ["./plugin"] from opencode.json if it exists
+> ```
+
+### Plugin Dependencies
+
+Ensure the plugin's dependencies are installed:
+
+```bash
+cd plugin
+npm install
+```
+
+### Requirements
+
+- The `task` binary must be on your PATH
+- OpenCode must be running in TUI mode
+
 ## Development
 
 This project uses SwiftLint for code quality. Run linting with:
