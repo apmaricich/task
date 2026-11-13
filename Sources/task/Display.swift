@@ -174,7 +174,7 @@ func displayTaskLine(task: Task, pinStr: String, options: TaskDisplayOptions) {
     let tagStr = formatTaskTags(tags: task.tags, tagDisplayLimit: options.tagDisplayLimit)
     let terminalWidth = getTerminalWidth()
 
-    let prefix = "  \(pinStr)\(status) #\(task.id) "
+    let prefix = "  \(status) \(pinStr)#\(task.id) "
     var content = task.title
     if options.showDescription {
         content += "\(tagStr) - " + task.description
@@ -250,7 +250,7 @@ func findWordBreak(_ text: String, at maxWidth: Int) -> Int {
 func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisplayOptions) {
     let red = "\u{1b}[31m"
     let reset = "\u{1b}[0m"
-    let pinStr = showPin ? "\(red)* \(reset)" : ""
+    let pinStr = showPin ? "\(red)*\(reset) " : ""
 
     if options.sortField == "completed" {
         let uncompleted = tasksToShow.filter { !$0.completed }
