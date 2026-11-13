@@ -291,9 +291,9 @@ if args["--help"] != nil {
         } else {
             let showDescription = args["--description"] != nil || args["-d"] != nil
             let tasks = store.list()
-            let yellow = "\u{1b}[33m"
-            let green = "\u{1b}[32m"
-            let red = "\u{1b}[31m"
+            let yellow = "\u{1b}[38;5;208m"
+            let green = "\u{1b}[38;5;119m"
+            let red = "\u{1b}[38;5;167m"
             let reset = "\u{1b}[0m"
 
             let sortField = store.getSortField()

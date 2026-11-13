@@ -22,7 +22,12 @@ async function getTaskList(dir: string): Promise<string> {
 }
 
 // Convert a color name to an ANSI color code
+// Hex colors pass through as-is for OpenTUI to render
 function colorToCode(name: string): string {
+  // Hex colors (#rrggbb) pass through unchanged
+  if (name.startsWith("#")) {
+    return name;
+  }
   const map: Record<string, string> = {
     black: "black",
     red: "red",

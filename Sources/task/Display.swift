@@ -95,7 +95,7 @@ func displayTaskDetail(task: Task, maxWidth: Int? = nil) {
 
     // Print tags
     if !task.tags.isEmpty {
-        let cyan = "\u{1b}[36m"
+        let cyan = "\u{1b}[38;5;73m"
         let reset = "\u{1b}[0m"
         print("  \(cyan)\(task.tags.joined(separator: " "))\(reset)")
     }
@@ -159,7 +159,7 @@ struct TaskDisplayOptions {
 
 func formatTaskTags(tags: [String], tagDisplayLimit: Int) -> String {
     if tags.isEmpty { return "" }
-    let cyan = "\u{1b}[36m"
+    let cyan = "\u{1b}[38;5;73m"
     let reset = "\u{1b}[0m"
     var displayTags = tags
     if tagDisplayLimit > 0 && tags.count > tagDisplayLimit {
@@ -248,7 +248,7 @@ func findWordBreak(_ text: String, at maxWidth: Int) -> Int {
 }
 
 func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisplayOptions) {
-    let red = "\u{1b}[31m"
+    let red = "\u{1b}[38;5;167m"
     let reset = "\u{1b}[0m"
     let pinStr = showPin ? "\(red)*\(reset) " : ""
 
