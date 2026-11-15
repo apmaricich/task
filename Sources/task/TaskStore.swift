@@ -130,7 +130,8 @@ class TaskStore {
             tasks[index]["description"] = description
         }
         if let tags = tags {
-            tasks[index]["tags"] = tags
+            let existing = (tasks[index]["tags"] as? [String]) ?? []
+            tasks[index]["tags"] = self.toggleTags(existingTags: existing, tagsToToggle: tags)
         }
         tasks[index]["updatedDate"] = Date().timeIntervalSince1970
 
@@ -338,6 +339,19 @@ class TaskStore {
             .filter { !$0.isEmpty }
     }
 
+    /// Toggle tags: remove any that exist, add any that don't (to the end).
+    func toggleTags(existingTags: [String], tagsToToggle: [String]) -> [String] {
+        var result = existingTags
+        for tag in tagsToToggle {
+            if let index = result.firstIndex(of: tag) {
+                result.remove(at: index)
+            } else {
+                result.append(tag)
+            }
+        }
+        return result
+    }
+
     func readyTask(id: Int) -> Bool {
         var store = loadStore()
         var tasks = store["tasks"] as? [[String: Any]] ?? []
@@ -351,6 +365,40 @@ class TaskStore {
         var tags = tasks[index]["tags"] as? [String] ?? []
         let hadBacklogTag = tags.contains(where: { backlogTags.contains($0) })
         tags = tags.filter { !backlogTags.contains($0) }
+
+        if tags.isEmpty {
+            tasks[index].removeValue(forKey: "tags")
+        } else {
+            tasks[index]["tags"] = tags
+        }
+        tasks[index]["updatedDate"] = Date().timeIntervalSince1970
+
+        store["tasks"] = tasks
+        saveStore(store)
+        return hadBacklogTag
+    }
+
+    func unbacklog(id: Int) -> Bool {
+        var store = loadStore()
+        var tasks = store["tasks"] as? [[String: Any]] ?? []
+        let index = tasks.firstIndex { $0["id"] as? Int == id }
+
+        guard let index = index else { return false }
+
+        let backlogTags = getBacklogTags()
+        guard !backlogTags.isEmpty else { return false }
+
+        var tags = tasks[index]["tags"] as? [String] ?? []
+        let hadBacklogTag = tags.contains(where: { backlogTags.contains($0) })
+
+        // For each backlog tag, toggle: remove if present, add if absent
+        for backlogTag in backlogTags {
+            if tags.contains(backlogTag) {
+                tags.remove(at: tags.firstIndex(of: backlogTag)!)
+            } else {
+                tags.append(backlogTag)
+            }
+        }
 
         if tags.isEmpty {
             tasks[index].removeValue(forKey: "tags")
@@ -379,16 +427,8 @@ class TaskStore {
 
         var tags = tasks[index]["tags"] as? [String] ?? []
 
-        // Check if task has any pin tags
-        let hasPinTag = tags.contains(where: { pinTags.contains($0) })
-
-        if hasPinTag {
-            // Remove all pin tags
-            tags = tags.filter { !pinTags.contains($0) }
-        } else {
-            // Add first pin tag
-            tags.append(pinTags[0])
-        }
+        // Toggle the first pin tag: remove if present, add if absent
+        tags = self.toggleTags(existingTags: tags, tagsToToggle: [pinTags[0]])
 
         if tags.isEmpty {
             tasks[index].removeValue(forKey: "tags")

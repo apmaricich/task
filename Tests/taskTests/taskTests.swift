@@ -455,6 +455,53 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertFalse(result)
     }
 
+    // MARK: - Unbacklog Task Tests
+
+    func testUnbacklogRemovesBacklogTag() {
+        let task = store.add(title: "Test", description: "", tags: ["#backlog"])
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
+
+        let result = store.unbacklog(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertTrue(retrieved?.tags.isEmpty ?? true)
+    }
+
+    func testUnbacklogAddsBacklogTag() {
+        let task = store.add(title: "Test", description: "")
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
+
+        let result = store.unbacklog(id: task.id)
+        XCTAssertFalse(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertEqual(retrieved?.tags, ["#backlog"])
+    }
+
+    func testUnbacklogMultipleTags() {
+        let task = store.add(title: "Test", description: "", tags: ["#backlog", "#someday", "#important"])
+        store.setConfigTags("backlogTags", tags: ["#backlog", "#someday"])
+
+        let result = store.unbacklog(id: task.id)
+        XCTAssertTrue(result)
+
+        let retrieved = store.getTask(id: task.id)
+        XCTAssertEqual(retrieved?.tags, ["#important"])
+    }
+
+    func testUnbacklogNonExistent() {
+        store.setConfigTags("backlogTags", tags: ["#backlog"])
+        let result = store.unbacklog(id: 999)
+        XCTAssertFalse(result)
+    }
+
+    func testUnbacklogNoBacklogTagsConfigured() {
+        let task = store.add(title: "Test", description: "")
+        let result = store.unbacklog(id: task.id)
+        XCTAssertFalse(result)
+    }
+
     // MARK: - Pin Task Tests
 
     func testGetPinTagsEmpty() {
@@ -512,7 +559,8 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertTrue(result)
 
         let retrieved = store.getTask(id: task.id)
-        XCTAssertEqual(retrieved?.tags, ["#other"])
+        // Toggles first pin tag: #important present so removed, #urgent absent so added
+        XCTAssertEqual(retrieved?.tags, ["#urgent", "#other"])
     }
 
     // MARK: - Agent Tag Tests
@@ -706,6 +754,89 @@ final class TaskStoreTests: XCTestCase {
         let commands = store.getCommands()
         XCTAssertEqual(commands.count, 1)
         XCTAssertEqual(commands.first, "feature")
+    }
+
+    // MARK: - Tag Toggle Tests
+
+    func testToggleAddsNewTag() {
+        let task = store.add(title: "Task", description: "")
+        store.update(id: task.id, title: nil, description: nil, tags: ["#newtag"])
+
+        let updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, ["#newtag"])
+    }
+
+    func testToggleRemovesExistingTag() {
+        let task = store.add(title: "Task", description: "", tags: ["#existing"])
+        store.update(id: task.id, title: nil, description: nil, tags: ["#existing"])
+
+        let updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, [])
+    }
+
+    func testToggleMultipleTagsIndependently() {
+        let task = store.add(title: "Task", description: "", tags: ["#one", "#two"])
+        store.update(id: task.id, title: nil, description: nil, tags: ["#one", "#three"])
+
+        let updated = store.getTask(id: task.id)
+        // #one is removed (toggled), #two is kept, #three is added
+        XCTAssertEqual(updated?.tags.sorted(), ["#three", "#two"].sorted())
+    }
+
+    func testToggleMixedAddAndRemove() {
+        let task = store.add(title: "Task", description: "", tags: ["#remove", "#keep"])
+        store.update(id: task.id, title: nil, description: nil, tags: ["#remove", "#add"])
+
+        let updated = store.getTask(id: task.id)
+        // #remove is toggled off, #keep is preserved, #add is toggled on
+        XCTAssertEqual(updated?.tags.sorted(), ["#add", "#keep"].sorted())
+    }
+
+    func testToggleOnTaskWithNoExistingTags() {
+        let task = store.add(title: "Task", description: "")
+        store.update(id: task.id, title: nil, description: nil, tags: ["#firsttag"])
+
+        let updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, ["#firsttag"])
+    }
+
+    func testToggleRemovesAllTags() {
+        let task = store.add(title: "Task", description: "", tags: ["#tag1", "#tag2", "#tag3"])
+        store.update(id: task.id, title: nil, description: nil, tags: ["#tag1", "#tag2", "#tag3"])
+
+        let updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, [])
+    }
+
+    func testToggleSameTagTwiceReturnsToOriginal() {
+        let task = store.add(title: "Task", description: "", tags: ["#original"])
+
+        // First toggle: add #newtag, remove #original
+        store.update(id: task.id, title: nil, description: nil, tags: ["#original", "#newtag"])
+        var updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, ["#newtag"])
+
+        // Second toggle: add #original back, remove #newtag
+        store.update(id: task.id, title: nil, description: nil, tags: ["#original", "#newtag"])
+        updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.tags, ["#original"])
+    }
+
+    func testToggleWithFieldUpdates() {
+        let task = store.add(title: "Original Title", description: "Original Description", tags: ["#tag1"])
+
+        store.update(id: task.id, title: "New Title", description: "New Description", tags: ["#tag1", "#tag2"])
+
+        let updated = store.getTask(id: task.id)
+        XCTAssertEqual(updated?.title, "New Title")
+        XCTAssertEqual(updated?.description, "New Description")
+        XCTAssertEqual(updated?.tags, ["#tag2"])
+        XCTAssertNotNil(updated?.updatedDate)
+    }
+
+    func testToggleOnNonExistentTask() {
+        let result = store.update(id: 999, title: nil, description: nil, tags: ["#tag"])
+        XCTAssertFalse(result)
     }
 
     // MARK: - Tags Command Tests
