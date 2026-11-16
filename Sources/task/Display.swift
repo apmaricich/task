@@ -355,6 +355,7 @@ func showHelp() {
     print("  --title, -t <title>     Task title")
     print("  --description, -d <desc> Task description")
     print("  --tag, -T <tag>         Tag (must be prefixed with #)")
+    print("  --all, -a               Show all tasks (completed and backlog)")
     print("  --help, -h              Show this help message")
     print("")
     print("Configuration Keys:")

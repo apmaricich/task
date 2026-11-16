@@ -30,6 +30,8 @@ func parseArguments() -> [String: String] {
                     result["--tag"] = result["--tag"]! + "," + tagValue
                 }
             }
+        } else if arg == "--all" || arg == "-a" {
+            result["all"] = "true"
         } else if arg == "--file" || arg == "-f" {
             if !args.isEmpty {
                 result["--file"] = args.removeFirst()
@@ -179,8 +181,8 @@ func handleView(store: TaskStore, args: [String: String]) {
         print("  No tasks.")
     } else {
         let sortField = store.getSortField()
-        let displayLimit = store.getDisplayLimit()
-        let tagDisplayLimit = store.getTagDisplayLimit()
+        let displayLimit = args["all"] == "true" ? 0 : store.getDisplayLimit()
+        let tagDisplayLimit = args["all"] == "true" ? 0 : store.getTagDisplayLimit()
         let pinTags = store.getPinTags()
         let agentTags = store.getAgentTags()
         let viewOptions = TaskDisplayOptions(
