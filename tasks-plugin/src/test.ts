@@ -107,4 +107,19 @@ test("handles task list output", () => {
   assertEqual(segments[7].text, " Task three");
 });
 
+test("preserves blank lines between sections", () => {
+  // A blank line between content creates consecutive newlines in the segment
+  const output = "Section 1\nLine A\n\nLine B\nSection 2";
+  const segments = parseAnsi(output);
+  
+  // The blank line produces a segment with "\n\n"
+  assertEqual(segments.length, 1);
+  assertEqual(segments[0].text.includes("\n\n"), true, "segment should contain consecutive newlines");
+  
+  // When split, there should be an empty string for the blank line
+  const parts = output.split("\n");
+  assertEqual(parts.length, 5, "should have 5 parts when split on newline");
+  assertEqual(parts[2], "", "the blank line should be an empty string");
+});
+
 console.log("\nAll tests completed.");

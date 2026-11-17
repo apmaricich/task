@@ -132,7 +132,9 @@ export default Plugin.define({
                 lines.push(currentLine);
                 currentLine = [];
               }
-              if (parts[i].length > 0) {
+              if (parts[i].length === 0) {
+                lines.push([]);
+              } else {
                 currentLine.push({ text: parts[i], style: seg.style });
               }
             }

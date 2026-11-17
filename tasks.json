@@ -1,388 +1,382 @@
 {
-  "reminders" : [
-    {
-      "id" : 5,
-      "text" : "Example reminder"
-    }
-  ],
   "config" : {
-    "tagDisplayLimit" : 3,
-    "sort" : "completed",
-    "showCompleted" : "false",
-    "pinTags" : [
-      "#pin"
-    ],
-    "displayLimit" : 4,
     "command" : [
       "bug",
       "feature",
       "backlog"
     ],
+    "sort" : "completed",
+    "showCompleted" : "false",
+    "pinTags" : [
+      "#pin"
+    ],
+    "tagDisplayLimit" : 3,
+    "displayLimit" : 4,
     "backlogTags" : [
       "#backlog"
     ]
   },
   "tasks" : [
     {
-      "id" : 1,
+      "description" : "",
       "title" : "sort task by complete feature",
       "completed" : true,
-      "description" : ""
+      "id" : 1
     },
     {
-      "id" : 2,
+      "description" : "",
       "title" : "visual update to sort",
       "completedDate" : 1793282877.4435391,
       "completed" : true,
-      "description" : ""
+      "id" : 2
     },
     {
       "id" : 3,
+      "description" : "",
       "title" : "add config command",
-      "completed" : true,
-      "description" : ""
+      "completed" : true
     },
     {
-      "id" : 4,
+      "description" : "",
       "title" : "add created and completed timestamps",
       "completed" : true,
-      "description" : ""
+      "id" : 4
     },
     {
       "createdDate" : 1793278255.319313,
-      "title" : "add display limit configuration option.",
+      "id" : 5,
       "completedDate" : 1793279136.1286559,
       "description" : "",
       "completed" : true,
-      "id" : 5
+      "title" : "add display limit configuration option."
     },
     {
-      "createdDate" : 1793278956.649796,
-      "id" : 6,
       "title" : "refactor codebase for readability",
       "completedDate" : 1793280765.953521,
-      "updatedDate" : 1793280698.610184,
+      "id" : 6,
+      "createdDate" : 1793278956.649796,
       "description" : "make sure files are split out separately. maybe the new display logic should be split since it is becoming more complex?",
-      "completed" : true
+      "completed" : true,
+      "updatedDate" : 1793280698.610184
     },
     {
       "id" : 7,
-      "title" : "prompt for input feature",
+      "createdDate" : 1793280739.789355,
+      "completed" : true,
       "completedDate" : 1793282892.406467,
       "description" : "",
-      "createdDate" : 1793280739.789355,
-      "completed" : true
+      "title" : "prompt for input feature"
     },
     {
-      "createdDate" : 1793280751.5302989,
-      "id" : 8,
-      "title" : "tag support",
-      "completedDate" : 1793291351.0477939,
-      "updatedDate" : 1793288452.6348372,
-      "description" : "",
       "completed" : true,
+      "id" : 8,
+      "updatedDate" : 1793288452.6348372,
       "tags" : [
         "#urgent",
         "#fish"
-      ]
+      ],
+      "createdDate" : 1793280751.5302989,
+      "title" : "tag support",
+      "description" : "",
+      "completedDate" : 1793291351.0477939
     },
     {
-      "createdDate" : 1793281067.3222299,
-      "id" : 9,
-      "title" : "task complete no parameters feature",
       "updatedDate" : 1793373809.2933269,
-      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
       "completed" : false,
+      "id" : 9,
+      "description" : "if no prameter is provided, it should prompt the user to select whitask you would like to complete.",
+      "title" : "task complete no parameters feature",
+      "createdDate" : 1793281067.3222299,
       "tags" : [
         "#backlog"
       ]
     },
     {
-      "createdDate" : 1793281110.801991,
-      "id" : 10,
-      "title" : "add hr rule",
-      "completedDate" : 1793285143.4755101,
-      "updatedDate" : 1793285071.8822351,
       "description" : "",
-      "completed" : true
-    },
-    {
-      "id" : 12,
-      "title" : "track command",
-      "completedDate" : 1793303628.6489511,
       "completed" : true,
-      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?",
-      "createdDate" : 1793286882.7039061
+      "updatedDate" : 1793285071.8822351,
+      "id" : 10,
+      "createdDate" : 1793281110.801991,
+      "completedDate" : 1793285143.4755101,
+      "title" : "add hr rule"
     },
     {
+      "completed" : true,
+      "completedDate" : 1793303628.6489511,
+      "title" : "track command",
+      "id" : 12,
+      "createdDate" : 1793286882.7039061,
+      "description" : "task track should behave like `task add` but should default complete date and completed to today and true. this is just to mark that something was done for historical purposes. quick command for add and then done. maybe just do it recursively?"
+    },
+    {
+      "updatedDate" : 1793303135.5591919,
       "createdDate" : 1793287030.560792,
       "id" : 13,
-      "completedDate" : 1793303074.8227601,
-      "title" : "backlog feature",
-      "updatedDate" : 1793303135.5591919,
       "description" : "tags configured in backlog list don't show up in the list of tasks to do. maybe some way to groom tasks?",
-      "completed" : true
+      "completedDate" : 1793303074.8227601,
+      "completed" : true,
+      "title" : "backlog feature"
     },
     {
-      "createdDate" : 1793287468.2949429,
-      "id" : 14,
-      "completedDate" : 1793298376.082309,
       "title" : "Test with tags",
-      "description" : "",
-      "completed" : true,
       "tags" : [
         "#bug",
         "#urgent"
-      ]
+      ],
+      "completedDate" : 1793298376.082309,
+      "id" : 14,
+      "description" : "",
+      "createdDate" : 1793287468.2949429,
+      "completed" : true
     },
     {
-      "id" : 15,
+      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
       "createdDate" : 1793294391.9601312,
       "title" : "Remove 'list' command and replace with no arguments",
       "completed" : true,
-      "description" : "If the app is run with no arguments, it should default to displaying the list. Similarly, task n should display the task details without needing to provide any other flags.",
+      "id" : 15,
       "completedDate" : 1793298359.5235991
     },
     {
-      "createdDate" : 1793296823.392992,
-      "id" : 16,
       "completedDate" : 1793298347.843744,
-      "title" : "pin section",
+      "createdDate" : 1793296823.392992,
       "updatedDate" : 1793298333.3063569,
-      "description" : "",
-      "completed" : true
+      "completed" : true,
+      "id" : 16,
+      "title" : "pin section",
+      "description" : ""
     },
     {
-      "id" : 17,
+      "completed" : true,
+      "title" : "Test of task track",
       "createdDate" : 1793303447.776912,
       "completedDate" : 1793303447.776912,
-      "description" : "This is just a test.",
-      "completed" : true,
-      "title" : "Test of task track"
+      "id" : 17,
+      "description" : "This is just a test."
     },
     {
-      "createdDate" : 1793305384.1244321,
-      "id" : 18,
-      "title" : "task add should prompt for tags",
       "completedDate" : 1793364406.008229,
-      "updatedDate" : 1793364410.861331,
+      "createdDate" : 1793305384.1244321,
       "description" : "List of tags should be able to be provided when adding an item through the prompt.",
-      "completed" : true
+      "title" : "task add should prompt for tags",
+      "updatedDate" : 1793364410.861331,
+      "completed" : true,
+      "id" : 18
     },
     {
-      "id" : 19,
-      "title" : "idea",
-      "completedDate" : 1793365063.5266628,
-      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
+      "createdDate" : 1793305894.0261459,
       "completed" : true,
-      "createdDate" : 1793305894.0261459
+      "title" : "idea",
+      "description" : "task idea command would operate just like task add, but would default to having the first backlogTag applied on creation.",
+      "id" : 19,
+      "completedDate" : 1793365063.5266628
     },
     {
       "createdDate" : 1793365147.063472,
-      "id" : 20,
-      "completedDate" : 1793934765.6368141,
+      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
+      "completed" : true,
       "title" : "statistics viewer",
       "updatedDate" : 1793934219.255044,
-      "description" : "It would be nice to see some statistics on how many tickets have been completed and in a timeframe. some sort of report",
-      "completed" : true
+      "id" : 20,
+      "completedDate" : 1793934765.6368141
     },
     {
-      "createdDate" : 1793372929.1742949,
-      "id" : 21,
-      "completedDate" : 1793373784.5193291,
-      "title" : "fix dynamic command feature",
-      "description" : "",
-      "completed" : true,
       "tags" : [
         "#bug"
-      ]
+      ],
+      "completed" : true,
+      "title" : "fix dynamic command feature",
+      "completedDate" : 1793373784.5193291,
+      "id" : 21,
+      "createdDate" : 1793372929.1742949,
+      "description" : ""
     },
     {
       "createdDate" : 1793373949.4697499,
-      "id" : 22,
-      "completedDate" : 1793375477.6240292,
-      "title" : "view configuration",
-      "updatedDate" : 1793375467.695183,
       "description" : "a view tag that is a list should operate like the dynamic command feature. a list of string view names are added. if a view name is invoked as a command, it should display a list of tasks that have tags that match that command name.",
+      "title" : "view configuration",
       "completed" : true,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "updatedDate" : 1793375467.695183,
+      "id" : 22,
+      "completedDate" : 1793375477.6240292
     },
     {
-      "createdDate" : 1793375093.850481,
-      "id" : 23,
-      "title" : "tag command",
-      "completedDate" : 1793376057.0426869,
-      "updatedDate" : 1793375093.8526831,
+      "completed" : true,
       "description" : "task tag should display a list of tags that are currently attached to tickets. It should list all tags and the count of how many tasks are associated with that tag.",
-      "completed" : true,
+      "completedDate" : 1793376057.0426869,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "id" : 23,
+      "createdDate" : 1793375093.850481,
+      "updatedDate" : 1793375093.8526831,
+      "title" : "tag command"
     },
     {
-      "createdDate" : 1793389486.5689201,
-      "id" : 24,
-      "completedDate" : 1794776247.359205,
-      "title" : "agentTags configuration",
-      "updatedDate" : 1794600979.1711221,
-      "description" : "agentTags config defines tags that agents use to mark what they are working on. Update the skill to tell the agent to add or remove the agent tag. Agent tag items are pointed to with a green > before the task. ",
-      "completed" : true,
       "tags" : [
 
-      ]
+      ],
+      "description" : "agentTags config defines tags that agents use to mark what they are working on. Update the skill to tell the agent to add or remove the agent tag. Agent tag items are pointed to with a green > before the task. ",
+      "title" : "agentTags configuration",
+      "createdDate" : 1793389486.5689201,
+      "completed" : true,
+      "completedDate" : 1794776247.359205,
+      "id" : 24,
+      "updatedDate" : 1794600979.1711221
     },
     {
-      "createdDate" : 1793390044.215178,
-      "id" : 25,
+      "completed" : true,
       "title" : "Opencode plugin",
-      "completedDate" : 1793713328.455369,
-      "updatedDate" : 1793713333.1360769,
       "description" : "Build a sidebar plugin that shows task list status. Requires understanding OpenCode plugin architecture.",
-      "completed" : true,
+      "id" : 25,
+      "createdDate" : 1793390044.215178,
+      "completedDate" : 1793713328.455369,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "updatedDate" : 1793713333.1360769
     },
     {
-      "createdDate" : 1793391281.9833231,
-      "id" : 26,
-      "completedDate" : 1793645320.678071,
-      "title" : "task work command",
-      "updatedDate" : 1793391281.986232,
       "description" : "task work should checkout a new branch from the current commit with the name of the first tag preceeding a slash and the task id after the slash. for example task work 12 when 12 has a tag of #feature would run a git checkout -b feature\/12",
-      "completed" : true,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "completed" : true,
+      "createdDate" : 1793391281.9833231,
+      "completedDate" : 1793645320.678071,
+      "id" : 26,
+      "updatedDate" : 1793391281.986232,
+      "title" : "task work command"
     },
     {
-      "createdDate" : 1793614848.0997682,
-      "id" : 27,
+      "tags" : [
+        "#feature"
+      ],
       "completedDate" : 1793647058.875103,
-      "title" : "Init to add git attributes",
       "description" : "Task init command should automatically add an ignore entry to the gitattributes file so changes dont show up in the diff output. ",
       "completed" : true,
-      "tags" : [
-        "#feature"
-      ]
+      "id" : 27,
+      "title" : "Init to add git attributes",
+      "createdDate" : 1793614848.0997682
     },
     {
-      "createdDate" : 1793615041.205198,
-      "id" : 28,
-      "completedDate" : 1793655064.4568372,
       "title" : "terminal resize",
-      "updatedDate" : 1793615041.2082729,
+      "createdDate" : 1793615041.205198,
       "description" : "right now the terminal output stays at 80 characters width by default. this doesnt look great when viewing on phones. the app should be able to detect what size the terminal is, and shrink its display width if smaller than 80. ",
+      "id" : 28,
       "completed" : true,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "updatedDate" : 1793615041.2082729,
+      "completedDate" : 1793655064.4568372
     },
     {
-      "createdDate" : 1793646810.501652,
-      "id" : 29,
-      "completedDate" : 1793650187.1084452,
-      "title" : "merge command",
       "updatedDate" : 1793646810.5042119,
-      "description" : "add a 'task merge {id}' command that does the same branch assembly logic as task work {id}, but runs a 'git merge {branch}' command, to merge that brancch we worked on into the current branch.",
       "completed" : true,
+      "title" : "merge command",
+      "createdDate" : 1793646810.501652,
+      "description" : "add a 'task merge {id}' command that does the same branch assembly logic as task work {id}, but runs a 'git merge {branch}' command, to merge that brancch we worked on into the current branch.",
+      "completedDate" : 1793650187.1084452,
+      "id" : 29,
       "tags" : [
         "#feature"
       ]
     },
     {
+      "tags" : [
+        "#feature"
+      ],
+      "completedDate" : 1794586174.0479732,
+      "completed" : true,
+      "updatedDate" : 1794586172.0470519,
+      "title" : "move asterisk",
       "createdDate" : 1793662683.343091,
       "id" : 30,
-      "completedDate" : 1794586174.0479732,
-      "title" : "move asterisk",
-      "updatedDate" : 1794586172.0470519,
-      "description" : "pinned asterisks should move to after the checkbox but before the title   [ ] * Title",
-      "completed" : true,
-      "tags" : [
-        "#feature"
-      ]
+      "description" : "pinned asterisks should move to after the checkbox but before the title   [ ] * Title"
     },
     {
-      "createdDate" : 1793662892.4472229,
-      "id" : 31,
-      "title" : "word wrap on list view",
+      "completed" : true,
       "completedDate" : 1793666384.0939469,
-      "updatedDate" : 1793713341.0080881,
-      "description" : "on main task command or any view command, if a tasks display output is longer than the edge of the size of the terminal, it should cleanly wrap on words. since a typical task is indented by 2 spaces, a word wrap line should be indented 6 soapaces.",
-      "completed" : true,
+      "title" : "word wrap on list view",
       "tags" : [
         "#feature"
-      ]
+      ],
+      "id" : 31,
+      "createdDate" : 1793662892.4472229,
+      "updatedDate" : 1793713341.0080881,
+      "description" : "on main task command or any view command, if a tasks display output is longer than the edge of the size of the terminal, it should cleanly wrap on words. since a typical task is indented by 2 spaces, a word wrap line should be indented 6 soapaces."
     },
     {
+      "tags" : [
+        "#bug"
+      ],
       "createdDate" : 1793666522.6162171,
+      "updatedDate" : 1793666522.618535,
+      "completed" : true,
       "id" : 32,
       "completedDate" : 1794586023.9061179,
       "title" : "tasks plugin not working outside tasks project",
-      "updatedDate" : 1793666522.618535,
-      "description" : "For some reason the plugin only displays when i am in the tasks project directory. is it because of the plugin location? I want the plugin to load no matter what directory i open opencode in. if it detects a tasks.json in that directory, it should load the tasks list in the sidebar.",
-      "completed" : true,
-      "tags" : [
-        "#bug"
-      ]
+      "description" : "For some reason the plugin only displays when i am in the tasks project directory. is it because of the plugin location? I want the plugin to load no matter what directory i open opencode in. if it detects a tasks.json in that directory, it should load the tasks list in the sidebar."
     },
     {
-      "createdDate" : 1793731462.1723771,
-      "id" : 34,
-      "title" : "task progress command",
-      "completedDate" : 1793933569.2690659,
       "updatedDate" : 1793933580.4040389,
-      "description" : "a new `task progress` command should be created that displays a live updating progress bar. on launch, it should calculate the number of uncompleted tasks. then it should display a progress bar with the text '(0\/n)' where n is the total number of uncompleted tasks. aevery 5 seconds, the number of uncompleted tasks should be re-checked, and if a task was completed, the progress bar should increase in value. the command should exit once all tasks are complete.",
-      "completed" : true,
+      "title" : "task progress command",
       "tags" : [
         "#feature"
-      ]
+      ],
+      "description" : "a new `task progress` command should be created that displays a live updating progress bar. on launch, it should calculate the number of uncompleted tasks. then it should display a progress bar with the text '(0\/n)' where n is the total number of uncompleted tasks. aevery 5 seconds, the number of uncompleted tasks should be re-checked, and if a task was completed, the progress bar should increase in value. the command should exit once all tasks are complete.",
+      "createdDate" : 1793731462.1723771,
+      "completedDate" : 1793933569.2690659,
+      "completed" : true,
+      "id" : 34
     },
     {
       "createdDate" : 1793734074.7533751,
-      "id" : 35,
-      "completedDate" : 1793734606.4476728,
       "title" : "Phase 1: Create ProgressMonitor.swift",
+      "tags" : [
+        "#feature"
+      ],
       "description" : "Implement the core progress monitoring logic and data structures. Create the ProgressMonitor class with State, ProgressInfo, and TerminalAction enums. Implement monitorProgress, monitorProgressInternal, and generateProgressInfo methods.",
       "completed" : true,
-      "tags" : [
-        "#feature"
-      ]
+      "id" : 35,
+      "completedDate" : 1793734606.4476728
     },
     {
+      "title" : "Phase 2: Create ProgressMonitorTests.swift",
+      "completed" : true,
+      "description" : "Implement comprehensive unit tests for ProgressMonitorTests. Test all edge cases including empty task list, all tasks completed, partial completion. Test progress info generation for various percentages.",
+      "completedDate" : 1793735009.1210871,
       "createdDate" : 1793734079.4733229,
       "id" : 36,
-      "completedDate" : 1793735009.1210871,
-      "title" : "Phase 2: Create ProgressMonitorTests.swift",
-      "description" : "Implement comprehensive unit tests for ProgressMonitorTests. Test all edge cases including empty task list, all tasks completed, partial completion. Test progress info generation for various percentages.",
-      "completed" : true,
       "tags" : [
         "#feature"
       ]
     },
     {
-      "createdDate" : 1793734084.091043,
-      "id" : 37,
-      "completedDate" : 1793735614.5218239,
-      "title" : "Phase 3: Integrate into main.swift",
+      "completed" : true,
       "description" : "Add handleProgress() function to the main switch. Call monitorProgressWithStore(store) in the progress case. Add appropriate error handling and exit codes. Ensure proper integration with existing code structure.",
-      "completed" : true,
+      "createdDate" : 1793734084.091043,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "id" : 37,
+      "title" : "Phase 3: Integrate into main.swift",
+      "completedDate" : 1793735614.5218239
     },
     {
-      "createdDate" : 1793734088.417486,
       "id" : 38,
-      "completedDate" : 1793736101.2389741,
       "title" : "Phase 4: Test the Progress Command",
-      "description" : "Create a temporary test directory with tasks.json. Add 10-15 tasks to test directory. Run task progress in test directory. Verify progress bar updates every 5 seconds. Verify exit when all tasks complete. Verify graceful Ctrl+C handling.",
+      "createdDate" : 1793734088.417486,
       "completed" : true,
       "tags" : [
         "#feature"
-      ]
+      ],
+      "description" : "Create a temporary test directory with tasks.json. Add 10-15 tasks to test directory. Run task progress in test directory. Verify progress bar updates every 5 seconds. Verify exit when all tasks complete. Verify graceful Ctrl+C handling.",
+      "completedDate" : 1793736101.2389741
     },
     {
       "createdDate" : 1793737485.7874532,
@@ -393,426 +387,452 @@
       "description" : ""
     },
     {
-      "createdDate" : 1794514684.0534461,
+      "description" : "for some reason the plugin is only displaying in opencode when I am in the task repository. does the plugin need to be symlinked somewhere so that it runs and displays in other directories?",
+      "completedDate" : 1794585404.9507852,
       "id" : 40,
       "title" : "fix plugin not showing in other repositories",
-      "completedDate" : 1794585404.9507852,
-      "updatedDate" : 1794585411.8407412,
-      "description" : "for some reason the plugin is only displaying in opencode when I am in the task repository. does the plugin need to be symlinked somewhere so that it runs and displays in other directories?",
-      "completed" : true,
       "tags" : [
         "#bug"
-      ]
+      ],
+      "completed" : true,
+      "createdDate" : 1794514684.0534461,
+      "updatedDate" : 1794585411.8407412
     },
     {
-      "createdDate" : 1794586268.6674628,
-      "id" : 41,
-      "completedDate" : 1794586315.525389,
       "title" : "Remove stripAnsi from plugin",
+      "completedDate" : 1794586315.525389,
       "description" : "Edit plugin\/src\/tui.tsx to remove the stripAnsi call so ANSI color codes are preserved in the sidebar output",
+      "id" : 41,
+      "createdDate" : 1794586268.6674628,
       "completed" : true,
       "tags" : [
         "#pluginfixcolors"
       ]
     },
     {
-      "createdDate" : 1794586268.6737452,
-      "id" : 42,
-      "title" : "Test color rendering",
-      "completedDate" : 1794586772.0058031,
       "description" : "Verify that task list colors display correctly in the OpenCode sidebar after removing stripAnsi. If not, implement ANSI-to-SolidJS attribute conversion",
-      "completed" : true,
+      "createdDate" : 1794586268.6737452,
+      "completedDate" : 1794586772.0058031,
+      "title" : "Test color rendering",
       "tags" : [
         "#pluginfixcolors"
-      ]
+      ],
+      "completed" : true,
+      "id" : 42
     },
     {
-      "createdDate" : 1794586785.359416,
-      "id" : 43,
       "title" : "Fix inline text rendering",
-      "completedDate" : 1794586904.219522,
+      "tags" : [
+        "#pluginfixcolors"
+      ],
       "description" : "The plugin renders each styled segment as a separate <text> component, causing newlines between segments. Fix by wrapping segments in a single container or using a different approach to keep text inline.",
-      "completed" : true,
-      "tags" : [
-        "#pluginfixcolors"
-      ]
+      "completedDate" : 1794586904.219522,
+      "id" : 43,
+      "createdDate" : 1794586785.359416,
+      "completed" : true
     },
     {
-      "createdDate" : 1794586984.6848691,
       "id" : 44,
-      "title" : "Fix plugin runtime error",
-      "completedDate" : 1794589955.9671969,
-      "description" : "The plugin fails to load due to JSX issues when returning raw strings from segments.map(). Fix by ensuring all map() returns are proper JSX elements, not raw strings.",
       "completed" : true,
+      "createdDate" : 1794586984.6848691,
+      "completedDate" : 1794589955.9671969,
+      "title" : "Fix plugin runtime error",
       "tags" : [
         "#pluginfixcolors"
-      ]
+      ],
+      "description" : "The plugin fails to load due to JSX issues when returning raw strings from segments.map(). Fix by ensuring all map() returns are proper JSX elements, not raw strings."
     },
     {
+      "tags" : [
+        "#pluginfixcolors"
+      ],
+      "description" : "The render logic splits text on newlines but adds all parts to the same line. Push each part to lines immediately after processing it, not after the loop completes.",
       "createdDate" : 1794589758.0958281,
-      "id" : 45,
+      "completed" : true,
       "completedDate" : 1794589915.335187,
       "title" : "Fix newline splitting in render",
-      "description" : "The render logic splits text on newlines but adds all parts to the same line. Push each part to lines immediately after processing it, not after the loop completes.",
-      "completed" : true,
-      "tags" : [
-        "#pluginfixcolors"
-      ]
+      "id" : 45
     },
     {
-      "createdDate" : 1794592677.730197,
-      "id" : 46,
-      "title" : "display task stats output",
       "completedDate" : 1794597244.6654439,
-      "updatedDate" : 1794592677.7324328,
-      "description" : "the `task stats` command output should be displayed in opencode as well. should this be a separate plugin, or something that can be toggled on and off using configuration?",
       "completed" : true,
+      "id" : 46,
+      "description" : "the `task stats` command output should be displayed in opencode as well. should this be a separate plugin, or something that can be toggled on and off using configuration?",
+      "createdDate" : 1794592677.730197,
+      "title" : "display task stats output",
+      "updatedDate" : 1794592677.7324328,
       "tags" : [
         "#feature"
       ]
     },
     {
-      "createdDate" : 1794593155.533401,
-      "id" : 47,
       "completedDate" : 1794593274.540669,
+      "tags" : [
+        "#statsplugin",
+        "#feature"
+      ],
       "title" : "Create task-stats plugin directory structure",
       "description" : "Create .opencode\/plugins\/task-stats\/ with package.json, src\/index.ts, src\/tui.tsx. Package name should be 'opencode-task-stats'. Copy the dependency structure from the existing task-manager plugin (plugin\/package.json) as a reference.",
-      "completed" : true,
-      "tags" : [
-        "#statsplugin",
-        "#feature"
-      ]
+      "id" : 47,
+      "createdDate" : 1794593155.533401,
+      "completed" : true
     },
     {
-      "createdDate" : 1794593159.1167359,
-      "id" : 48,
       "completedDate" : 1794593516.522934,
-      "title" : "Implement tasks.json filesystem detection",
+      "tags" : [
+        "#statsplugin",
+        "#feature"
+      ],
+      "createdDate" : 1794593159.1167359,
+      "completed" : true,
       "description" : "In .opencode\/plugins\/task-stats\/src\/tui.tsx, implement the filesystem walk-up logic to find tasks.json. This is needed to determine which project directory to run task stats from. Copy\/adapt this from the existing task-manager plugin (plugin\/src\/tui.tsx).",
-      "completed" : true,
+      "id" : 48,
+      "title" : "Implement tasks.json filesystem detection"
+    },
+    {
       "tags" : [
         "#statsplugin",
         "#feature"
-      ]
-    },
-    {
-      "createdDate" : 1794593163.781213,
-      "id" : 49,
-      "title" : "Implement task stats CLI execution",
-      "completedDate" : 1794593596.5637388,
+      ],
       "description" : "Add a function in .opencode\/plugins\/task-stats\/src\/tui.tsx that executes 'task stats' via child_process.exec() with the detected project directory as cwd. Return the raw output string.",
+      "createdDate" : 1794593163.781213,
+      "completedDate" : 1794593596.5637388,
+      "id" : 49,
       "completed" : true,
+      "title" : "Implement task stats CLI execution"
+    },
+    {
       "tags" : [
         "#statsplugin",
         "#feature"
-      ]
-    },
-    {
-      "createdDate" : 1794593169.743948,
+      ],
+      "completed" : true,
       "id" : 50,
-      "completedDate" : 1794593732.6852651,
-      "title" : "Implement ANSI parsing for stats output",
+      "createdDate" : 1794593169.743948,
       "description" : "Copy the ANSI escape parser from the existing task-manager plugin (plugin\/src\/ansi.ts) to .opencode\/plugins\/task-stats\/src\/ansi.ts. The parser converts ANSI codes to OpenTUI\/SolidJS styled text.",
-      "completed" : true,
-      "tags" : [
-        "#statsplugin",
-        "#feature"
-      ]
+      "title" : "Implement ANSI parsing for stats output",
+      "completedDate" : 1794593732.6852651
     },
     {
-      "createdDate" : 1794593175.086762,
-      "id" : 51,
-      "completedDate" : 1794593866.7991052,
       "title" : "Implement TUI sidebar rendering for stats",
-      "description" : "Complete the plugin\/src\/tui.tsx implementation: use the task stats output, parse it with the ANSI parser, and render to the sidebar.content slot. Include auto-refresh every 30 seconds like the existing task-manager plugin.",
-      "completed" : true,
+      "id" : 51,
+      "createdDate" : 1794593175.086762,
       "tags" : [
         "#statsplugin",
         "#feature"
-      ]
+      ],
+      "completed" : true,
+      "description" : "Complete the plugin\/src\/tui.tsx implementation: use the task stats output, parse it with the ANSI parser, and render to the sidebar.content slot. Include auto-refresh every 30 seconds like the existing task-manager plugin.",
+      "completedDate" : 1794593866.7991052
     },
     {
-      "createdDate" : 1794593180.5969481,
-      "id" : 52,
-      "title" : "Create plugin entry point",
       "completedDate" : 1794593893.967829,
-      "description" : "Implement .opencode\/plugins\/task-stats\/src\/index.ts as the server plugin entry point. It should import and register the TUI plugin, similar to the existing task-manager plugin.",
-      "completed" : true,
       "tags" : [
         "#statsplugin",
         "#feature"
-      ]
+      ],
+      "completed" : true,
+      "description" : "Implement .opencode\/plugins\/task-stats\/src\/index.ts as the server plugin entry point. It should import and register the TUI plugin, similar to the existing task-manager plugin.",
+      "title" : "Create plugin entry point",
+      "id" : 52,
+      "createdDate" : 1794593180.5969481
     },
     {
       "createdDate" : 1794593188.1924219,
-      "id" : 53,
       "completedDate" : 1794594210.657932,
-      "title" : "Add plugin symlink",
-      "description" : "Create a symlink from .opencode\/plugins\/task-stats to ..\/plugin-stats (or appropriate path) so OpenCode can discover the plugin. Follow the same pattern as the existing task-manager plugin symlink.",
-      "completed" : true,
       "tags" : [
         "#statsplugin",
         "#feature"
-      ]
+      ],
+      "id" : 53,
+      "title" : "Add plugin symlink",
+      "completed" : true,
+      "description" : "Create a symlink from .opencode\/plugins\/task-stats to ..\/plugin-stats (or appropriate path) so OpenCode can discover the plugin. Follow the same pattern as the existing task-manager plugin symlink."
     },
     {
-      "createdDate" : 1794593197.3671751,
-      "id" : 54,
       "title" : "Build and test the task-stats plugin",
       "completedDate" : 1794594258.9509859,
-      "description" : "Run 'npm install' and 'npm run build' in .opencode\/plugins\/task-stats\/. Verify the plugin compiles without errors. Run 'task stats' from the CLI to verify output is correct, then check that the plugin renders stats in the OpenCode sidebar.",
+      "createdDate" : 1794593197.3671751,
       "completed" : true,
+      "description" : "Run 'npm install' and 'npm run build' in .opencode\/plugins\/task-stats\/. Verify the plugin compiles without errors. Run 'task stats' from the CLI to verify output is correct, then check that the plugin renders stats in the OpenCode sidebar.",
+      "id" : 54,
       "tags" : [
         "#statsplugin",
         "#feature"
       ]
     },
     {
-      "createdDate" : 1794598891.2843189,
-      "id" : 55,
-      "title" : "Add getAgentTags() method to TaskStore.swift",
       "completedDate" : 1794598976.4101009,
-      "description" : "Follow getPinTags() pattern: retrieve agentTags array from config, convert to lowercase strings, return empty array if not set",
+      "title" : "Add getAgentTags() method to TaskStore.swift",
+      "createdDate" : 1794598891.2843189,
       "completed" : true,
+      "id" : 55,
       "tags" : [
         "#agenttag"
-      ]
+      ],
+      "description" : "Follow getPinTags() pattern: retrieve agentTags array from config, convert to lowercase strings, return empty array if not set"
     },
     {
-      "createdDate" : 1794598891.290602,
-      "id" : 56,
-      "title" : "Modify Display.swift for orange task highlighting",
-      "completedDate" : 1794599097.3002639,
-      "description" : "Add orange ANSI color constant (38;5;208m). Add agentStr parameter to displayTaskLine() and displayTasksSection(). When task has agent tag, wrap title in orange and add green > prefix",
       "completed" : true,
       "tags" : [
         "#agenttag"
-      ]
+      ],
+      "title" : "Modify Display.swift for orange task highlighting",
+      "completedDate" : 1794599097.3002639,
+      "createdDate" : 1794598891.290602,
+      "id" : 56,
+      "description" : "Add orange ANSI color constant (38;5;208m). Add agentStr parameter to displayTaskLine() and displayTasksSection(). When task has agent tag, wrap title in orange and add green > prefix"
     },
     {
       "createdDate" : 1794598891.295619,
-      "id" : 57,
-      "title" : "Update main.swift list command for agentTags",
-      "completedDate" : 1794599364.497968,
-      "description" : "Retrieve agentTags from store in list\/ls command. Pass to displayTaskList and displayTasksSection. Identify tasks with agent tags and set agentStr accordingly",
-      "completed" : true,
       "tags" : [
         "#agenttag"
-      ]
+      ],
+      "id" : 57,
+      "completed" : true,
+      "completedDate" : 1794599364.497968,
+      "title" : "Update main.swift list command for agentTags",
+      "description" : "Retrieve agentTags from store in list\/ls command. Pass to displayTaskList and displayTasksSection. Identify tasks with agent tags and set agentStr accordingly"
     },
     {
       "createdDate" : 1794598891.300396,
-      "id" : 58,
+      "completed" : true,
       "title" : "Update SKILL.md with agent tag documentation",
+      "id" : 58,
+      "tags" : [
+        "#agenttag"
+      ],
       "completedDate" : 1794599399.816653,
-      "description" : "Add section explaining agent tag usage: how to mark tasks as agent-owned (task tag <id> #agent), how to clear (task untag <id> #agent), explain visual indicators (green > prefix, orange title)",
-      "completed" : true,
-      "tags" : [
-        "#agenttag"
-      ]
+      "description" : "Add section explaining agent tag usage: how to mark tasks as agent-owned (task tag <id> #agent), how to clear (task untag <id> #agent), explain visual indicators (green > prefix, orange title)"
     },
     {
-      "createdDate" : 1794598891.3051682,
-      "id" : 59,
       "completedDate" : 1794599703.6291909,
-      "title" : "Add tests for agentTags functionality",
-      "description" : "Test getAgentTags() config retrieval. Test display output contains orange ANSI codes for tagged tasks. Test display output contains green > prefix. Test tasks without agent tags are not highlighted",
-      "completed" : true,
       "tags" : [
         "#agenttag"
-      ]
+      ],
+      "completed" : true,
+      "title" : "Add tests for agentTags functionality",
+      "id" : 59,
+      "createdDate" : 1794598891.3051682,
+      "description" : "Test getAgentTags() config retrieval. Test display output contains orange ANSI codes for tagged tasks. Test display output contains green > prefix. Test tasks without agent tags are not highlighted"
     },
     {
-      "createdDate" : 1794599240.360368,
-      "id" : 60,
-      "completedDate" : 1794599783.9952788,
-      "title" : "Set #working as default agentTag",
-      "description" : "Configure the task manager so that #working is included in the default agentTags list when none are configured. This ensures the green > and orange highlighting work out of the box for the #working tag.",
-      "completed" : true,
       "tags" : [
         "#agenttag"
-      ]
+      ],
+      "title" : "Set #working as default agentTag",
+      "createdDate" : 1794599240.360368,
+      "completedDate" : 1794599783.9952788,
+      "completed" : true,
+      "description" : "Configure the task manager so that #working is included in the default agentTags list when none are configured. This ensures the green > and orange highlighting work out of the box for the #working tag.",
+      "id" : 60
     },
     {
       "createdDate" : 1794770761.990715,
-      "id" : 61,
-      "completedDate" : 1794771050.424993,
-      "title" : "Extract toggleTags helper function",
       "updatedDate" : 1794770800.9785352,
+      "id" : 61,
       "description" : "Create a reusable toggleTags(existingTags, tagsToToggle) function in TaskStore.swift that toggles tags: removes if present, adds if not present. Returns the new tag array.",
       "completed" : true,
+      "completedDate" : 1794771050.424993,
       "tags" : [
         "#working"
-      ]
+      ],
+      "title" : "Extract toggleTags helper function"
     },
     {
-      "createdDate" : 1794770765.5363932,
+      "tags" : [
+        "#working"
+      ],
+      "title" : "Apply toggle logic to update command",
+      "completed" : true,
+      "updatedDate" : 1794771053.3432221,
       "id" : 62,
       "completedDate" : 1794771131.302748,
-      "title" : "Apply toggle logic to update command",
-      "updatedDate" : 1794771053.3432221,
-      "description" : "Modify the update method in TaskStore.swift to use toggleTags instead of overwriting. When -T flag is passed, toggle each tag: remove if exists, add if not. Update tests accordingly.",
-      "completed" : true,
-      "tags" : [
-        "#working"
-      ]
+      "createdDate" : 1794770765.5363932,
+      "description" : "Modify the update method in TaskStore.swift to use toggleTags instead of overwriting. When -T flag is passed, toggle each tag: remove if exists, add if not. Update tests accordingly."
     },
     {
-      "createdDate" : 1794770768.593116,
-      "id" : 63,
+      "tags" : [
+        "#working"
+      ],
+      "description" : "Update the unbacklog method to use the new toggleTags helper function instead of manual tag filtering and removal. This reduces code duplication.",
+      "updatedDate" : 1794771133.6528831,
+      "completed" : true,
       "title" : "Refactor unbacklog to use toggleTags",
       "completedDate" : 1794771539.5400009,
-      "updatedDate" : 1794771133.6528831,
-      "description" : "Update the unbacklog method to use the new toggleTags helper function instead of manual tag filtering and removal. This reduces code duplication.",
-      "completed" : true,
-      "tags" : [
-        "#working"
-      ]
+      "id" : 63,
+      "createdDate" : 1794770768.593116
     },
     {
+      "tags" : [
+        "#working"
+      ],
+      "completed" : true,
       "createdDate" : 1794770771.1838641,
+      "updatedDate" : 1794771541.9027619,
       "id" : 64,
       "completedDate" : 1794771763.2876611,
       "title" : "Refactor unpin to use toggleTags",
-      "updatedDate" : 1794771541.9027619,
-      "description" : "Update the unpin method to use the new toggleTags helper function instead of manual tag filtering. This reduces code duplication and makes tag behavior consistent.",
-      "completed" : true,
-      "tags" : [
-        "#working"
-      ]
+      "description" : "Update the unpin method to use the new toggleTags helper function instead of manual tag filtering. This reduces code duplication and makes tag behavior consistent."
     },
     {
-      "createdDate" : 1794770774.9493151,
-      "id" : 65,
-      "title" : "Add tests for tag toggle behavior",
+      "tags" : [
+        "#working"
+      ],
       "completedDate" : 1794772073.616787,
-      "updatedDate" : 1794771765.5650899,
-      "description" : "Write comprehensive tests for the new toggle behavior: toggling existing tags, toggling new tags, multiple tags in one command, and edge cases. Run full test suite and verify all tests pass.",
       "completed" : true,
-      "tags" : [
-        "#working"
-      ]
+      "description" : "Write comprehensive tests for the new toggle behavior: toggling existing tags, toggling new tags, multiple tags in one command, and edge cases. Run full test suite and verify all tests pass.",
+      "updatedDate" : 1794771765.5650899,
+      "title" : "Add tests for tag toggle behavior",
+      "id" : 65,
+      "createdDate" : 1794770774.9493151
     },
     {
-      "createdDate" : 1794841348.779566,
-      "id" : 66,
-      "title" : "Add --all\/-a argument parsing",
       "completedDate" : 1794841556.2257872,
+      "title" : "Add --all\/-a argument parsing",
+      "tags" : [
+        "#working",
+        "#viewall"
+      ],
       "updatedDate" : 1794841554.5432501,
       "description" : "Parse the --all flag (with -a shorthand) in the CLI argument parser in main.swift. Store it as args[\"all\"] = \"true\" when present. Update the usage\/help string to document the new flag.",
-      "completed" : true,
+      "id" : 66,
+      "createdDate" : 1794841348.779566,
+      "completed" : true
+    },
+    {
+      "completedDate" : 1794841678.3132029,
+      "updatedDate" : 1794841676.648823,
       "tags" : [
         "#working",
         "#viewall"
-      ]
-    },
-    {
-      "createdDate" : 1794841348.787106,
+      ],
       "id" : 67,
-      "completedDate" : 1794841678.3132029,
-      "title" : "Modify handleView to override limits with --all",
-      "updatedDate" : 1794841676.648823,
       "description" : "Update handleView function in main.swift to check for the --all flag. When present, set both displayLimit and tagDisplayLimit to 0 (no limit) regardless of persisted config. The rest of the display pipeline already handles 0 as 'show all'.",
       "completed" : true,
-      "tags" : [
-        "#working",
-        "#viewall"
-      ]
+      "createdDate" : 1794841348.787106,
+      "title" : "Modify handleView to override limits with --all"
     },
     {
+      "completedDate" : 1794841686.7793589,
       "createdDate" : 1794841348.7934971,
       "id" : 68,
-      "completedDate" : 1794841686.7793589,
       "title" : "Build, test, and lint the implementation",
-      "updatedDate" : 1794841683.5354838,
       "description" : "Run swift build, swift test, and swiftlint to verify the implementation compiles, passes all tests, and meets code quality standards.",
-      "completed" : true,
       "tags" : [
         "#working"
-      ]
+      ],
+      "completed" : true,
+      "updatedDate" : 1794841683.5354838
     },
     {
-      "createdDate" : 1794925990.2678971,
-      "id" : 69,
-      "title" : "Add Reminder struct to Task.swift",
-      "completedDate" : 1794926968.9482369,
       "updatedDate" : 1794926070.1005421,
-      "description" : "Define a simple Reminder struct with id (Int) and text (String) fields. Place it alongside the Task struct definition. Reminders are much simpler than tasks - no completed state, no tags, no timestamps.",
-      "completed" : true,
+      "completedDate" : 1794926968.9482369,
+      "id" : 69,
       "tags" : [
         "#reminders"
-      ]
+      ],
+      "createdDate" : 1794925990.2678971,
+      "title" : "Add Reminder struct to Task.swift",
+      "completed" : true,
+      "description" : "Define a simple Reminder struct with id (Int) and text (String) fields. Place it alongside the Task struct definition. Reminders are much simpler than tasks - no completed state, no tags, no timestamps."
     },
     {
-      "createdDate" : 1794925990.2737479,
       "id" : 70,
-      "title" : "Add reminder CRUD methods to TaskStore.swift",
       "completedDate" : 1794926318.82885,
-      "updatedDate" : 1794926318.8342791,
-      "description" : "Implement reminders() -> [Reminder], addReminder(text:) -> Reminder, and deleteReminder(id:) -> Bool methods on TaskStore. Load\/save the 'reminders' array from tasks.json. Generate sequential IDs starting after the last existing reminder ID.",
       "completed" : true,
+      "title" : "Add reminder CRUD methods to TaskStore.swift",
+      "updatedDate" : 1794926318.8342791,
+      "createdDate" : 1794925990.2737479,
       "tags" : [
         "#reminders"
-      ]
+      ],
+      "description" : "Implement reminders() -> [Reminder], addReminder(text:) -> Reminder, and deleteReminder(id:) -> Bool methods on TaskStore. Load\/save the 'reminders' array from tasks.json. Generate sequential IDs starting after the last existing reminder ID."
     },
     {
       "createdDate" : 1794925990.279115,
+      "completed" : true,
       "id" : 71,
-      "title" : "Add reminder CLI commands to main.swift",
+      "tags" : [
+        "#reminders"
+      ],
       "updatedDate" : 1794927376.0687299,
       "description" : "Add handling for 'reminder' command with subcommands: 'add <text>', 'delete <id>'. Parse arguments in parseArguments() or the command switch. Provide helpful error messages for missing arguments.",
-      "completed" : false,
-      "tags" : [
-        "#reminders"
-      ]
+      "title" : "Add reminder CLI commands to main.swift",
+      "completedDate" : 1794928390.8246541
     },
     {
-      "createdDate" : 1794925990.2840371,
-      "id" : 72,
       "title" : "Add reminder display section to list view",
-      "completedDate" : 1794926959.0751119,
-      "updatedDate" : 1794926959.081037,
+      "id" : 72,
       "description" : "After displaying the task list, add a 'Reminders: (n)' section that shows numbered reminders with format '  • #1 text'. Only display if there are reminders. Update showHelp() to document the reminder commands.",
-      "completed" : true,
       "tags" : [
         "#reminders"
-      ]
+      ],
+      "completedDate" : 1794926959.0751119,
+      "createdDate" : 1794925990.2840371,
+      "updatedDate" : 1794926959.081037,
+      "completed" : true
     },
     {
+      "completed" : true,
+      "completedDate" : 1794927048.3187461,
       "createdDate" : 1794925990.289377,
+      "description" : "Update the initStore() method in TaskStore.swift to include 'reminders': [] in the initial store object so new task stores have the reminders array from the start.",
+      "tags" : [
+        "#reminders"
+      ],
       "id" : 73,
       "title" : "Initialize reminders array in initStore()",
-      "completedDate" : 1794927048.3187461,
-      "updatedDate" : 1794927048.3254662,
-      "description" : "Update the initStore() method in TaskStore.swift to include 'reminders': [] in the initial store object so new task stores have the reminders array from the start.",
-      "completed" : true,
-      "tags" : [
-        "#reminders"
-      ]
+      "updatedDate" : 1794927048.3254662
     },
     {
-      "createdDate" : 1794925990.2946839,
-      "id" : 74,
+      "tags" : [
+        "#reminders"
+      ],
       "title" : "Add unit tests for reminders",
-      "completedDate" : 1794927250.8435059,
-      "updatedDate" : 1794927250.850035,
       "description" : "Create tests for reminder functionality: adding reminders, listing reminders, deleting reminders, ID generation, and that reminders persist to disk. Follow existing test patterns in Tests\/taskTests\/taskTests.swift.",
+      "completedDate" : 1794927250.8435059,
+      "id" : 74,
+      "createdDate" : 1794925990.2946839,
       "completed" : true,
-      "tags" : [
-        "#reminders"
-      ]
+      "updatedDate" : 1794927250.850035
     },
     {
-      "createdDate" : 1794925990.29895,
-      "id" : 75,
+      "updatedDate" : 1794927315.465445,
+      "tags" : [
+        "#reminders"
+      ],
+      "completed" : true,
       "completedDate" : 1794927315.459322,
       "title" : "Update README.md with reminders documentation",
-      "updatedDate" : 1794927315.465445,
       "description" : "Add a Reminders section to README.md documenting the feature and CLI commands. Include examples for adding, listing, and deleting reminders.",
-      "completed" : true,
+      "id" : 75,
+      "createdDate" : 1794925990.29895
+    },
+    {
+      "createdDate" : 1794927962.267133,
+      "description" : "The plugin's ANSI parsing in src\/tui.tsx filters out empty lines when splitting on newlines. This causes the blank line between the task list and Reminders header to be dropped. Fix by preserving empty segments as blank lines in the output. Write a test that verifies blank lines are preserved.",
+      "completedDate" : 1794928216.4454241,
       "tags" : [
         "#reminders"
-      ]
+      ],
+      "title" : "Fix blank line stripping in tasks-plugin",
+      "updatedDate" : 1794928216.4504619,
+      "id" : 76,
+      "completed" : true
+    },
+    {
+      "title" : "test",
+      "createdDate" : 1794928494.137692,
+      "description" : "test",
+      "id" : 77,
+      "completed" : false
+    }
+  ],
+  "reminders" : [
+    {
+      "id" : 5,
+      "text" : "Example reminder"
     }
   ]
 }
