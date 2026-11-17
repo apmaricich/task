@@ -28,3 +28,15 @@ struct Task {
         return formatter.string(from: date)
     }
 }
+
+// MARK: - Reminder Model
+
+struct Reminder {
+    let id: Int
+    let text: String
+
+    init(id: Int, text: String) {
+        self.id = id
+        self.text = text
+    }
+}

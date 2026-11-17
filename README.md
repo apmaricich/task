@@ -87,6 +87,24 @@ Tags must be prefixed with `#`.
 ./task complete <ID>
 ```
 
+## Common Operations
+
+| Operation | Command |
+|-----------|---------|
+| List tasks | `task` or `task list` |
+| Add task | `task add "title"` |
+| Update task | `task update <ID> --title "new title"` |
+| Delete task | `task delete <ID>` |
+| Complete task | `task done <ID>` |
+| Add tag | `task tag <ID> "#tag"` |
+| Remove tag | `task untag <ID> "#tag"` |
+| Pin task | `task pin <ID>` |
+| View backlog | `task backlog` |
+| Add reminder | `task reminder add "text"` |
+| Delete reminder | `task reminder delete <id>` |
+| Configure | `task config <key> <value>` |
+| Help | `task --help` |
+
 ## Configuration
 
 ### Sorting
@@ -171,6 +189,41 @@ View only backlog tasks:
 
 ```bash
 ./task backlog
+```
+
+## Reminders
+
+Add simple text reminders that display below your task list.
+
+### Adding Reminders
+
+```bash
+task reminder add "Review PR #42"
+task reminder add "Buy groceries"
+```
+
+### Deleting Reminders
+
+Reminders are numbered. Delete by ID:
+
+```bash
+task reminder delete 1
+```
+
+### Viewing Reminders
+
+Reminders appear below your task list when you run `task` or `task list`:
+
+```
+Tasks: (3, 2)
+-------------
+  [ ] #1 Fix bug
+  ...
+
+Reminders: (2)
+--------------
+  • #1 Review PR #42
+  • #2 Buy groceries
 ```
 
 ## Help

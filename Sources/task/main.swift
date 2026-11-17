@@ -48,6 +48,17 @@ func parseArguments() -> [String: String] {
             result["value"] = arg
         } else if result["command"] == "command" && result["id"] == nil {
             result["id"] = arg
+        } else if result["command"] == "reminder" {
+            if result["text"] == nil {
+                // First arg after reminder is the subcommand
+                result["text"] = arg
+            } else if result["text"] == "delete" && arg.allSatisfy({ $0.isNumber }) {
+                // "delete" subcommand with a numeric ID
+                result["id"] = arg
+            } else {
+                // Append to text for "add" subcommand
+                result["text"] = result["text"]! + " " + arg
+            }
         } else {
             result["id"] = arg
         }
@@ -227,6 +238,51 @@ func addTaskWithPrompt(_ store: TaskStore, args: [String: String]) {
     }
 }
 
+// MARK: - Reminder Command
+
+func handleReminder(store: TaskStore, args: [String: String]) {
+    // Check if the text starts with "delete " or is just "delete"
+    if let text = args["text"] {
+        if text == "delete" {
+            // Delete by ID - get ID from args["id"]
+            guard let idStr = args["id"], let id = Int(idStr) else {
+                print("Error: reminder delete requires an ID")
+                exit(1)
+            }
+            if store.deleteReminder(id: id) {
+                print("Deleted reminder #\(id)")
+            } else {
+                print("Error: reminder #\(id) not found")
+                exit(1)
+            }
+        } else if text.hasPrefix("add ") {
+            // Add reminder with text
+            let actualText = String(text.dropFirst(4)) // Remove "add "
+            if actualText.isEmpty {
+                print("Error: 'reminder add' requires text")
+                exit(1)
+            }
+            let reminder = store.addReminder(text: actualText)
+            print("Added reminder #\(reminder.id): \(actualText)")
+        } else {
+            // Treat as add with full text (no explicit add keyword)
+            let reminder = store.addReminder(text: text)
+            print("Added reminder #\(reminder.id): \(text)")
+        }
+    } else if let idStr = args["id"], let id = Int(idStr) {
+        // No text, only ID - treat as delete
+        if store.deleteReminder(id: id) {
+            print("Deleted reminder #\(id)")
+        } else {
+            print("Error: reminder #\(id) not found")
+            exit(1)
+        }
+    } else {
+        print("Error: reminder command requires 'add' or 'delete' subcommand")
+        exit(1)
+    }
+}
+
 // MARK: - Main
 
 let args = parseArguments()
@@ -359,6 +415,9 @@ if args["--help"] != nil {
                 )
                 displayTaskList(tasks: tasksToShow, options: listOptions)
             }
+
+            let reminders = store.reminders()
+            displayReminders(reminders: reminders)
         }
 
     case "track":
@@ -447,6 +506,9 @@ if args["--help"] != nil {
 
     case "config":
         handleConfig(store: store, args: args)
+
+    case "reminder":
+        handleReminder(store: store, args: args)
 
     case "doctor":
         let doctorFilePath = args["--file"] ?? "tasks.json"

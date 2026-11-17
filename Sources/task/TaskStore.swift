@@ -10,16 +10,17 @@ class TaskStore {
     }
 
     private func loadStore() -> [String: Any] {
+        let defaultStore: [String: Any] = ["tasks": [], "config": ["sort": "completed"], "reminders": []]
         guard FileManager.default.fileExists(atPath: filePath) else {
-            return ["tasks": [], "config": ["sort": "completed"]]
+            return defaultStore
         }
 
         do {
             let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
             let decoded = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-            return decoded ?? ["tasks": [], "config": ["sort": "completed"]]
+            return decoded ?? defaultStore
         } catch {
-            return ["tasks": [], "config": ["sort": "completed"]]
+            return defaultStore
         }
     }
 
@@ -35,6 +36,7 @@ class TaskStore {
     func initStore() {
         var store = loadStore()
         store["config"] = ["sort": "completed", "tagDisplayLimit": 0, "lists": ["backlogTags", "pinTags", "command"]]
+        store["reminders"] = []
         saveStore(store)
         print("Task store initialized at \(filePath)")
     }
@@ -490,6 +492,50 @@ class TaskStore {
             }
             return taskA.completedDate! > taskB.completedDate!
         }
+    }
+
+    func reminders() -> [Reminder] {
+        let store = loadStore()
+        let reminders = store["reminders"] as? [[String: Any]] ?? []
+
+        return reminders.compactMap {
+            guard let id = $0["id"] as? Int,
+                  let text = $0["text"] as? String else {
+                return nil
+            }
+            return Reminder(id: id, text: text)
+        }
+    }
+
+    func addReminder(text: String) -> Reminder {
+        var store = loadStore()
+        var reminders = store["reminders"] as? [[String: Any]] ?? []
+
+        let nextId = reminders.isEmpty ? 1 : reminders.map { $0["id"] as? Int ?? 0 }.max()! + 1
+        let reminder = Reminder(id: nextId, text: text)
+
+        reminders.append([
+            "id": reminder.id,
+            "text": reminder.text
+        ])
+
+        store["reminders"] = reminders
+        saveStore(store)
+
+        return reminder
+    }
+
+    func deleteReminder(id: Int) -> Bool {
+        var store = loadStore()
+        var reminders = store["reminders"] as? [[String: Any]] ?? []
+        let index = reminders.firstIndex { $0["id"] as? Int == id }
+
+        guard let index = index else { return false }
+
+        reminders.remove(at: index)
+        store["reminders"] = reminders
+        saveStore(store)
+        return true
     }
 
     private func sortTasks(_ tasks: [Task], by field: String) -> [Task] {

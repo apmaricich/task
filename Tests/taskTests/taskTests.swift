@@ -922,6 +922,59 @@ final class TaskStoreTests: XCTestCase {
         XCTAssertTrue(viewTasks.isEmpty)
     }
 
+    // MARK: - Reminder Tests
+
+    func testAddReminderAppearsInList() {
+        let reminder = store.addReminder(text: "Buy groceries")
+        XCTAssertEqual(reminder.id, 1)
+        XCTAssertEqual(reminder.text, "Buy groceries")
+
+        let reminders = store.reminders()
+        XCTAssertEqual(reminders.count, 1)
+        XCTAssertEqual(reminders[0].text, "Buy groceries")
+    }
+
+    func testReminderIdsAutoIncrement() {
+        let first = store.addReminder(text: "First reminder")
+        let second = store.addReminder(text: "Second reminder")
+
+        XCTAssertEqual(first.id, 1)
+        XCTAssertEqual(second.id, 2)
+    }
+
+    func testDeleteReminderById() {
+        let reminder = store.addReminder(text: "Delete me")
+        XCTAssertEqual(store.reminders().count, 1)
+
+        let deleted = store.deleteReminder(id: reminder.id)
+        XCTAssertTrue(deleted)
+
+        let reminders = store.reminders()
+        XCTAssertEqual(reminders.count, 0)
+    }
+
+    func testDeleteNonExistentReminderReturnsFalse() {
+        let deleted = store.deleteReminder(id: 999)
+        XCTAssertFalse(deleted)
+    }
+
+    func testRemindersEmptyOnNewStore() {
+        let reminders = store.reminders()
+        XCTAssertEqual(reminders.count, 0)
+    }
+
+    func testRemindersPersistAcrossStoreInstances() {
+        // Add reminder to first store instance
+        store.addReminder(text: "Persistent reminder")
+
+        // Create second instance with same file path
+        let newStore = TaskStore(filePath: testFilePath)
+        let reminders = newStore.reminders()
+
+        XCTAssertEqual(reminders.count, 1)
+        XCTAssertEqual(reminders[0].text, "Persistent reminder")
+    }
+
     // MARK: - Work Command Tests
 
     func testGetBranchNameWithTag() {

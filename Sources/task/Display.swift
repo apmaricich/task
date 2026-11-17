@@ -310,6 +310,23 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
     }
 }
 
+// MARK: - Reminder Display
+
+func displayReminders(reminders: [Reminder]) {
+    if reminders.isEmpty { return }
+
+    print("")
+    print("Reminders: (\(reminders.count))")
+    print("--------------")
+    for reminder in reminders {
+        print("  • #\(reminder.id) \(reminder.text)")
+    }
+}
+
+// MARK: - List Display
+
+// MARK: - List Display
+
 func displayTaskList(tasks: [Task], options: TaskDisplayOptions) {
     // Separate pinned tasks from the rest
     let pinnedTasks = tasks.filter { task in
@@ -349,6 +366,8 @@ func showHelp() {
     print("  view <tag>              View tasks by tag")
     print("  tags                    List all tags and their usage counts")
     print("  config <key> <value>    Update configuration")
+    print("  reminder add <text>       Add a reminder")
+    print("  reminder delete <id>      Delete a reminder")
     print("")
     print("Options:")
     print("  --file, -f <path>       Path to tasks.json (default: ./tasks.json)")
