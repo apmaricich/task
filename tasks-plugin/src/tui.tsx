@@ -8,7 +8,7 @@ import { parseAnsi } from "./ansi";
 async function getTaskList(dir: string): Promise<string> {
   try {
     return new Promise<string>((resolve) => {
-      exec("task list", { cwd: dir }, (error, stdout, stderr) => {
+      exec("task list --width 40", { cwd: dir }, (error, stdout, stderr) => {
         if (error || stderr) {
           resolve("");
         } else {
