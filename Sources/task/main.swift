@@ -36,6 +36,10 @@ func parseArguments() -> [String: String] {
             if !args.isEmpty {
                 result["--file"] = args.removeFirst()
             }
+        } else if arg == "--width" || arg == "-W" {
+            if !args.isEmpty {
+                result["--width"] = args.removeFirst()
+            }
         } else if arg == "--help" || arg == "-h" {
             result["--help"] = ""
         } else if result["command"] == nil {
@@ -196,13 +200,15 @@ func handleView(store: TaskStore, args: [String: String]) {
         let tagDisplayLimit = args["all"] == "true" ? 0 : store.getTagDisplayLimit()
         let pinTags = store.getPinTags()
         let agentTags = store.getAgentTags()
+        let width: Int? = args["--width"].flatMap { Int($0) }
         let viewOptions = TaskDisplayOptions(
             sortField: sortField,
             displayLimit: displayLimit,
             tagDisplayLimit: tagDisplayLimit,
             pinTags: pinTags,
             agentTags: agentTags,
-            showDescription: false
+            showDescription: false,
+            width: width
         )
         displayTaskList(tasks: viewTasks, options: viewOptions)
     }
@@ -405,13 +411,15 @@ if args["--help"] != nil {
                 print("  No tasks.")
             } else {
                 let agentTags = store.getAgentTags()
+                let width: Int? = args["--width"].flatMap { Int($0) }
                 let listOptions = TaskDisplayOptions(
                     sortField: sortField,
                     displayLimit: displayLimit,
                     tagDisplayLimit: tagDisplayLimit,
                     pinTags: pinTags,
                     agentTags: agentTags,
-                    showDescription: showDescription
+                    showDescription: showDescription,
+                    width: width
                 )
                 displayTaskList(tasks: tasksToShow, options: listOptions)
             }

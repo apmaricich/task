@@ -81,6 +81,16 @@ Tasks with agent tags display a green `>` prefix and orange task title in the ta
 | Delete task | `task delete 1` |
 | List all tags | `task tags` |
 | Set config | `task config sort title` |
+| Override width | `task list --width 80` or `-W 80` |
+
+## Width Override
+
+Override terminal width for word wrapping (useful in plugins/CI):
+
+```bash
+task list --width 80
+task list -W 80
+```
 
 ## Configuration
 

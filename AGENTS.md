@@ -52,6 +52,16 @@ swiftlint
 4. Run `swiftlint` to check code quality
 5. Commit changes with clear, descriptive messages
 
+## Output Width
+
+For plugin/CI environments where terminal width may not be detected, override with `--width`:
+
+```bash
+task list --width 80
+# Or short form:
+task list -W 80
+```
+
 ## Agent Tags
 
 Use `#working` to mark tasks you are currently working on. This will highlight them in orange in the task list.

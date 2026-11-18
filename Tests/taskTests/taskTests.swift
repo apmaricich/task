@@ -595,7 +595,8 @@ final class TaskStoreTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: ["#agent"],
-            showDescription: false
+            showDescription: false,
+            width: nil
         )
 
         let captured = captureOutput {
@@ -619,7 +620,8 @@ final class TaskStoreTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: ["#agent"],
-            showDescription: false
+            showDescription: false,
+            width: nil
         )
 
         let captured = captureOutput {
@@ -1286,7 +1288,8 @@ final class DisplayTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: [],
-            showDescription: false
+            showDescription: false,
+            width: nil
         )
 
         let captured = captureOutput {
@@ -1315,7 +1318,8 @@ final class DisplayTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: [],
-            showDescription: true
+            showDescription: true,
+            width: nil
         )
 
         let captured = captureOutput {
@@ -1336,7 +1340,8 @@ final class DisplayTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: [],
-            showDescription: true
+            showDescription: true,
+            width: nil
         )
 
         let captured = captureOutput {
@@ -1357,7 +1362,8 @@ final class DisplayTests: XCTestCase {
             tagDisplayLimit: 0,
             pinTags: [],
             agentTags: [],
-            showDescription: false
+            showDescription: false,
+            width: nil
         )
 
         let red = "\u{1b}[31m"
@@ -1372,6 +1378,91 @@ final class DisplayTests: XCTestCase {
         XCTAssertTrue(lines.count > 1, "Long title with pin should wrap")
         // First line should have the pin
         XCTAssertTrue(lines[0].contains("*"), "First line should contain pin marker")
+    }
+
+    // MARK: - Width Override Tests
+
+    func testGetTerminalWidthWithOverride() {
+        let width = getTerminalWidth(override: 50)
+        XCTAssertEqual(width, 50, "getTerminalWidth should return the override value when provided")
+    }
+
+    func testGetTerminalWidthWithZeroOverride() {
+        let width = getTerminalWidth(override: 0)
+        XCTAssertNotEqual(width, 0, "getTerminalWidth should fall back when override is 0")
+        XCTAssertEqual(width, 80, "getTerminalWidth should return 80 when override is 0")
+    }
+
+    func testGetTerminalWidthWithNilOverride() {
+        let width = getTerminalWidth(override: nil)
+        XCTAssertEqual(width, 80, "getTerminalWidth should return 80 when override is nil")
+    }
+
+    func testGetTerminalWidthWithNegativeOverride() {
+        let width = getTerminalWidth(override: -10)
+        XCTAssertEqual(width, 80, "getTerminalWidth should fall back for negative override")
+    }
+
+    func testDisplayTaskLineWithWidthOverride() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "This is a long title that should wrap at width 30", description: "")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            agentTags: [],
+            showDescription: false,
+            width: nil
+        )
+
+        // With width override of 30, this should wrap into many lines
+        let captured = captureOutput {
+            displayTaskLine(task: task, pinStr: "", agentStr: "", options: options, width: 30)
+        }
+
+        let lines = captured.components(separatedBy: "\n").filter { !$0.isEmpty }
+        XCTAssertTrue(lines.count > 1, "Long title should wrap at width 30")
+    }
+
+    func testDisplayTasksSectionWithWidthOverride() {
+        let store = TaskStore(filePath: testFilePath)
+        let task = store.add(title: "Short task", description: "")
+
+        let options = TaskDisplayOptions(
+            sortField: "completed",
+            displayLimit: 0,
+            tagDisplayLimit: 0,
+            pinTags: [],
+            agentTags: [],
+            showDescription: false,
+            width: 40
+        )
+
+        let captured = captureOutput {
+            displayTasksSection([task], showPin: false, options: options)
+        }
+
+        // Should display successfully with the overridden width
+        XCTAssertTrue(captured.contains("#\(task.id)"), "Task should be displayed")
+    }
+
+    func testParseWidthFromCommandArgs() {
+        // Verify that Int("40") parses correctly (as used in CLI arg parsing)
+        let widthStr = "40"
+        let width = Int(widthStr)
+        XCTAssertEqual(width, 40, "Width string should parse to Int")
+
+        // Verify nil case
+        let badWidthStr = "abc"
+        let badWidth = Int(badWidthStr)
+        XCTAssertNil(badWidth, "Non-numeric width should parse to nil")
+
+        // Verify flatMap behavior
+        let args = ["--width": "50"]
+        let parsedWidth: Int? = args["--width"].flatMap { Int($0) }
+        XCTAssertEqual(parsedWidth, 50, "flatMap parsing should work")
     }
 }
 

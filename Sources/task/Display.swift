@@ -7,12 +7,15 @@ import Glibc
 
 // MARK: - Terminal Width Detection
 
-func getTerminalWidth() -> Int {
+func getTerminalWidth(override width: Int? = nil) -> Int {
+    if width != nil && width! > 0 {
+        return width!
+    }
     #if canImport(Darwin) || canImport(Glibc)
     var size = winsize()
     if ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) == 0 && size.ws_col > 0 {
-        let width = Int(size.ws_col)
-        return width > 80 ? 80 : width
+        let terminalWidth = Int(size.ws_col)
+        return terminalWidth > 80 ? 80 : terminalWidth
     }
     #endif
     return 80
@@ -156,6 +159,7 @@ struct TaskDisplayOptions {
     let pinTags: [String]
     let agentTags: [String]
     let showDescription: Bool
+    let width: Int?
 }
 
 func formatTaskTags(tags: [String], tagDisplayLimit: Int) -> String {
@@ -170,10 +174,10 @@ func formatTaskTags(tags: [String], tagDisplayLimit: Int) -> String {
     return " \(cyan)" + displayTags.joined(separator: " ") + "\(reset)"
 }
 
-func displayTaskLine(task: Task, pinStr: String, agentStr: String, options: TaskDisplayOptions) {
+func displayTaskLine(task: Task, pinStr: String, agentStr: String, options: TaskDisplayOptions, width: Int? = nil) {
     let status = task.completed ? "[x]" : "[ ]"
     let tagStr = formatTaskTags(tags: task.tags, tagDisplayLimit: options.tagDisplayLimit)
-    let terminalWidth = getTerminalWidth()
+    let terminalWidth = getTerminalWidth(override: width)
 
     let prefix = "  \(status) \(pinStr)#\(task.id) "
     var content = task.title
@@ -258,7 +262,7 @@ func findWordBreak(_ text: String, at maxWidth: Int) -> Int {
     return maxWidth
 }
 
-func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisplayOptions) {
+func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisplayOptions, width: Int? = nil) {
     let red = "\u{1b}[38;5;167m"
     let reset = "\u{1b}[0m"
     let pinStr = showPin ? "\(red)*\(reset) " : ""
@@ -276,7 +280,7 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
 
         for task in displayedUncompleted {
             let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
-            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options, width: width)
         }
         if uncompleted.count > displayedUncompleted.count {
             print("  ...")
@@ -288,7 +292,7 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
 
         for task in displayedCompleted {
             let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
-            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options, width: width)
         }
         if completed.count > displayedCompleted.count {
             print("  ...")
@@ -301,7 +305,7 @@ func displayTasksSection(_ tasksToShow: [Task], showPin: Bool, options: TaskDisp
 
         for task in displayedTasks {
             let agentStr = task.tags.contains(where: { options.agentTags.contains($0) }) ? ">" : ""
-            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options)
+            displayTaskLine(task: task, pinStr: pinStr, agentStr: agentStr, options: options, width: width)
         }
 
         if options.displayLimit > 0 && tasksToShow.count > displayedTasks.count {
@@ -328,6 +332,7 @@ func displayReminders(reminders: [Reminder]) {
 // MARK: - List Display
 
 func displayTaskList(tasks: [Task], options: TaskDisplayOptions) {
+    let width = options.width
     // Separate pinned tasks from the rest
     let pinnedTasks = tasks.filter { task in
         !options.pinTags.isEmpty && task.tags.contains(where: { options.pinTags.contains($0) })
@@ -337,12 +342,12 @@ func displayTaskList(tasks: [Task], options: TaskDisplayOptions) {
     }
 
     if !pinnedTasks.isEmpty {
-        displayTasksSection(pinnedTasks, showPin: true, options: options)
+        displayTasksSection(pinnedTasks, showPin: true, options: options, width: width)
         print("")
     }
 
     if !unpinnedTasks.isEmpty {
-        displayTasksSection(unpinnedTasks, showPin: false, options: options)
+        displayTasksSection(unpinnedTasks, showPin: false, options: options, width: width)
     }
 }
 
@@ -375,6 +380,7 @@ func showHelp() {
     print("  --description, -d <desc> Task description")
     print("  --tag, -T <tag>         Tag (must be prefixed with #)")
     print("  --all, -a               Show all tasks (completed and backlog)")
+    print("  --width, -W <chars>    Override terminal width (for plugins/CI)")
     print("  --help, -h              Show this help message")
     print("")
     print("Configuration Keys:")

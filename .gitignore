@@ -11,3 +11,4 @@ tasks.json
 deploy.sh
 *.swp
 *.swo
+dashboard.yaml

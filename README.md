@@ -170,6 +170,16 @@ Pin or unpin a task by ID. If the task has no pin tags, the first pin tag from t
 ./task pin <ID>
 ```
 
+### Output Width
+
+Override terminal width for word wrapping. Useful for plugin/CI environments where the terminal width may not be detected:
+
+```bash
+task list --width 80
+# Or short form:
+task list -W 80
+```
+
 ### Backlog Tags
 
 Hide tasks in the regular list by configuring backlog tags:
