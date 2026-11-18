@@ -8,7 +8,7 @@ import { parseAnsi } from "./ansi";
 async function getTaskList(dir: string): Promise<string> {
   try {
     return new Promise<string>((resolve) => {
-      exec("task list --width 40", { cwd: dir }, (error, stdout, stderr) => {
+      exec("task list --width 37", { cwd: dir }, (error, stdout, stderr) => {
         if (error || stderr) {
           resolve("");
         } else {
@@ -128,13 +128,11 @@ export default Plugin.define({
           if (seg.text.includes('\n')) {
             const parts = seg.text.split('\n');
             for (let i = 0; i < parts.length; i++) {
-              if (i > 0 && currentLine.length > 0) {
+              if (i > 0) {
                 lines.push(currentLine);
                 currentLine = [];
               }
-              if (parts[i].length === 0) {
-                lines.push([]);
-              } else {
+              if (parts[i].length > 0) {
                 currentLine.push({ text: parts[i], style: seg.style });
               }
             }

@@ -87,7 +87,7 @@ class ProgressMonitor {
                 // Use cyan color for the tag name (ANSI escape code)
                 let line = "\r\u{1b}[38;5;73m\(tag!)\u{1b}[0m \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)"
                 let data = line.data(using: .utf8)!
-                data.withUnsafeBytes { bytes in
+                _ = data.withUnsafeBytes { bytes in
                     #if canImport(Darwin)
                     write(1, bytes.baseAddress, data.count)
                     #endif
@@ -95,7 +95,7 @@ class ProgressMonitor {
             } else {
                 let line = "\rProgress: \(progressInfo.percentage)% \(progressInfo.progressBar)  \(completedCount)/\(initialUncompletedCount)"
                 let data = line.data(using: .utf8)!
-                data.withUnsafeBytes { bytes in
+                _ = data.withUnsafeBytes { bytes in
                     #if canImport(Darwin)
                     write(1, bytes.baseAddress, data.count)
                     #endif

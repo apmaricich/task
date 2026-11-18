@@ -37,7 +37,7 @@ export async function findTaskDir(currentPath: string): Promise<string | null> {
  */
 async function getTaskStats(dir: string): Promise<string> {
   return new Promise((resolve) => {
-    exec("task stats --width 40", { cwd: dir }, (error, stdout, stderr) => {
+    exec("task stats --width 37", { cwd: dir }, (error, stdout, stderr) => {
       if (error || stderr) {
         resolve("");
       } else {
